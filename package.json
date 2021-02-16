@@ -1,0 +1,30 @@
+{
+  "name": "preact-sidebar",
+  "version": "1.0.0",
+  "description": "Declaritive reactive sidebar menus",
+  "main": "dist/index.js",
+  "dependencies": {
+    "preact": "^10.5.12"
+  },
+  "devDependencies": {
+    "typescript": "^4.1.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pekasen/preact-sidebar.git"
+  },
+  "keywords": [
+    "reactive",
+    "sidebar",
+    "menu"
+  ],
+  "author": "Philipp Kessling",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pekasen/preact-sidebar/issues"
+  },
+  "homepage": "https://github.com/pekasen/preact-sidebar#readme"
+}
