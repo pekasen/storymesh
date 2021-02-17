@@ -1,36 +1,21 @@
-import { remote } from "electron";
-
 import { h, JSX } from "preact";
-import { IMenuTemplate } from "../../renderer/utils/PlugInClassRegistry";
-import { exportClass } from "../helpers/exportClass";
-import { IMenuItemRenderer } from "../helpers/IMenuItemRenderer";
+import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
 
-export class FileSelectorMenuItem implements IMenuItemRenderer {
-    render(item: IMenuTemplate): JSX.Element {
-        return <div class="form-group-item">
-            <input class="form-control" type="text" value={item.value()}></input>
-            <button class="btn btn-default" onClick={() => {
-                const file = remote.dialog.showOpenDialogSync(
-                    remote.getCurrentWindow(), {
-                        title: "Open scene",
-                        properties: [
-                            "openFile"
-                        ]
-                    }
-                );
+export interface IFileSelectorMenuItemsOptions {
 
-                if (file && file.length === 1 && item.valueReference) item.valueReference(file[0]);
-            }}>
-                load Scene
-            </button>
-        </div>
-    }
 }
 
-export const plugInExport = exportClass(
-    FileSelectorMenuItem,
-    "",
-    "internal.pane.file-selector",
-    "",
-    false
-);
+export const FileSelectorMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, IFileSelectorMenuItemsOptions>): JSX.Element => {
+    return <div class="form-group-item">
+        <input class="form-control" type="text" value={item.getter()}></input>
+        {/* <button class="btn btn-default" onClick={() => {
+            const file = window.
+            );
+
+            if (file && file.length === 1 && item.valueReference) item.valueReference(file[0]);
+        }}>
+            load Scene
+        </button> */}
+        <input type="file" />
+    </div>
+}

@@ -1,18 +1,30 @@
-import { FunctionalComponent, h } from 'preact';
-import { IMenuItemRenderer } from "../../../plugins/helpers/IMenuItemRenderer";
-import { IMenuTemplate } from '../../utils/PlugInClassRegistry';
-import { useContext } from 'preact/hooks';
-import { Store } from '../..';
+import { FunctionalComponent, h, render } from 'preact';
+import { ButtonGroupMenuItem, IButtonGroupOptions } from './panes/ButtonGroup';
 
+export interface IMenuTemplateOptions {
+
+}
+
+export interface IMenuTemplate<Value = any, Options = any> {
+    type: IMenuItemRenderer,
+    label: string,
+    getter?: () => Value,
+    setter?: (arg: Value) => void
+    options: Options
+}
+
+export interface IMenuItemRenderer {
+    (item: IMenuTemplate): h.JSX.Element
+}
 
 export const SideBar: FunctionalComponent<{ items: IMenuTemplate[]; }> = ({ items }) => {
-    const { pluginStore } = useContext(Store);
+    
     const menuItems = items.map(item => {
-        const ret = pluginStore.getNewInstance(`internal.pane.${item.type}`);
-        if (ret)
-            return (ret as IMenuItemRenderer).render(item);
+        if (item.type) {
+            return item.type(item);
+        }
         else
-            return <p>NUILLL</p>;
+            return <p>This menu item is not available</p>;
     });
     const onDrop = (event: DragEvent) => {
         const data = event.dataTransfer?.getData("text");
@@ -22,7 +34,10 @@ export const SideBar: FunctionalComponent<{ items: IMenuTemplate[]; }> = ({ item
         }
     };
 
-    return <form onSubmit={e => e.preventDefault()} onDrop={onDrop}>
+    return <form
+        onSubmit={e => e.preventDefault()}
+        onDrop={onDrop}
+    >
         {(menuItems.length !== 0) ? menuItems : null}
     </form>;
 };

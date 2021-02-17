@@ -1,33 +1,29 @@
 import { h } from "preact";
-import { IMenuTemplate } from "../../renderer/utils/PlugInClassRegistry";
-import { exportClass } from "../helpers/exportClass";
-import { IMenuItemRenderer } from "../helpers/IMenuItemRenderer";
+import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
 
-export class TextMenuItem implements IMenuItemRenderer {
-    render(item: IMenuTemplate) {
-        return <div class="form-group-item">
-            <label>{item.label}</label>
-            <input
-                class="form-control"
-                type="text"
-                placeholder="Insert text here…"
-                value={item.value()}
-                onInput={(e: Event) => {
-                    const target = e.target as HTMLInputElement
-                    
-                    if (item.valueReference && target.value && target.value !== item.value().length) {
-                        item.valueReference(target.value);
-                    }
-                }}
-                ></input>
-        </div>
-    }
+export interface ITextMenuItemOptions {
+    defaultValue: string | undefined
 }
 
-export const plugInExport = exportClass(
-    TextMenuItem,
-    "",
-    "internal.pane.text",
-    "",
-    false
-);
+export const TextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, ITextMenuItemOptions>) => {
+    return <div class="form-group-item">
+        <label>{item.label}</label>
+        <input
+            class="form-control"
+            type="text"
+            placeholder="Insert text here…"
+            value={
+                (item.getter) ? item.getter() : (
+                    (item.options.defaultValue) ? item.options.defaultValue : ""
+                )
+            }
+            onInput={(e: Event) => {
+                const target = e.target as HTMLInputElement
+                
+                if (item.setter && target.value) {
+                    item.setter(target.value);
+                }
+            }}
+            ></input>
+    </div>
+}

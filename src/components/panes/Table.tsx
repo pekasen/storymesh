@@ -1,95 +1,69 @@
-import { reaction, runInAction } from "mobx";
-import { h, JSX } from "preact";
-import { useEffect, useState } from "preact/hooks";
-import { IMenuTemplate } from "../../renderer/utils/PlugInClassRegistry";
-import { exportClass } from "../helpers/exportClass";
-import { IMenuItemRenderer } from "../helpers/IMenuItemRenderer";
-import { HotSpot } from "../modifiers/HotSpot";
+import { FunctionalComponent, h, JSX } from "preact";
+import { IMenuTemplate } from "../SideBar";
 
-interface IColumnSpecification {
+interface IColumnSpecification<Value, Property extends keyof Value> {
     name: string
     type: string
     editable: boolean
-    property: string | ((e: HotSpot) => void)
+    property: Property
+    setter?: (arg: Value[Property], property: Property, value: Value) => void
 }
 
-interface ITableOptions {
-    columns: IColumnSpecification[];
+interface ITableOptions<Value> {
+    columns: IColumnSpecification<Value, keyof Value>[];
 }
 
-export class HotSpotTableMenuItem implements IMenuItemRenderer {
-    render(item: IMenuTemplate<HotSpot[], ITableOptions>): JSX.Element {
-        // const [, setState] = useState({});
+// Define a few Alias function
+const TableRow: FunctionalComponent = ({ children }) => (
+    <tr>{children}</tr>
+)
 
-        // useEffect(() => {
-        //     const reactionDisposer = reaction(
-        //         () => {
-        //             return [...item.value()]
-        //         },
-        //         () => setState({})
-        //     );
+const TableDataCell: FunctionalComponent = ({ children }) => (
+    <td>{children}</td>
+)
 
-        //     return () => {
-        //         reactionDisposer();
-        //     };
-        // });
+export function TableMenuItem<Value> (item: IMenuTemplate<Value[], ITableOptions<Value>>): JSX.Element {
+    if (item.getter === undefined) return <div></div>
 
-        return <div class="form-group-item">
-            <label>HotSpots</label>
-            <table>
-                <thead>
-                    <tr>
+    return <div class="form-group-item">
+        <label>HotSpots</label>
+        <table>
+            <Header />
+            <tbody>
+            {
+                item.getter().map((value) => {
+                    return <tr>
                         {
-                            item.options?.columns.map(column => (
-                                <th>{column.name}</th>
-                            ))
-                        }
-                    </tr>
-                </thead>
-                <tbody>
-                {
-                    item.value().map((e: HotSpot) => {
-                        return <tr>
-                            {
-                                item.options?.columns.map(column => {
-                                    if (typeof column.property === "string") {
-                                        const val = e.get(column.property);
+                            item.options?.columns.map(column => {
+                                const val = value[column.property];
 
-                                        return <td contentEditable={column.editable} onInput={(event: Event) =>{
-                                            if (column.editable) {
-                                                runInAction(() => {
-                                                    e[column.property] = (event.target as HTMLTableDataCellElement).innerHTML;
-                                                });
-                                            }
-                                        }}>{val}</td>
-                                    } else if (typeof column.property !== "string") {
-                                        const cb = column.property;
-                                        if (column.type === "button") {
-                                            return <td>
-                                                <button onClick={() => {cb(e)}}>{column.name}</button>
-                                            </td>
+                                if (typeof val === "string") {
+                                    return <td contentEditable={column.editable} onInput={(event: Event) =>{
+                                        if (column.editable !== undefined && column.setter !== undefined) {
+                                            column.setter(
+                                                (event.target as HTMLTableDataCellElement).innerText,
+                                                column.property,
+                                                value
+                                            );
                                         }
-                                        if (column.type === "slider") {
-                                            return <td>
-                                                <input type="slider"></input>
-                                            </td>
-                                        }
-                                    }
-                                })
-                            }
-                        </tr>             
-                    })
-                }
-                </tbody>
-            </table>
-        </div>
+                                    }}>{val}</td>
+                                }
+                            })
+                        }
+                    </tr>             
+                })
+            }
+            </tbody>
+        </table>
+    </div>
+
+    function Header() {
+        return <thead>
+            <tr>
+                {item.options?.columns.map(column => (
+                    <th>{column.name}</th>
+                ))}
+            </tr>
+        </thead>;
     }
 }
-
-export const plugInExport = exportClass(
-    HotSpotTableMenuItem,
-    "",
-    "internal.pane.hotspot-table",
-    "",
-    false
-);
