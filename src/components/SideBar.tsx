@@ -1,5 +1,4 @@
 import { FunctionalComponent, h, render } from 'preact';
-import { ButtonGroupMenuItem, IButtonGroupOptions } from './panes/ButtonGroup';
 
 export interface IMenuTemplateOptions {
 
