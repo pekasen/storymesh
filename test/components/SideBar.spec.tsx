@@ -2,7 +2,9 @@ import { assert } from "chai";
 import { JSDOM } from "jsdom";
 import { h, render} from "preact";
 import { SideBar } from "../../src";
-import { ITextMenuItemOptions, TextMenuItem } from "../../src/components/panes/Text";
+import { DisplayMenuItem } from "../../src/components/panes/Display";
+import { ITextMenuItemOptions, TextMenuItem, TextMenuItemTemplate } from "../../src/components/panes/Text";
+import { TextAreaMenuItem } from "../../src/components/panes/TextArea";
 import { IMenuTemplate } from "../../src/components/SideBar";
 
 const html = '<html lang="en"><head><meta charset="UTF-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Document</title></head><body><div id="preact-root"></div></body></html>';
@@ -44,6 +46,45 @@ describe("<SideBar />", () => {
             render(test, root);
             assert.equal(
                 jsdom.window.document.getElementsByClassName("form-group-item").length, 1
+            )
+        }
+    });
+
+    it("should behave with any kind of IMenuItem", () => {
+        const item: TextMenuItemTemplate = {
+            label: "Test",
+            type: TextMenuItem,
+            options: {
+                defaultValue: "Test"
+            }
+        };
+
+        const test = <SideBar items={[
+            {
+                label: "Test",
+                type: TextMenuItem,
+                options: {
+                    defaultValue: "Test"
+                }
+            },
+            {
+                label: "Test2",
+                type: TextAreaMenuItem,
+                options: {
+
+                }
+            },
+            {
+                label: "Test3",
+                type: DisplayMenuItem,
+                options: {}
+            }
+        ]} />;
+        const root  = jsdom.window.document.getElementById("preact-root");
+        if (root !== null && jsdom.window && jsdom.window.document) {
+            render(test, root);
+            assert.equal(
+                jsdom.window.document.getElementsByClassName("form-group-item").length, 3
             )
         }
     });
