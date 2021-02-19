@@ -16,7 +16,12 @@ export interface IMenuItemRenderer {
     (item: IMenuTemplate): h.JSX.Element
 }
 
-export const SideBar: FunctionalComponent<{ items: IMenuTemplate[]; }> = ({ items }) => {
+export interface ISideBarProps {
+    items: IMenuTemplate[] 
+    onDrop?: (ev: DragEvent) => void
+}
+    
+export const SideBar: FunctionalComponent<ISideBarProps> = ({ items, onDrop }) => {
     
     const menuItems = items.map(item => {
         if (item.type) {
@@ -25,13 +30,6 @@ export const SideBar: FunctionalComponent<{ items: IMenuTemplate[]; }> = ({ item
         else
             return <p>This menu item is not available</p>;
     });
-    const onDrop = (event: DragEvent) => {
-        const data = event.dataTransfer?.getData("text");
-        if (data) {
-            // const instace = pluginStore.getNewInstance(data) as AbstractStoryModifier;
-            // if (instace) res?.addModifier(instace);
-        }
-    };
 
     return <form id="side-bar"
         onSubmit={e => e.preventDefault()}
