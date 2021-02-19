@@ -3,7 +3,7 @@ import { JSDOM } from "jsdom";
 import { h, render} from "preact";
 import { SideBar } from "../../src";
 import { DisplayMenuItem } from "../../src/components/panes/Display";
-import { ITextMenuItemOptions, TextMenuItem, TextMenuItemTemplate } from "../../src/components/panes/Text";
+import { ITextMenuItemOptions, TextMenuItem } from "../../src/components/panes/Text";
 import { TextAreaMenuItem } from "../../src/components/panes/TextArea";
 import { IMenuTemplate } from "../../src/components/SideBar";
 
@@ -51,7 +51,7 @@ describe("<SideBar />", () => {
     });
 
     it("should behave with any kind of IMenuItem", () => {
-        const item: TextMenuItemTemplate = {
+        const item: IMenuTemplate = {
             label: "Test",
             type: TextMenuItem,
             options: {

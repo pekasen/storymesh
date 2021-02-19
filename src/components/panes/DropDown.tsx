@@ -17,11 +17,11 @@ export const DropDownMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, 
                 size={1}
                 onInput={(e: Event) => {
                     const target = e.target as HTMLSelectElement;
-
-                    if (item.setter && target) {
+                    const value = target.selectedOptions.item(0)?.value;
+                    if (item.setter && target && value) {
                         if (target.selectedOptions.length === 1) {
                             item.setter(
-                                (target.selectedOptions.item(0)?.value !== undefined) ? target.selectedOptions.item(0)?.value : ""
+                                value
                             );
                         }
                     }

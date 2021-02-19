@@ -27,7 +27,9 @@ export const HSliderMenuItem: IMenuItemRenderer = (item: IMenuTemplate): JSX.Ele
             }}
         />
         <p ref={pRef}>{
-            (item.options.formatter !== undefined && item.getter !== undefined) ? item.options.formatter(item.getter()) : item.getter()
+            ((item.getter !== undefined) ? 
+                (item.options.formatter !== undefined) ?
+               item.options.formatter(item.getter()) : item.getter() : null)
         }</p>
     </div>
 }

@@ -37,17 +37,17 @@ export function TableMenuItem<Value> (item: IMenuTemplate<Value[], ITableOptions
                             item.options?.columns.map(column => {
                                 const val = value[column.property];
 
-                                if (typeof val === "string") {
-                                    return <td contentEditable={column.editable} onInput={(event: Event) =>{
-                                        if (column.editable !== undefined && column.setter !== undefined) {
-                                            column.setter(
-                                                (event.target as HTMLTableDataCellElement).innerText,
-                                                column.property,
-                                                value
-                                            );
-                                        }
-                                    }}>{val}</td>
-                                }
+                                // if (typeof val === "string") {
+                                //     return <td contentEditable={column.editable} onInput={(event: Event) =>{
+                                //         if (column.editable !== undefined && column.setter !== undefined) {
+                                //             column.setter(
+                                //                 (event.target as HTMLTableDataCellElement).innerText,
+                                //                 column.property,
+                                //                 value
+                                //             );
+                                //         }
+                                //     }}>{val}</td>
+                                // }
                             })
                         }
                     </tr>             
