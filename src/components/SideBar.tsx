@@ -33,7 +33,7 @@ export const SideBar: FunctionalComponent<{ items: IMenuTemplate[]; }> = ({ item
         }
     };
 
-    return <form
+    return <form id="side-bar"
         onSubmit={e => e.preventDefault()}
         onDrop={onDrop}
     >
