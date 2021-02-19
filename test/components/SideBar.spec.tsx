@@ -22,7 +22,6 @@ describe("<SideBar />", () => {
         const test = <SideBar items={[]} />;
         const root  = jsdom.window.document.getElementById("preact-root");
         if (root !== null && jsdom.window && jsdom.window.document) {
-            // render(test, jsdom.window.document, root);
             render(test, root);
             assert.exists(
                 jsdom.window.document.getElementById("side-bar")
@@ -42,7 +41,6 @@ describe("<SideBar />", () => {
         const test = <SideBar items={[item]} />;
         const root  = jsdom.window.document.getElementById("preact-root");
         if (root !== null && jsdom.window && jsdom.window.document) {
-            // render(test, jsdom.window.document, root);
             render(test, root);
             assert.equal(
                 jsdom.window.document.getElementsByClassName("form-group-item").length, 1
