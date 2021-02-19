@@ -13,3 +13,10 @@ export const TextAreaMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, 
         }}>{(item.getter !== undefined) ? item.getter() : null}</textarea>
     </div>
 }
+
+export type TextAreaMenuItemTemplate = {
+    label: string
+    type: typeof TextAreaMenuItem
+    getter: () => string,
+    setter: (arg: string) => void
+}
