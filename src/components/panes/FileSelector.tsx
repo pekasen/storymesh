@@ -7,7 +7,7 @@ export interface IFileSelectorMenuItemsOptions {
 
 export const FileSelectorMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, IFileSelectorMenuItemsOptions>): JSX.Element => {
     return <div class="form-group-item">
-        <input class="form-control" type="text" value={item.getter()}></input>
+        <input class="form-control" type="text" value={((item.getter !== undefined) ? item.getter() : undefined)}></input>
         {/* <button class="btn btn-default" onClick={() => {
             const file = window.
             );

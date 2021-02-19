@@ -11,7 +11,7 @@ export const HSliderMenuItem: IMenuItemRenderer = (item: IMenuTemplate): JSX.Ele
             type="range"
             min={item.options?.min}
             max={item.options?.max}
-            value={item.getter()}
+            value={((item.getter !== undefined) ? item.getter() : undefined)}
             class="slider" 
             onInput={(e: Event) => {
                 const target = e.target as HTMLInputElement
@@ -27,7 +27,7 @@ export const HSliderMenuItem: IMenuItemRenderer = (item: IMenuTemplate): JSX.Ele
             }}
         />
         <p ref={pRef}>{
-            (item.options.formatter) ? item.options.formatter(item.getter()) : item.getter()
+            (item.options.formatter !== undefined && item.getter !== undefined) ? item.options.formatter(item.getter()) : item.getter()
         }</p>
     </div>
 }

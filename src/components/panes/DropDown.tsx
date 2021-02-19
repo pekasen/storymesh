@@ -29,7 +29,7 @@ export const DropDownMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, 
             >
             {
                 item.options?.options.map((value: string) => (
-                    <option value={value} selected={(item.getter() === value)}>{value}</option>
+                    <option value={value} selected={((item.getter !== undefined) ? item.getter() === value : undefined)}>{value}</option>
                 ))
             }
         </select>
