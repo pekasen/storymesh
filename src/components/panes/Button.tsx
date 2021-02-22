@@ -1,6 +1,6 @@
 import { h, JSX } from "preact";
 import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
-import { MenuTemplate } from "./../../classes/MenuTemplate";
+import { MenuTemplate } from "../../classes/MenuTemplate";
 
 export const ButtonMenuItem: IMenuItemRenderer = (item: IMenuTemplate<void, void>): JSX.Element => {
     return <div class="form-group-item">
