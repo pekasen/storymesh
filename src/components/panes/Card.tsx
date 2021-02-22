@@ -1,4 +1,5 @@
 import { h, JSX } from "preact";
+import { MenuTemplate } from "../../classes/MenuTemplate";
 import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
 
 export interface ICardMenuItemOptions {
@@ -15,4 +16,18 @@ export const CardMenuItem: IMenuItemRenderer = (item: IMenuTemplate<void, ICardM
             }
         </div>
     </div>
+}
+
+export class Card extends MenuTemplate<void, ICardMenuItemOptions> {
+    public type = CardMenuItem;
+    public label: string;
+    public options: ICardMenuItemOptions;
+    public getter?: undefined;
+    public setter?: undefined;
+
+    constructor(label: string, options: ICardMenuItemOptions) {
+        super();
+        this.label = label;
+        this.options = options;
+    }
 }

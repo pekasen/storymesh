@@ -1,4 +1,5 @@
 import { h, JSX } from "preact";
+import { MenuTemplate } from "../../classes/MenuTemplate";
 import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
 
 export interface IDropDownMenuItemOptions {
@@ -34,4 +35,20 @@ export const DropDownMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, 
             }
         </select>
     </div>
+}
+
+export class DropDown extends MenuTemplate<string, IDropDownMenuItemOptions> {
+    public type = DropDownMenuItem;
+    public label: string;
+    public options: IDropDownMenuItemOptions;
+    public getter?: (() => string) | undefined;
+    public setter?: ((arg: string) => void) | undefined;
+
+    constructor(label: string, options: IDropDownMenuItemOptions, getter: () => string, setter: (value: string) => void) {
+        super();
+        this.label = label;
+        this.options = options;
+        this.getter = getter;
+        this.setter = setter;
+    }
 }

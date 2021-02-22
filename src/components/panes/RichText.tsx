@@ -3,6 +3,7 @@ import { useEffect, useRef } from "preact/hooks";
 import Delta from "quill-delta";
 import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
 import Quill from "quill";
+import { MenuTemplate } from "../../classes/MenuTemplate";
 
 export const RichTextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<Delta, undefined>) => {
     const ref = useRef<HTMLDivElement>(undefined);
@@ -44,4 +45,19 @@ export const RichTextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<Delta, u
         <label>{item.label}</label>
         <div ref={ref}></div>
     </div>
+}
+
+export class RichText extends MenuTemplate<Delta, undefined> {
+    public type = RichTextMenuItem;
+    public label: string;
+    public options: undefined;
+    public getter: (() => Delta);
+    public setter: ((arg: Delta) => void);
+
+    constructor(label: string, getter: () => Delta, setter: (arg: Delta) => void) {
+        super();
+        this.label = label;
+        this.getter = getter;
+        this.setter = setter;
+    }
 }

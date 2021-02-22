@@ -1,4 +1,5 @@
 import { h } from "preact";
+import { MenuTemplate } from "../../classes/MenuTemplate";
 import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
 
 export interface ITextMenuItemOptions {
@@ -26,4 +27,20 @@ export const TextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, ITex
             }}
             ></input>
     </div>
+}
+
+export class Text extends MenuTemplate<string, ITextMenuItemOptions> {
+    public type = TextMenuItem;
+    public label: string;
+    public options: ITextMenuItemOptions;
+    public getter: () => string;
+    public setter: (arg: string) => void;
+
+    constructor(label: string, options: ITextMenuItemOptions, getter: () => string, setter: (arg: string) => void) {
+        super();
+        this.label = label;
+        this.options = options;
+        this.getter = getter;
+        this.setter = setter;
+    }
 }

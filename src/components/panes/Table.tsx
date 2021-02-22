@@ -1,5 +1,6 @@
 import { FunctionalComponent, h, JSX } from "preact";
-import { IMenuTemplate } from "../SideBar";
+import { MenuTemplate } from "../../classes/MenuTemplate";
+import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
 
 export interface IColumnSpecification<Value, Property extends keyof Value> {
     name: string
@@ -65,5 +66,20 @@ export function TableMenuItem<Value> (item: IMenuTemplate<Value[], ITableOptions
                 ))}
             </tr>
         </thead>;
+    }
+}
+
+export class Table<Value> extends MenuTemplate<Value[], ITableOptions<Value>> {
+    public type = TableMenuItem;
+    public label: string;
+    public options: ITableOptions<Value>;
+    public getter: () => Value[];
+    public setter: undefined;
+
+    constructor(label: string, options: ITableOptions<Value>, getter: () => Value[]) {
+        super();
+        this.label = label;
+        this.options = options;
+        this.getter = getter;
     }
 }

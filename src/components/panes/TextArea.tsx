@@ -1,4 +1,5 @@
 import { h, JSX } from "preact";
+import { MenuTemplate } from "../../classes/MenuTemplate";
 import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
 
 export const TextAreaMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, undefined>): JSX.Element => {
@@ -14,9 +15,17 @@ export const TextAreaMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, 
     </div>
 }
 
-export type TextAreaMenuItemTemplate = {
-    label: string
-    type: typeof TextAreaMenuItem
-    getter: () => string,
-    setter: (arg: string) => void
-}
+export class TextArea extends MenuTemplate<string, undefined> {
+    public type = TextAreaMenuItem;
+    public label: string;
+    public options: undefined;
+    public getter: () => string;
+    public setter: (arg: string) => void;
+
+    constructor(label: string, getter: () => string, setter: (arg: string) => void) {
+        super();
+        this.label = label;
+        this.getter = getter;
+        this.setter = setter;
+    }
+} 

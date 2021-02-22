@@ -1,5 +1,6 @@
 import { h, JSX } from "preact";
 import { useRef } from "preact/hooks";
+import { MenuTemplate } from "../../classes/MenuTemplate";
 import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
 
 export interface IHSliderMenuItemOptions{
@@ -8,7 +9,7 @@ export interface IHSliderMenuItemOptions{
     formatter: (srg: string | number) => string
 }
 
-export const HSliderMenuItem: IMenuItemRenderer = (item: IMenuTemplate): JSX.Element => {
+export const HSliderMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string | number, IHSliderMenuItemOptions>): JSX.Element => {
     const pRef = useRef<HTMLParagraphElement>(null);
 
     return <div class="form-group-item slider-item">
@@ -31,11 +32,27 @@ export const HSliderMenuItem: IMenuItemRenderer = (item: IMenuTemplate): JSX.Ele
                     item.setter(target.value);
                     if (pRef !== null && pRef.current !== null && item.getter) {
                         const val = Number(item.getter());
-                        const string = (item.options.formatter) ? item.options.formatter(val) : val
-                        pRef.current.innerHTML = string;
+                        const string = (item.options.formatter) ? item.options.formatter(val) : String(val)
+                        pRef.current.innerText = string;
                     }
                 }
             }}
         />
     </div>
+}
+
+export class HSlider extends MenuTemplate<string, IHSliderMenuItemOptions> {
+    public type = HSliderMenuItem;
+    public label: string;
+    public options: IHSliderMenuItemOptions;
+    public getter: (() => string);
+    public setter: ((arg: string) => void);
+
+    constructor(label: string, options: IHSliderMenuItemOptions, getter: () => string, setter: (arg: string) => void) {
+        super();
+        this.label = label;
+        this.options = options;
+        this.getter = getter;
+        this.setter = setter
+    }
 }

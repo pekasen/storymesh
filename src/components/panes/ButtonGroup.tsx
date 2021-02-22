@@ -1,4 +1,5 @@
 import { h } from "preact";
+import { MenuTemplate } from "../../classes/MenuTemplate";
 import { IMenuItemRenderer, IMenuTemplate, IMenuTemplateOptions } from "../SideBar";
 
 export interface IButtonGroupOptions extends IMenuTemplateOptions{
@@ -21,3 +22,17 @@ export const ButtonGroupMenuItem: IMenuItemRenderer = (item: IMenuTemplate<void,
         </div>
     </div>
 );
+
+export class ButtonGroup extends MenuTemplate<void, IButtonGroupOptions> {
+    public type = ButtonGroupMenuItem;
+    public label: string;
+    public options: IButtonGroupOptions;
+    public getter: undefined;
+    public setter:  undefined;
+
+    constructor(label: string, options: IButtonGroupOptions) {
+        super();
+        this.label = label;
+        this.options = options;
+    }
+}
