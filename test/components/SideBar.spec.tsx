@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { JSDOM } from "jsdom";
 import { h, render} from "preact";
-import { SideBar } from "../../src";
+import { SideBar } from "../../src/components/SideBar";
 import { DisplayMenuItem } from "../../src/components/panes/Display";
 import { ITextMenuItemOptions, TextMenuItem } from "../../src/components/panes/Text";
 import { TextAreaMenuItem } from "../../src/components/panes/TextArea";
