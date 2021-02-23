@@ -6,10 +6,10 @@ import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
 export interface IHSliderMenuItemOptions{
     min: number
     max: number
-    formatter: (srg: string | number) => string
+    formatter: (srg: number) => string
 }
 
-export const HSliderMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string | number, IHSliderMenuItemOptions>): JSX.Element => {
+export const HSliderMenuItem: IMenuItemRenderer = (item: IMenuTemplate<number, IHSliderMenuItemOptions>): JSX.Element => {
     const pRef = useRef<HTMLParagraphElement>(null);
 
     return <div class="form-group-item slider-item">
@@ -27,12 +27,12 @@ export const HSliderMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string | 
             class="slider" 
             onInput={(e: Event) => {
                 const target = e.target as HTMLInputElement
-                
+                const value = Number(target.value);
                 if (item.setter && target.value) {
-                    item.setter(target.value);
+                    item.setter(value);
                     if (pRef !== null && pRef.current !== null && item.getter) {
-                        const val = Number(item.getter());
-                        const string = (item.options.formatter) ? item.options.formatter(val) : String(val)
+
+                        const string = (item.options.formatter) ? item.options.formatter(value) : String(value)
                         pRef.current.innerText = string;
                     }
                 }
@@ -41,14 +41,14 @@ export const HSliderMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string | 
     </div>
 }
 
-export class HSlider extends MenuTemplate<string, IHSliderMenuItemOptions> {
+export class HSlider extends MenuTemplate<number, IHSliderMenuItemOptions> {
     public type = HSliderMenuItem;
     public label: string;
     public options: IHSliderMenuItemOptions;
-    public getter: (() => string);
-    public setter: ((arg: string) => void);
+    public getter: (() => number);
+    public setter: ((arg: number) => void);
 
-    constructor(label: string, options: IHSliderMenuItemOptions, getter: () => string, setter: (arg: string) => void) {
+    constructor(label: string, options: IHSliderMenuItemOptions, getter: () => number, setter: (arg: number) => void) {
         super();
         this.label = label;
         this.options = options;
