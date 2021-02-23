@@ -1,3 +1,4 @@
+import { MenuTemplate } from "./classes/MenuTemplate";
 import { Button, ButtonMenuItem } from "./components/panes/Button";
 import { ButtonGroup, ButtonGroupMenuItem, IButtonGroupOptions } from "./components/panes/ButtonGroup";
 import { Card, CardMenuItem } from "./components/panes/Card";
@@ -30,6 +31,7 @@ export {
     HSliderMenuItem,
     HSlider,
     IHSliderMenuItemOptions,
+    MenuTemplate,
     TableMenuItem,
     Table,
     ITableOptions,
