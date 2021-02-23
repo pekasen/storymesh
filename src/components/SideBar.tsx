@@ -12,7 +12,7 @@ export interface IMenuTemplate<Value = any, Options = any> {
     options: Options
 }
 
-export interface IMenuItemRenderer {
+export interface IMenuItemRenderer extends FunctionalComponent<IMenuTemplate> {
     (item: IMenuTemplate): h.JSX.Element
 }
 
