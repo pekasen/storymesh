@@ -1,50 +1,71 @@
-import { h } from "preact";
+import { Component, createRef, h } from "preact";
 import { useEffect, useRef } from "preact/hooks";
 import Delta from "quill-delta";
 import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
-import Quill from "quill";
 import { MenuTemplate } from "../../classes/MenuTemplate";
+import Quill from "quill";
 
 export const RichTextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<Delta, undefined>) => {
-    const ref = useRef<HTMLDivElement>(undefined);
     
-    useEffect(() => {
-        if (ref.current !== null) {
-            const quill = new Quill(ref.current, {
-                modules: {
-                    toolbar: [
-                        [{
-                            header: [1, 2, false
-                        ]}],
-                        ["bold", "link", "underline"],
-                        ["link", "code-block"]
-                    ]
-                }
-            });
+    class RichText extends Component {
+        ref = createRef<HTMLDivElement>();
+        quill: Quill | undefined;
 
-            if (item.getter !== undefined) {
-                quill.setContents(item.getter());
-            }
+        render() {
 
-            quill.on('text-change', () => {
-                console.log(quill.getContents());
-                if (item.setter !== undefined) {
-                    item.setter(quill.getContents())
-                }
-            });
-
-            // (async () => {
-            //     import("quill").then((Quill) => {
-                    
-            //     });                
-            // })();
+            return <div>
+                <label>{item.label}</label>
+                <div ref={this.ref}></div>
+            </div>
         }
-    });
 
-    return <div>
-        <label>{item.label}</label>
-        <div ref={ref}></div>
-    </div>
+        componentDidMount() {
+            if (this.ref != null && this.ref.current != null) {
+                this.quill = new Quill(this.ref.current, {
+                    modules: {
+                        toolbar: [
+                            [{
+                                header: [1, 2, false
+                            ]}],
+                            ["bold", "link", "underline"],
+                            ["link", "code-block"]
+                        ]
+                    }
+                });
+    
+               if (this.quill) {
+                if (item.getter !== undefined) {
+                    this.quill?.setContents(item.getter());
+                }
+    
+                this.quill?.on('text-change', () => {
+                    console.log(this.quill?.getContents());
+                    if (item.setter !== undefined && this.quill !== undefined) {
+                        item.setter(this.quill.getContents())
+                    }
+                });
+               }
+            }
+        }
+
+        componentWillUnmount() {
+            if (this.ref && this.ref.current) this.ref.current.remove();
+        }
+    }
+    
+    
+    // useEffect(() => {
+        
+
+    //         // (async () => {
+    //         //     import("quill").then((Quill) => {
+                    
+    //         //     });                
+    //         // })();
+    //     }
+    // });
+
+    return <RichText />;
 }
 
 export class RichText extends MenuTemplate<Delta, undefined> {
