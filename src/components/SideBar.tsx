@@ -31,10 +31,14 @@ export const SideBar: FunctionalComponent<ISideBarProps> = ({ items, onDrop }) =
             return <p>This menu item is not available</p>;
     });
 
-    return <form id="side-bar"
-        onSubmit={e => e.preventDefault()}
+    return <div
+        class="side-bar"
         onDrop={onDrop}
     >
-        {(menuItems.length !== 0) ? menuItems : null}
-    </form>;
+        <form id="side-bar"
+            onSubmit={e => e.preventDefault()}
+        >
+            {(menuItems.length !== 0) ? menuItems : null}
+        </form>
+    </div>
 };
