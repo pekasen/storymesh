@@ -1,4 +1,4 @@
-import { h, JSX } from "preact";
+import { Component, createRef, h, JSX } from "preact";
 import { useRef } from "preact/hooks";
 import { MenuTemplate } from "../../classes/MenuTemplate";
 import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
@@ -10,35 +10,49 @@ export interface IHSliderMenuItemOptions{
 }
 
 export const HSliderMenuItem: IMenuItemRenderer = (item: IMenuTemplate<number, IHSliderMenuItemOptions>): JSX.Element => {
-    const pRef = useRef<HTMLParagraphElement>(null);
+    // const pRef = useRef<HTMLParagraphElement>();
 
-    return <div class="form-group-item slider-item">
-        <label>{item.label}</label>
-        <p ref={pRef}>{ // ref={pRef}
-            ((item.getter !== undefined) ? 
-                (item.options.formatter !== undefined) ?
-               item.options.formatter(item.getter()) : item.getter() : null)
-        }</p>
-        <input
-            type="range"
-            min={item.options?.min}
-            max={item.options?.max}
-            value={((item.getter !== undefined) ? item.getter() : undefined)}
-            class="slider" 
-            onInput={(e: Event) => {
-                const target = e.target as HTMLInputElement
-                const value = Number(target.value);
-                if (item.setter && target.value) {
-                    item.setter(value);
-                    if (pRef !== null && pRef.current !== null && item.getter) {
+    class HSlider extends Component {
+        pRef = createRef<HTMLParagraphElement>();
 
-                        const string = (item.options.formatter) ? item.options.formatter(value) : String(value)
-                        pRef.current.innerText = string;
-                    }
-                }
-            }}
-        />
-    </div>
+        render() {
+            return <div class="form-group-item slider-item">
+                <label>{item.label}</label>
+                <p ref={this.pRef}>{ // ref={pRef}
+                    ((item.getter !== undefined) ? 
+                        (item.options.formatter !== undefined) ?
+                    item.options.formatter(item.getter()) : item.getter() : null)
+                }</p>
+                <input
+                    type="range"
+                    min={item.options?.min}
+                    max={item.options?.max}
+                    value={((item.getter !== undefined) ? item.getter() : undefined)}
+                    class="slider" 
+                    onInput={(e: Event) => {
+                        const target = e.target as HTMLInputElement
+                        const value = Number(target.value);
+                        if (item.setter && target.value) {
+                            item.setter(value);
+                            if (
+                                this.pRef != null &&
+                                this.pRef !== undefined &&
+                                this.pRef.current != null &&
+                                this.pRef.current !== undefined
+                                && item.getter
+                            ) {
+
+                                const string = (item.options.formatter) ? item.options.formatter(value) : String(value)
+                                this.pRef.current.innerText = string;
+                            }
+                        }
+                    }}
+                />
+            </div>
+        }
+    }
+
+    return <HSlider />
 }
 
 export class HSlider extends MenuTemplate<number, IHSliderMenuItemOptions> {
