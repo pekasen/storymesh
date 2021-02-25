@@ -13,6 +13,7 @@
     "jsxFactory": "h",
     "declaration": true,                   /* Generates corresponding '.d.ts' file. */
     "declarationMap": true,                /* Generates a sourcemap for each corresponding '.d.ts' file. */
+    "emitDeclarationOnly": true,
     "sourceMap": true,                     /* Generates corresponding '.map' file. */
     "declarationDir": "./types",
     // "outFile": "./",                       /* Concatenate and emit output to single file. */

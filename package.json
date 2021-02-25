@@ -26,7 +26,8 @@
     "typescript": "^4.1.5"
   },
   "scripts": {
-    "test": "mocha --require ts-node/register --watch-extensions ts,tsx 'test/**/*.{ts,tsx}'"
+    "test": "mocha --require ts-node/register --watch-extensions ts,tsx 'test/**/*.{ts,tsx}'",
+    "build": "rollup -c"
   },
   "repository": {
     "type": "git",
