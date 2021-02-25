@@ -1,6 +1,6 @@
-import { FunctionalComponent, h, JSX } from "preact";
+import { h, JSX } from "preact";
 import { MenuTemplate } from "../../classes/MenuTemplate";
-import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
+import { IMenuTemplate } from "../SideBar";
 
 export interface IColumnSpecification<Value, Property extends keyof Value> {
     name: string
