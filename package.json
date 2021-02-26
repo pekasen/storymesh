@@ -27,7 +27,8 @@
   },
   "scripts": {
     "test": "mocha --require ts-node/register --watch-extensions ts,tsx 'test/**/*.{ts,tsx}'",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "declarations": "tsc -p tsconfig.json"
   },
   "repository": {
     "type": "git",
