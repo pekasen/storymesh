@@ -14,7 +14,9 @@ export const RichTextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<Delta, u
         render() {
 
             return <div>
-                <label>{item.label}</label>
+                {
+                    (item.label !== "") ? <label>{item.label}</label> : null
+                }
                 <div ref={this.ref}></div>
             </div>
         }

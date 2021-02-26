@@ -8,7 +8,9 @@ export interface ITextMenuItemOptions {
 
 export const TextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, ITextMenuItemOptions>) => {
     return <div class="form-group-item">
-        <label>{item.label}</label>
+        {
+            (item.label !== "") ? <label>{item.label}</label> : null
+        }
         <input
             class="form-control"
             type="text"

@@ -10,7 +10,9 @@ export const DropDownMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, 
     if (item.getter === undefined) return <div></div>
 
     return <div class="form-group-item">
-        <label>{item.label}</label>
+        {
+            (item.label !== "") ? <label>{item.label}</label> : null
+        }
         <select
             class="form-control"
                 name={item.label.toLowerCase()}

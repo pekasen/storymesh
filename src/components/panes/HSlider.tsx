@@ -17,7 +17,9 @@ export const HSliderMenuItem: IMenuItemRenderer = (item: IMenuTemplate<number, I
 
         render() {
             return <div class="form-group-item slider-item">
-                <label>{item.label}</label>
+                {
+                    (item.label !== "") ? <label>{item.label}</label> : null
+                }
                 <p ref={this.pRef}>{ // ref={pRef}
                     ((item.getter !== undefined) ? 
                         (item.options.formatter !== undefined) ?

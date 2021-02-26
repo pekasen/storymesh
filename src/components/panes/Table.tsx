@@ -4,7 +4,7 @@ import { IMenuTemplate } from "../SideBar";
 
 export interface IColumnSpecification<Value, Property extends keyof Value> {
     name: string
-    type: string
+    type: string | ((arg: Value, spec: IColumnSpecification<Value, Property>) => MenuTemplate)
     editable: boolean
     property: Property
     setter?: (arg: Value[Property], property: Property, value: Value) => void
@@ -37,6 +37,15 @@ export function TableMenuItem<Value> (item: IMenuTemplate<Value[], ITableOptions
                         {
                             item.options?.columns.map(column => {
                                 const val = value[column.property];
+
+                                // utilize MenuTemplate passed into column
+                                if (typeof column.type  === "function") {
+                                    console.log("constructor", column.type);
+                                    const item = column.type(value, column);
+                                    return <td>{
+                                        (item.type(item))
+                                    }</td>
+                                }
 
                                 if (typeof val === "string") {
                                     return <td contentEditable={column.editable} onInput={(event: Event) =>{
