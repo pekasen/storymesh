@@ -48,7 +48,7 @@ export function TableMenuItem<Value> (item: IMenuTemplate<Value[], ITableOptions
                                 }
 
                                 if (typeof val === "string") {
-                                    return <td contentEditable={column.editable} onInput={(event: Event) =>{
+                                    return <td onInput={(event: Event) =>{
                                         if (column.editable !== undefined &&  column.editable && column.setter !== undefined) {
                                             column.setter(
                                                 (event.target as HTMLTableDataCellElement).innerText as unknown as Value[keyof Value],
