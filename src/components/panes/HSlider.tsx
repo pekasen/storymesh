@@ -20,11 +20,11 @@ export const HSliderMenuItem: IMenuItemRenderer = (item: IMenuTemplate<number, I
                 {
                     (item.label !== "") ? <label>{item.label}</label> : null
                 }
-                <p ref={this.pRef}>{ // ref={pRef}
+                <span ref={this.pRef}>{ // ref={pRef}
                     ((item.getter !== undefined) ? 
                         (item.options.formatter !== undefined) ?
                     item.options.formatter(item.getter()) : item.getter() : null)
-                }</p>
+                }</span>
                 <input
                     type="range"
                     min={item.options?.min}
