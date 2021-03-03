@@ -88,6 +88,24 @@
           > .form-group-item {
             margin: 0;
           }
+          .slider-item {
+            flex-wrap: nowrap;
+            span {
+              min-width: 16px;
+            }
+            input {
+              display: inline-block !important; /* remove display none from wherever :D */
+              transition: width 0.33s ease-out, opacity 0.15s;
+              -webkit-transition: width 0.33s ease-out, opacity 0.15s;
+              -moz-transition: width 0.33s ease-out, opacity 0.15s;
+              width: 0px;
+              opacity: 0;
+            }
+            &:hover > input {
+              width: 95px;
+              opacity: 1;
+            }
+          }
         }
         th {
           height: 25px;
@@ -99,6 +117,9 @@
           background: getValue(text-background);
         }
         border: none;
+      }
+      .table-item {
+        overflow-x: scroll;
       }
     }
 
@@ -161,10 +182,10 @@
         background: getValue(node-object-background);
       }
       border: 0;
-        overflow-x: scroll;
     }
   }
   .btn {
+    margin: 0 auto;
     border: 2px solid #efefef;
     background: transparent;
     color: #efefef;

@@ -26,7 +26,7 @@ export interface ITableOptions<Value> {
 export function TableMenuItem<Value> (item: IMenuTemplate<Value[], ITableOptions<Value>>): JSX.Element {
     if (item.getter === undefined) return <div></div>
 
-    return <div class="form-group-item">
+    return <div class="form-group-item table-item">
         <label>{item.label}</label>
         <table>
             <Header />
