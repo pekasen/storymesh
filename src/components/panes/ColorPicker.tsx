@@ -9,6 +9,7 @@ export const ColorPickerMenuItem: IMenuItemRenderer = (item: IMenuTemplate<strin
                 (item.label !== "") ? <label>{item.label}</label> : null
             }
             <input type="color"
+                class="color-picker"
                 value={((item.getter !== undefined) ? item.getter() : undefined)}
                 onInput={(e: Event) => {
                     const target = e.target as HTMLInputElement
