@@ -8,7 +8,7 @@ export const CheckBoxMenuItem: IMenuItemRenderer = (item: IMenuTemplate<boolean,
         <label>{item.label}</label>
         <input checked={(item.getter) ? item.getter() : false} type="checkbox" onClick={(ev) => {
             const target = (ev.target as HTMLInputElement);
-            if (item.setter && target.checked) item.setter(target.checked);
+            if (item.setter && target.checked !== undefined) item.setter(target.checked);
         }}>{item.label}</input>
     </div>
 }

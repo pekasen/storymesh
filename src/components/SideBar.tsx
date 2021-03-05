@@ -1,5 +1,5 @@
 import { FunctionalComponent, h, render } from 'preact';
-
+import "./SideBar.scss";
 export interface IMenuTemplateOptions {
 
 }

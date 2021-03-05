@@ -1,5 +1,6 @@
 // rollup.config.js
 import typescript from '@rollup/plugin-typescript';
+import scss from "rollup-plugin-scss";
 
 export default {
     input: 'src/index.ts',
@@ -13,6 +14,7 @@ export default {
         typescript({
             emitDeclarationOnly: false
         }),
+        scss()
         // resolve({
         //     dedupe: [ 'preact', 'preact/hooks' ]
         // })
