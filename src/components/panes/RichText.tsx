@@ -24,13 +24,15 @@ export const RichTextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<Delta, u
         componentDidMount() {
             if (this.ref != null && this.ref.current != null) {
                 this.quill = new Quill(this.ref.current, {
+                    theme: 'snow',
                     modules: {
                         toolbar: [
                             [{
                                 header: [1, 2, false
                             ]}],
                             ["bold", "link", "underline"],
-                            ["link", "code-block"]
+                            ["link", "code-block", "align", 
+                            "direction", "list", "strike", "script"]
                         ]
                     }
                 });
