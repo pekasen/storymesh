@@ -28,7 +28,7 @@ export const RichTextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<Delta, u
                     modules: {
                         toolbar: [
                             [{
-                                header: [1, 2, false
+                                header: [1, 2, 3, false
                             ]}],
                             ["bold", "link", "underline"],
                             ["link", "code-block", "align", 
