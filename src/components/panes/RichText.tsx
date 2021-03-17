@@ -30,9 +30,8 @@ export const RichTextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<Delta, u
                             [{
                                 header: [1, 2, 3, false
                             ]}],
-                            ["bold", "link", "underline"],
-                            ["link", "code-block", "align", 
-                            "direction", "list", "strike", "script"]
+                            ["bold", "italic", "underline", "align",  "direction"],
+                            ["code-block", "link", "list", "strike", "script"]
                         ]
                     }
                 });
