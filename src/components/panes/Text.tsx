@@ -4,6 +4,7 @@ import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
 
 export interface ITextMenuItemOptions {
     defaultValue: string | undefined
+    placeHolder: string | undefined
 }
 
 export const TextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, ITextMenuItemOptions>) => {
@@ -14,7 +15,7 @@ export const TextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, ITex
         <input
             class="form-control"
             type="text"
-            placeholder="Insert text here…"
+            placeholder={item.options.placeHolder ?? "Insert text here…"}
             value={
                 (item.getter) ? item.getter() : (
                     (item.options.defaultValue) ? item.options.defaultValue : ""
