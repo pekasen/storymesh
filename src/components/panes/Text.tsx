@@ -3,8 +3,8 @@ import { MenuTemplate } from "../../classes/MenuTemplate";
 import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
 
 export interface ITextMenuItemOptions {
-    defaultValue: string | undefined
-    placeHolder: string | undefined
+    defaultValue?: string
+    placeHolder?: string
 }
 
 export const TextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, ITextMenuItemOptions>) => {
@@ -17,9 +17,19 @@ export const TextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, ITex
             type="text"
             placeholder={item.options.placeHolder ?? "Insert text here…"}
             value={
-                (item.getter) ? item.getter() : (
-                    (item.options.defaultValue) ? item.options.defaultValue : ""
-                )
+                (() => {
+                    let ret = "";
+                    if (item.getter) {
+                        const moddefault = item.getter();
+                        if (item.options.defaultValue && item.options.defaultValue === moddefault) return "";
+                        if (item.options.placeHolder && item.options.placeHolder === moddefault) return "";
+                        ret = moddefault;
+                    } else if (item.options.defaultValue) {
+                        ret = item.options.defaultValue;
+                    }
+
+                    return ret
+                })()
             }
             onInput={(e: Event) => {
                 const target = e.target as HTMLInputElement
