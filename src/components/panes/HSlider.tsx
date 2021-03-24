@@ -1,11 +1,11 @@
 import { Component, createRef, h, JSX } from "preact";
-import { useRef } from "preact/hooks";
 import { MenuTemplate } from "../../classes/MenuTemplate";
 import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
 
 export interface IHSliderMenuItemOptions{
     min: number
     max: number
+    step?: number
     formatter: (srg: number) => string
 }
 
@@ -31,6 +31,7 @@ export const HSliderMenuItem: IMenuItemRenderer = (item: IMenuTemplate<number, I
                     max={item.options?.max}
                     value={((item.getter !== undefined) ? item.getter() : undefined)}
                     class="slider" 
+                    step={item.options.step ?? 1}
                     onInput={(e: Event) => {
                         const target = e.target as HTMLInputElement
                         const value = Number(target.value);
