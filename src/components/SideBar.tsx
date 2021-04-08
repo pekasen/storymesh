@@ -37,7 +37,11 @@ export const SideBar: FunctionalComponent<ISideBarProps> = ({ items, onDrop }) =
     >
         <form id="side-bar"
             onSubmit={e => e.preventDefault()}
-            onKeyPress={e => e.preventDefault()}
+            onKeyPress={e => {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                }
+            }}
         >
             {(menuItems.length !== 0) ? menuItems : null}
         </form>
