@@ -6,7 +6,10 @@
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%; }
+  height: 100%;
+  background: #fff; }
+  .preview-container .vertical-pane {
+    background-color: inherit; }
   .preview-container .vertical-pane-mini {
     position: fixed;
     width: 100%;
@@ -25,11 +28,9 @@
 /* ============ MIXINS ============ */
 .storywrapper {
   width: 100%;
-  height: 100%;
+  height: auto;
   margin: 0;
-  padding: 0;
-  margin-top: 50px;
-  background: #fff; }
+  padding: 0; }
   .storywrapper .ngwebs-story {
     /* ========== THEME TYPEWRITER ========== */ }
     .storywrapper .ngwebs-story .ngwebs-story-container {
