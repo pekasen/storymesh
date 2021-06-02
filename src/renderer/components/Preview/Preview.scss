@@ -18,6 +18,7 @@
   }
 
   .vertical-pane-group {
+    border: none;
     > .vertical-pane:nth-of-type(even) {
       background: #fff;
     }
