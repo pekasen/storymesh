@@ -5,25 +5,19 @@
   padding: 15px;
   border-radius: 7px;
   transition: background 0.4s ease-in, color 0.4s ease-in;
-  @include customize(theme) {
-    background: getValue(menu-background);
-    color: getValue(text);
-  }
+  background: #262626;
+  color: #efefef;
   /* for testing */
   max-width: 300px;
   form {
     display: flex;
     flex-direction: column;
-    @include customize(theme) {
-      color: getValue(text);
-    }
+    color: #efefef;
 
     // > .form-group-item {
     //   padding: 10px;
     //   border-radius: 3px;
-    //   @include customize(theme) {
-    //     background: getValue(node-object-background);
-    //   }
+    //   background: #3b3b3b;
     // }
 
     .form-group-item {
@@ -31,9 +25,7 @@
       flex-direction: row;
       flex-wrap: wrap;
       margin: 0 0 15px 0;
-      @include customize(theme) {
-        color: getValue(text);
-      }
+      color: #efefef;
       &.slider-item {
         display: block;
         label {
@@ -50,7 +42,8 @@
           min-width: 36px;
         }
       }
-      input.form-control, select {
+      input.form-control,
+      select {
         /* reset unnecessary photn values */
         width: 100%;
         /* make resizeable */
@@ -61,20 +54,14 @@
         font-size: 12px;
         line-height: 25px;
         border: 0;
-        @include customize(theme) {
-          color: getValue(text);
-          background: getValue(node-object-background); //top-level-input?
-        }
+        color: #efefef;
+        background: #3b3b3b; //top-level-input?
         &:focus {
-          @include customize(theme) {
-            box-shadow:
-              0 1.4px 1.1px rgba(getValue(highlight-color), 0.034),
-              0 3.25px 2.6px rgba(getValue(highlight-color), 0.048),
-              0 6.2px 5px rgba(getValue(highlight-color), 0.06),
-              0 11px 8px rgba(getValue(highlight-color), 0.072);
-            border: 2px solid getValue(highlight-color);
-            box-sizing: border-box;
-          }
+          box-shadow: 0 1.4px 1.1px rgba(#009485, 0.034),
+            0 3.25px 2.6px rgba(#009485, 0.048), 0 6.2px 5px rgba(#009485, 0.06),
+            0 11px 8px rgba(#009485, 0.072);
+          border: 2px solid #009485;
+          box-sizing: border-box;
         }
       }
       label,
@@ -87,25 +74,19 @@
         min-width: 50px;
       }
       table {
-        @include customize(theme) {
-          color: getValue(text);
-          background: getValue(node-object-background); //sidebar-table?
-          border-radius: 5px;
-          padding: 5px;
-        }
+        color: #efefef;
+        background: #3b3b3b; //sidebar-table?
+        border-radius: 5px;
+        padding: 5px;
         border-radius: 5px;
         thead,
         tbody {
-          @include customize(theme) {
-            background: getValue(node-object-background); //sidebar-table?
-          }
+          background: #3b3b3b; //sidebar-table?
         }
-        thead{
+        thead {
           tr:active {
-            @include customize(theme) {
-              background: getValue(highlight-color);
-              color: getValue(highlight-color-font);
-            }
+            background: #009485;
+            color: #262626;
           }
         }
         tbody {
@@ -115,10 +96,8 @@
             }
           }
           tr:active {
-            @include customize(theme) {
-              background: getValue(highlight-color);
-              color: getValue(highlight-color-font);
-            }
+            background: #009485;
+            color: #262626;
           }
         }
         td {
@@ -129,18 +108,14 @@
             padding: 0;
             .form-control {
               padding: 0 5px;
-              @include customize(theme) {
-                background: getValue(node-area-background); //table-input or level-2-input ?
-              }
+              background: #4d4d4d; //table-input or level-2-input ?
             }
           }
           .slider-item {
             flex-wrap: nowrap;
             input[type="range"] {
               &::-webkit-slider-runnable-track {
-                @include customize(theme) {
-                  background-color: getValue(node-object-background); //level-2-slider-track?
-                }
+                background-color: #3b3b3b; //level-2-slider-track?
               }
             }
             span {
@@ -171,8 +146,8 @@
       }
       // select {
       //   @include customize(theme) {
-      //     color: getValue(text);
-      //     background: getValue(node-object-background); 
+      //     color: #efefef;
+      //     background: #3b3b3b;
       //   }
       //   border: none;
       // }
@@ -182,9 +157,7 @@
     }
 
     .table-striped tr {
-      @include customize(theme) {
-        color: getValue(text);
-      }
+      color: #efefef;
       background: transparent;
     }
     textarea {
@@ -201,9 +174,7 @@
         outline: none;
       }
       &::-webkit-slider-runnable-track {
-        @include customize(theme) {
-          background-color: getValue(node-area-background); //level-1-slider-track?
-        }
+        background-color: #4d4d4d; //level-1-slider-track?
         transition: background 0.2s ease;
         border: 0;
         border-radius: 10px;
@@ -216,66 +187,49 @@
         width: 15px;
         height: 15px;
         border: 1px solid;
-        @include customize(theme) {
-          border-color: getValue(border-color);
-          background: getValue(highlight-color);
-        }
+        border-color: #3b3b3b;
+        background: #009485;
         border-radius: 50px;
         cursor: pointer;
         -webkit-appearance: none;
       }
       &:hover::-webkit-slider-runnable-track {
-        @include customize(theme) {
-          background-color: getValue(text);
-        }
+        background-color: #efefef;
       }
       &:focus::-webkit-slider-runnable-track {
-        @include customize(theme) {
-          background-color: getValue(text);
-        }
+        background-color: #efefef;
       }
     }
     .form-control.card {
-      @include customize(theme) {
-        background: getValue(node-object-background); //sidebar-card?
-      }
+      background: #3b3b3b; //sidebar-card?
       border: 0;
       table {
         .btn.btn-default {
           border: 2px solid;
-          @include customize(theme) {
-            color: getValue(text);
-            border-color: getValue(text);
-          }
+          color: #efefef;
+          border-color: #efefef;
           &:hover {
-            @include customize(theme) {
-              color: getValue(highlight-color);
-              border-color: getValue(highlight-color);
-            } 
-          } 
+            color: #009485;
+            border-color: #009485;
+          }
         }
       }
       table,
       thead,
       tbody {
-        @include customize(theme) {
-          background: getValue(node-area-background); //sidebar-card-table?
-        }
+        background: #4d4d4d; //sidebar-card-table?
       }
-      .form-group-item{
-        select, input.form-control {
-          @include customize(theme) {
-            background: getValue(node-area-background); //sidebar-card-table?
-          }
+      .form-group-item {
+        select,
+        input.form-control {
+          background: #4d4d4d; //sidebar-card-table?
         }
       }
       hr {
         width: 100%;
         border-style: dashed;
         border-width: 1px;
-        @include customize(theme) {
-          border-color: getValue(node-area-background); //sidebar-card-table?
-        }
+        border-color: #4d4d4d; //sidebar-card-table?
       }
     }
   }
@@ -289,10 +243,8 @@
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     &:hover {
-      @include customize(theme) {
-        color: getValue(highlight-color);
-        border-color: getValue(highlight-color);
-      }
+      color: #009485;
+      border-color: #009485;
     }
     .btn-group {
       &:first-child {
