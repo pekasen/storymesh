@@ -432,6 +432,6 @@ export class EdgeRenderer2 extends Component<{store: RootStore}> {
                 });
                 document.dispatchEvent(event);
             }  
-        }>asaa</div>
+        }></div>
     }
 }
