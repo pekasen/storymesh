@@ -7,6 +7,7 @@ import { StoryObject } from '../../../plugins/helpers/AbstractStoryObject';
 import { MoveableItem } from '../../store/MoveableItem';
 import { Line, Rect, Svg, SVG } from '@svgdotjs/svg.js';
 import { RootStore } from '../../store/rootStore';
+import Logger from 'js-logger';
 
 export interface IEdgeRendererProperties {
     loadedObject: IStoryObject
@@ -186,7 +187,7 @@ export class EdgeRenderer2 extends Component<{store: RootStore}> {
 
         document.addEventListener("SelectionDragStart", (customEvent: Event) => {            
             const e = customEvent as CustomEvent;            
-            //Logger.info("SelectionDragStart", e.detail.x, e.detail.y);   
+            // Logger.info("SelectionDragStart", e.detail.x, e.detail.y);   
 
             const mouseMove = (ev: MouseEvent) => 
             {
@@ -332,11 +333,12 @@ export class EdgeRenderer2 extends Component<{store: RootStore}> {
     }
 
     componentDidMount(): void {
-        const obj = document.getElementById(this.nodeEditorID);
+        const obj = document.getElementById(this.edgeRendererID);
         // Select the node that will be observed for mutations
         this.mutationTargetNode = obj as HTMLElement;
         if (obj) {
-            this.svg = SVG().addTo(obj).size(1000, 1000);
+            this.svg = SVG().size("100%", "100%");
+            this.svg.addTo(obj);
         }
     }
 
@@ -419,8 +421,8 @@ export class EdgeRenderer2 extends Component<{store: RootStore}> {
     
 
     render(): h.JSX.Element {
-        return <div id={this.edgeRendererID}
-            onMouseDown = {(ev: MouseEvent) => {
+        return <div id={this.edgeRendererID} onMouseDown = {(ev: MouseEvent) => {
+                console.log("MOUSE");
                 // create and dispatch the event
                 const event = new CustomEvent("SelectionDragStart", {
                     detail: {
@@ -430,6 +432,6 @@ export class EdgeRenderer2 extends Component<{store: RootStore}> {
                 });
                 document.dispatchEvent(event);
             }  
-        }></div>
+        }>asaa</div>
     }
 }
