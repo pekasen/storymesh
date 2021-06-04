@@ -3,7 +3,7 @@ import { Component, createRef, h } from "preact";
 import { createModelSchema, list, object } from "serializr";
 import { ReactionConnectorOutPort, IConnectorPort } from "storygraph";
 import { ConnectorSchema } from "../../renderer/store/schemas/ConnectorSchema";
-import { MenuTemplate } from "preact-sidebar";
+import { CheckBox, MenuTemplate } from "preact-sidebar";
 import { exportClass } from "../helpers/exportClass";
 import { HMTLModifier } from "../helpers/HTMLModifier";
 import { dropDownField, nameField } from "../helpers/plugInHelpers";
@@ -45,16 +45,16 @@ class InteractionModifierData {
 }
 
 export interface IHTMLInteractionModifierProperties {
-    wrapperObject: HTMLInteractionModifier
+    wrappedObject: HTMLInteractionModifier
 }
 
 class WrapperComponent extends Component<IHTMLInteractionModifierProperties> {
     elemRef = createRef();
-    wrapper: HTMLInteractionModifier;
+    wrapped: HTMLInteractionModifier;
 
     constructor(props: IHTMLInteractionModifierProperties) {
         super();
-        this.wrapper = props.wrapperObject;
+        this.wrapped = props.wrappedObject;
     }
 
     render() {
@@ -62,7 +62,8 @@ class WrapperComponent extends Component<IHTMLInteractionModifierProperties> {
     }
 
     componentDidMount() {
-        this.wrapper.intersectionObserver?.observe(this.elemRef.current);
+        this.wrapped.intersectionObserverEnter?.observe(this.elemRef.current);
+        this.wrapped.intersectionObserverExit?.observe(this.elemRef.current);
     }
 }
 
@@ -70,104 +71,132 @@ export class HTMLInteractionModifier extends HMTLModifier {
     public name = "Interaction"
     public role = "internal.modifier.InteractionModifier";
     public data = new InteractionModifierData();
-    intersectionObserver: IntersectionObserver | undefined;
-    public interactionOption: string;
+    intersectionObserverEnter: IntersectionObserver | undefined;
+    intersectionObserverExit: IntersectionObserver | undefined;
+    onClick: boolean = false;
+    onDblClick: boolean = false;
+    onPointerEnter: boolean = false;
+    onPointerLeave: boolean = false;
+    onEnterView: boolean = false;
+    onExitView: boolean = false;
 
     constructor() {
         super();
-        this.interactionOption = "click";
         makeObservable(this, {
-            data: observable,
-            interactionOption: observable
+            data: observable
         });
     }
 
 
     public modify(element: h.JSX.Element): h.JSX.Element {
+        class WrapperComponentEnter extends WrapperComponent {
+            constructor(props: IHTMLInteractionModifierProperties) {
+                super(props);
+                const thatWrapped = this.wrapped;
 
-        switch (this.interactionOption) {
-            case "enter-view":
-                {
-                    class WrapperComponentEnter extends WrapperComponent {
-                        constructor(props: IHTMLInteractionModifierProperties) {
-                            super(props);
-                            const thatWrapper = this.wrapper;
-
-                            function onEntry(entry: IntersectionObserverEntry[]) {
-                                entry.forEach((change) => {
-                                    if (change.isIntersecting) {
-                                        thatWrapper.data.interactionModifier.reactionOut.notify();
-                                    }
-                                });
-                            }
-
-                            let options = { threshold: [0.5] };
-                            thatWrapper.intersectionObserver = new IntersectionObserver(onEntry, options);
+                function onEnter(entry: IntersectionObserverEntry[]) {
+                    entry.forEach((change) => {
+                        if (change.isIntersecting) {
+                            thatWrapped.data.interactionModifier.reactionOut.notify();
                         }
-                    }
-                    return <WrapperComponentEnter wrapperObject={this}>{element}</WrapperComponentEnter>;
+                    });
                 }
-            case "exit-view":
-                {
-                    class WrapperComponentExit extends WrapperComponent {
-                        constructor(props: IHTMLInteractionModifierProperties) {
-                            super(props);
-                            const thatWrapper = this.wrapper;
 
-                            function onExit(entry: IntersectionObserverEntry[]) {
-                                entry.forEach((change) => {
-                                    if (!change.isIntersecting) {
-                                        thatWrapper.data.interactionModifier.reactionOut.notify();
-                                    }
-                                });
-                            }
-
-                            let options = { threshold: [0.5] };
-                            thatWrapper.intersectionObserver = new IntersectionObserver(onExit, options);
-                        }
-                    }
-
-                    return <WrapperComponentExit wrapperObject={this}>{element}</WrapperComponentExit>;
-                }
-            case "click": {
-                return <div onClick={() => {
-                    this.data.interactionModifier.reactionOut.notify();
-                }}>{element}</div>
-            }
-            case "double-click": {
-                return <div onDblClick={() => {
-                    this.data.interactionModifier.reactionOut.notify();
-                }}>{element}</div>
-            }
-            case "pointer-enter": {
-                return <div onPointerEnter={() => {
-                    this.data.interactionModifier.reactionOut.notify();
-                }}>{element}</div>
-            }
-            case "pointer-exit": {
-                return <div onPointerLeave={() => {
-                    this.data.interactionModifier.reactionOut.notify();
-                }}>{element}</div>
-            }
-            default: {
-                return <div></div>
+                let options = { threshold: [0.25] };
+                thatWrapped.intersectionObserverEnter = new IntersectionObserver(onEnter, options);
             }
         }
+
+        class WrapperComponentExit extends WrapperComponent {
+            constructor(props: IHTMLInteractionModifierProperties) {
+                super(props);
+                const thatWrapper = this.wrapped;
+
+                function onExit(entry: IntersectionObserverEntry[]) {
+                    entry.forEach((change) => {
+                        if (!change.isIntersecting) {
+                            thatWrapper.data.interactionModifier.reactionOut.notify();
+                        }
+                    });
+                }
+                let options = { threshold: [0.25] };
+                thatWrapper.intersectionObserverExit = new IntersectionObserver(onExit, options);
+            }
+        }
+
+        let toReturn = <div onClick={() => {
+            if (this.onClick) {
+                this.data.interactionModifier.reactionOut.notify();
+            }
+        }}
+            onDblClick={() => {
+                if (this.onDblClick) {
+                    this.data.interactionModifier.reactionOut.notify();
+                }
+            }}
+            onPointerEnter={() => {
+                if (this.onPointerEnter) {
+                    this.data.interactionModifier.reactionOut.notify();
+                }
+            }}
+            onPointerLeave={() => {
+                if (this.onPointerLeave) {
+                    this.data.interactionModifier.reactionOut.notify();
+                }
+            }}>
+            {element}
+        </div>;
+
+        if (this.onEnterView) {
+            toReturn = <WrapperComponentEnter wrappedObject={this}>{toReturn}</WrapperComponentEnter>;
+        }
+        if (this.onExitView) {
+            toReturn = <WrapperComponentExit wrappedObject={this}>{toReturn}</WrapperComponentExit>;
+        }
+
+        return toReturn;
     }
 
     public get menuTemplate(): MenuTemplate[] {
         const ret: MenuTemplate[] = [
             ...super.menuTemplate,
             ...nameField(this),
-            //TODO: Slider should be configurable to do half-steps
-            ...dropDownField(
-                this,
-                () => ["click", "double-click", "enter-view", "exit-view", "hover"],
-                () => this.interactionOption,
-                (selection: string) => {
-                    runInAction(() => this.interactionOption = selection);
-                }
-            )];
+            new CheckBox(
+                "enable OnClick Event",
+                () => this.onClick,
+                (sel: boolean) => {
+                    runInAction(() => this.onClick = sel)
+                }),
+            new CheckBox(
+                "enable OnDoubleClick Event",
+                () => this.onDblClick,
+                (sel: boolean) => {
+                    runInAction(() => this.onDblClick = sel)
+                }),
+            new CheckBox(
+                "enable OnPointerEnter Event",
+                () => this.onPointerEnter,
+                (sel: boolean) => {
+                    runInAction(() => this.onPointerEnter = sel)
+                }),
+            new CheckBox(
+                "enable OnPointerLeave Event",
+                () => this.onPointerLeave,
+                (sel: boolean) => {
+                    runInAction(() => this.onPointerLeave = sel)
+                }),
+            new CheckBox(
+                "enable OnEnterView Event",
+                () => this.onEnterView,
+                (sel: boolean) => {
+                    runInAction(() => this.onEnterView = sel)
+                }),
+            new CheckBox(
+                "enable OnExitView Event",
+                () => this.onExitView,
+                (sel: boolean) => {
+                    runInAction(() => this.onExitView = sel)
+                })];
         return ret;
     }
 
