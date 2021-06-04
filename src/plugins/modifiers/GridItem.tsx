@@ -28,7 +28,7 @@ export class GridItemInlineStatements implements IGridItemInlineStatements {
     }
 }
 
-type Size = "XS" | "SM" | "MD" | "LG" | "XL";
+type Size = "XS" | "SM" | "MD" | "LG";
 
 export class GridItem implements IGridItemModifierData {
     
@@ -46,9 +46,8 @@ export class GridItem implements IGridItemModifierData {
     public classMap = new Map<Size, number>([
         ["XS", 12],
         ["SM", 12],
-        ["MD", 6],
-        ["LG", 6],
-        ["XL", 3]
+        ["MD", 12],
+        ["LG", 6]
     ]);
 
     constructor() {
@@ -77,7 +76,7 @@ export class CSSGriditemModifier extends CSSModifier {
     public get menuTemplate(): MenuTemplate[] {
         return [
             ...super.menuTemplate,
-            ...["XS", "SM", "MD", "LG", "XL"].map(e => (
+            ...["XS", "SM", "MD", "LG"].map(e => (
                 this.makeSlider(e as Size)
             )),
         ];

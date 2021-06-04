@@ -16,7 +16,7 @@ interface IPreviewProps extends IPreviewWrapperProps {
     store: RootStore
 }
 
-type WidthClass = "XS" | "SM" | "MD" | "LG" | "XL";
+type WidthClass = "XS" | "SM" | "MD" | "LG";
 
 interface IPreviewState {
     classes: WidthClass[]
@@ -61,10 +61,9 @@ export class Preview2 extends Component<IPreviewProps, IPreviewState> {
     private getCurrentWidthClass(width: number) {
         const classes = [
             { class: "XS", condition: (x: number) => x >= 0 },
-            { class: "SM", condition: (x: number) => x >= 576 },
-            { class: "MD", condition: (x: number) => x >= 768 },
-            { class: "LG", condition: (x: number) => x >= 960 },
-            { class: "XL", condition: (x: number) => x >= 1200 },
+            { class: "SM", condition: (x: number) => x >= 480 },
+            { class: "MD", condition: (x: number) => x >= 800 },
+            { class: "LG", condition: (x: number) => x >= 1024 },
         ];
 
         return classes.filter(e => e.condition(width)).map(e => e.class as WidthClass);
