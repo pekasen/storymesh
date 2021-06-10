@@ -32,8 +32,58 @@
   width: 100%;
   height: auto;
   margin: 0;
-  padding: 0; }
+  padding: 0;
+  transition: font-size .2s; }
+  .storywrapper.XS.SM.MD.LG h1 {
+    font-size: 3rem; }
+  .storywrapper.XS.SM.MD.LG h2 {
+    font-size: 2.4rem; }
+  .storywrapper.XS.SM.MD.LG h3 {
+    font-size: 2.1rem; }
+  .storywrapper.XS.SM.MD.LG h4 {
+    font-size: 1.8rem; }
+  .storywrapper.XS.SM.MD.LG h5 {
+    font-size: 1.5rem; }
+  .storywrapper.XS.SM.MD.LG h6 {
+    font-size: 1.3rem; }
+  .storywrapper.XS.SM.MD h1 {
+    font-size: 2.5rem; }
+  .storywrapper.XS.SM.MD h2 {
+    font-size: 2.1rem; }
+  .storywrapper.XS.SM.MD h3 {
+    font-size: 1.8rem; }
+  .storywrapper.XS.SM.MD h4 {
+    font-size: 1.5rem; }
+  .storywrapper.XS.SM.MD h5 {
+    font-size: 1.2rem; }
+  .storywrapper.XS.SM.MD h6 {
+    font-size: .9rem; }
+  .storywrapper.XS.SM h1 {
+    font-size: 2.1rem; }
+  .storywrapper.XS.SM h2 {
+    font-size: 1.8rem; }
+  .storywrapper.XS.SM h3 {
+    font-size: 1.6rem; }
+  .storywrapper.XS.SM h4 {
+    font-size: 1.4rem; }
+  .storywrapper.XS.SM h5 {
+    font-size: 1.2rem; }
+  .storywrapper.XS.SM h6 {
+    font-size: 0.9rem; }
+  .storywrapper.XS h1 {
+    font-size: 1.7rem; }
+  .storywrapper.XS h2 {
+    font-size: 1.4rem; }
+  .storywrapper.XS h3 {
+    font-size: 1.2rem; }
+  .storywrapper.XS h4 {
+    font-size: 1rem; }
+  .storywrapper.XS h5 {
+    font-size: .9rem; }
+  .storywrapper.XS h6 {
+    font-size: .8rem; }
   .storywrapper .ngwebs-story {
+    /* move to hero scss? */
     /* ========== THEME TYPEWRITER ========== */ }
     .storywrapper .ngwebs-story .ngwebs-story-container {
       width: 100%;
@@ -81,26 +131,6 @@
     .storywrapper .ngwebs-story h5,
     .storywrapper .ngwebs-story h6 {
       white-space: normal; }
-    .storywrapper .ngwebs-story h1 {
-      font-size: 2.5rem; }
-      .storywrapper .ngwebs-story h1 .storywrapper.XS {
-        font-size: 1.5rem; }
-      .storywrapper .ngwebs-story h1 .storywrapper.SM {
-        font-size: 1.8rem; }
-      .storywrapper .ngwebs-story h1 .storywrapper.MD {
-        font-size: 1.9rem; }
-      .storywrapper .ngwebs-story h1 .storywrapper.LG {
-        font-size: 2.1rem; }
-    .storywrapper .ngwebs-story h2 {
-      font-size: 2rem; }
-    .storywrapper .ngwebs-story h3 {
-      font-size: 1.8rem; }
-    .storywrapper .ngwebs-story h4 {
-      font-size: 1.6rem; }
-    .storywrapper .ngwebs-story h5 {
-      font-size: 1.4rem; }
-    .storywrapper .ngwebs-story h6 {
-      font-size: 1.2rem; }
     .storywrapper .ngwebs-story blockquote {
       font-size: 2.3rem; }
       .storytheme-basic .storywrapper .ngwebs-story blockquote {

@@ -82,6 +82,94 @@
   height: auto;
   margin: 0;
   padding: 0;
+  transition: font-size .2s;
+
+  &.XS.SM.MD.LG {
+    h1 {
+      font-size: 3rem;
+    }
+    h2 {
+      font-size: 2.4rem;
+    }
+    h3 {
+      font-size: 2.1rem;     
+    }
+    h4 {
+      font-size: 1.8rem;
+    }
+    h5 {
+      font-size: 1.5rem;
+    }
+    h6 {
+      font-size: 1.3rem;
+    }
+    p {
+      font-size: 1rem;
+    }
+  }
+
+  &.XS.SM.MD {
+    h1 {
+      font-size: 2.5rem;
+    }
+    h2 {
+      font-size: 2.1rem;
+    }
+    h3 {
+      font-size: 1.8rem;     
+    }
+    h4 {
+      font-size: 1.5rem;
+    }
+    h5 {
+      font-size: 1.2rem;
+    }
+    h6 {
+      font-size: .9rem;
+    }
+  }
+
+  &.XS.SM {
+    h1 {
+      font-size: 2.1rem;
+    }
+    h2 {
+      font-size: 1.8rem;
+    }
+    h3 {
+      font-size: 1.6rem;     
+    }
+    h4 {
+      font-size: 1.4rem;
+    }
+    h5 {
+      font-size: 1.2rem;
+    }
+    h6 {
+      font-size: 0.9rem;
+    }
+  }
+
+  &.XS {
+    h1 {
+      font-size: 1.7rem;
+    }
+    h2 {
+      font-size: 1.4rem;
+    }
+    h3 {
+      font-size: 1.2rem;     
+    }
+    h4 {
+      font-size: 1rem;
+    }
+    h5 {
+      font-size: .9rem;
+    }
+    h6 {
+      font-size: .8rem;
+    }
+  }
 
   .ngwebs-story {
     .ngwebs-story-container {
@@ -90,6 +178,8 @@
       place-items: center;
     }
 
+
+    /* move to hero scss? */
     .hero {
       display: flex;
       justify-content: center;
@@ -146,42 +236,6 @@
     h5,
     h6 {
       white-space: normal;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      @include for-mobile() {
-        font-size: 1.5rem;
-      }
-      @include for-tablet-portrait() {
-        font-size: 1.8rem;
-      }
-      @include for-tablet-landscape() {
-        font-size: 1.9rem;
-      }
-      @include for-desktop() {
-        font-size: 2.1rem;
-      }
-    }
-
-    h2 {
-      font-size: 2rem;
-    }
-
-    h3 {
-      font-size: 1.8rem;
-    }
-
-    h4 {
-      font-size: 1.6rem;
-    }
-
-    h5 {
-      font-size: 1.4rem;
-    }
-
-    h6 {
-      font-size: 1.2rem;
     }
 
     // QUOTES
