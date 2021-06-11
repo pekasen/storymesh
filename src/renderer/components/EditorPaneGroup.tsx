@@ -1,7 +1,7 @@
 import { reaction } from 'mobx';
 import { FunctionalComponent, h } from "preact";
 import { Pane, HorizontalPaneGroup, ResizablePane } from './Pane/Pane';
-import { VerticalPane, VerticalPaneGroup, VerticalSmallPane, VerticalMiniPane, VerticalFlexPane } from './VerticalPane/VerticalPane';
+import { VerticalPane, VerticalPaneGroup, VerticalFlexPane } from './VerticalPane/VerticalPane';
 import { ItemPropertiesView } from './ItemPropertiesView/ItemPropertiesView';
 import { StoryObjectViewRenderer } from "./StoryObjectViewRenderer/StoryObjectViewRenderer";
 import { BreadCrumb } from "./BreadCrumbs/BreadCrumbs";
@@ -10,7 +10,6 @@ import { StoryComponentGallery } from './StoryComponentGalleryView/StoryComponen
 import { GalleryItemView } from './GalleryItemView';
 import { Store } from '..';
 import { useContext, useEffect, useState } from 'preact/hooks';
-import { StoryObject } from '../../plugins/helpers/AbstractStoryObject';
 
 export const EditorPaneGroup: FunctionalComponent = () => {
     const [, setState] = useState({});
@@ -19,7 +18,7 @@ export const EditorPaneGroup: FunctionalComponent = () => {
 
     useEffect(() => {
         const disposer = reaction(
-            () => [store.storyContentObjectRegistry, store.storyContentObjectRegistry.registry.size, store.uistate.loadedItem],
+            () => [store.storyContentObjectRegistry, store.storyContentObjectRegistry.__registry.size, store.uistate.loadedItem],
             () => setState({})
         );
 
@@ -28,7 +27,7 @@ export const EditorPaneGroup: FunctionalComponent = () => {
         };
     });
 
-    const loadedItem = store.storyContentObjectRegistry.getValue(store.uistate.loadedItem);
+    const loadedItem = store.storyContentObjectRegistry.get(store.uistate.loadedItem);
 
     if (loadedItem) return <HorizontalPaneGroup>
         <ResizablePane paneState={store.uistate.windowProperties.sidebarPane} resizable="right" classes={["sidebar"]}>
@@ -41,7 +40,7 @@ export const EditorPaneGroup: FunctionalComponent = () => {
                     <StoryObjectViewRenderer />
                     <VerticalFlexPane>
                         <StoryComponentGallery>
-                            {store.pluginStore.registry.
+                            {store.pluginStore.toArray().
                                 filter((val) => (val.public)).
                                 map((item) => (
                                     <GalleryItemView item={item}>
@@ -57,7 +56,7 @@ export const EditorPaneGroup: FunctionalComponent = () => {
             <Preview
                 topLevelObjectId={store.uistate.topLevelObjectID}
                 id={"g"}
-                graph={store.storyContentObjectRegistry.getValue(store.uistate.topLevelObjectID)?.childNetwork}
+                graph={store.storyContentObjectRegistry.get(store.uistate.topLevelObjectID)?.childNetwork}
                 registry={store.storyContentObjectRegistry}
                 userDefinedProperties={{}}
             >

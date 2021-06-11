@@ -13,6 +13,9 @@ type Themes = "dark" | "light" | "eggplant";
 export class Preferences {
     theme: Themes = "eggplant";
     author = "NGWebS Default User";
+    installedPackages: string[] = [
+        "base"
+    ];
     static availableThemes = ["dark", "light", "eggplant"];
 }
 
@@ -97,11 +100,27 @@ class PreferencesView extends Component<unknown, Preferences> {
                     const value = (ev.target as HTMLInputElement).value;
                     this.setState({author: value});
                 }}>
-                    NGWebS Default User
+                    {this.state.author}
                 </input>
                 <label class="label-name" for="author">
                     <span class="content-name">Author</span>
                 </label>
+            </div>
+        );
+
+        const PackagesField: FunctionalComponent = () => (
+            <div class="form-group-item ">
+                <label class="label-name" for="installedPackages">Installed Packages</label>
+                <table>
+                    {
+                        this.state.installedPackages.map(e => (
+                            <tr>
+                                <th>Name</th>
+                                <td>{e}</td>
+                            </tr>
+                        ))
+                    }
+                </table>
             </div>
         );
 
@@ -128,6 +147,7 @@ class PreferencesView extends Component<unknown, Preferences> {
             <form>
                 <ThemePicker options={Preferences.availableThemes} />
                 <AuthorField />
+                <PackagesField />
                 <button class="cancel" id="pref-cancel-btn" onClick={() => this.exit()}>Cancel</button>
                 <button class="confirm" id="pref-ok-btn" onClick={() => this.saveAndExit()}>OK</button>
             </form>

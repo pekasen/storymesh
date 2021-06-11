@@ -1,9 +1,8 @@
 import { IReactionDisposer, reaction } from 'mobx';
 import { Component, FunctionalComponent, h } from 'preact';
 import { useContext } from 'preact/hooks';
-import { IStoryObject } from 'storygraph';
+import { IStoryObject, StoryObject } from 'storygraph';
 import { Store } from '../..';
-import { StoryObject } from '../../../plugins/helpers/AbstractStoryObject';
 import { MoveableItem } from '../../store/MoveableItem';
 import { Line, Rect, Svg, SVG } from '@svgdotjs/svg.js';
 import { RootStore } from '../../store/rootStore';
@@ -56,7 +55,7 @@ export class EdgeRenderer2 extends Component<{store: RootStore}> {
                 if (nestedDisposeReaction) {
                     nestedDisposeReaction();
                 }
-                const loadedObject = this.store.storyContentObjectRegistry.getValue(this.store.uistate.loadedItem);
+                const loadedObject = this.store.storyContentObjectRegistry.get(this.store.uistate.loadedItem);
                 if (!loadedObject)
                     throw ("Undefined loaded object");
                 const moveableItems = loadedObject?.childNetwork?.nodes.map((id) => {                    
@@ -78,7 +77,7 @@ export class EdgeRenderer2 extends Component<{store: RootStore}> {
                 ]
             },
             () => {
-                const loadedObject = this.store.storyContentObjectRegistry.getValue(this.store.uistate.loadedItem);
+                const loadedObject = this.store.storyContentObjectRegistry.get(this.store.uistate.loadedItem);
                 if (!loadedObject)
                     throw ("Undefined loaded object");
                 this.setState({});                
@@ -91,7 +90,7 @@ export class EdgeRenderer2 extends Component<{store: RootStore}> {
             () => {
                 this.setState({});
                 
-                const loadedObject = this.store.storyContentObjectRegistry.getValue(this.store.uistate.loadedItem);
+                const loadedObject = this.store.storyContentObjectRegistry.get(this.store.uistate.loadedItem);
                 if (!loadedObject)
                     throw ("Undefined loaded object");
                 
@@ -110,7 +109,7 @@ export class EdgeRenderer2 extends Component<{store: RootStore}> {
 
         this.disposeReactionCollapseItem = reaction(
             () => {
-                const loadedObject = this.store.storyContentObjectRegistry.getValue(this.store.uistate.loadedItem);
+                const loadedObject = this.store.storyContentObjectRegistry.get(this.store.uistate.loadedItem);
                 if (!loadedObject)
                     throw ("Undefined loaded object");
                 const moveableItems = loadedObject?.childNetwork?.nodes.map((id) => {                    
@@ -121,7 +120,7 @@ export class EdgeRenderer2 extends Component<{store: RootStore}> {
             () => {
                 this.setState({});
                 
-                const loadedObject = this.store.storyContentObjectRegistry.getValue(this.store.uistate.loadedItem);
+                const loadedObject = this.store.storyContentObjectRegistry.get(this.store.uistate.loadedItem);
                 if (!loadedObject)
                     throw ("Undefined loaded object");
                 
@@ -148,7 +147,7 @@ export class EdgeRenderer2 extends Component<{store: RootStore}> {
             () => {  
                 this.setState({});
                 //Logger.info("selected items changed", this.store.uistate.selectedItems.ids.length);
-                const loadedObject = this.store.storyContentObjectRegistry.getValue(this.store.uistate.loadedItem);
+                const loadedObject = this.store.storyContentObjectRegistry.get(this.store.uistate.loadedItem);
                 if (!loadedObject)
                     throw ("Undefined loaded object");
 
@@ -199,7 +198,7 @@ export class EdgeRenderer2 extends Component<{store: RootStore}> {
                 document.removeEventListener("mousemove", mouseMove);
                 this.store.uistate.selectedItems.clearSelectedItems();
 
-                const loadedObject = this.store.storyContentObjectRegistry.getValue(this.store.uistate.loadedItem);
+                const loadedObject = this.store.storyContentObjectRegistry.get(this.store.uistate.loadedItem);
                 if (!loadedObject)
                     throw ("Undefined loaded object");
                 const moveableItems = loadedObject?.childNetwork?.nodes.map((id) => {                    

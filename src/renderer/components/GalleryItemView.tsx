@@ -1,6 +1,6 @@
 import { IReactionDisposer, reaction } from 'mobx';
 import { Component, FunctionalComponent, h } from 'preact';
-import { StoryObject } from '../../plugins/helpers/AbstractStoryObject';
+import { StoryObject } from 'storygraph';
 import { IPlugInRegistryEntry } from '../utils/PlugInClassRegistry';
 import { Draggable } from './Draggable';
 import { IItem } from './IItem';

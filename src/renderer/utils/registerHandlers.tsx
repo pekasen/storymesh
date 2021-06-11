@@ -2,8 +2,7 @@ import { ipcRenderer } from 'electron/renderer';
 import { readFile, writeFile } from "fs";
 import Logger from 'js-logger';
 import { deserialize, serialize } from 'serializr';
-import { StoryObject } from 'storygraph';
-import { StoryObjectSchema } from '../../plugins/helpers/AbstractStoryObject';
+import { StoryObjectSchema } from 'storygraph';
 import { rootStore } from '../index';
 import { RootStoreSchema } from "../store/rootStore";
 import { IValue, ValueRegistrySchema } from './registry';
@@ -65,16 +64,16 @@ export function registerHandlers(): void {
         const selectedItemIds = rootStore.root.uistate.selectedItems.ids;
         const reg = rootStore.root.storyContentObjectRegistry;
         Logger.info("delete", selectedItemIds);
-        const loadedObject = rootStore.root.storyContentObjectRegistry.getValue(rootStore.root.uistate.loadedItem);
+        const loadedObject = rootStore.root.storyContentObjectRegistry.get(rootStore.root.uistate.loadedItem);
 
         selectedItemIds.forEach(selectedItemID => {
-            const selectedItem = reg.getValue(selectedItemID);
+            const selectedItem = reg.get(selectedItemID);
             if ( selectedItem && selectedItem.parent && selectedItem.deletable) {
-                const parentItem = reg.getValue(selectedItem.parent)
+                const parentItem = reg.get(selectedItem.parent)
                 // remove ties and die
                 parentItem?.childNetwork?.removeNode(reg, selectedItem.id);
                 rootStore.root.uistate.moveableItems.deregister(selectedItemID);
-                rootStore.root.storyContentObjectRegistry.deregister(selectedItemID);
+                rootStore.root.storyContentObjectRegistry.rm(selectedItemID);
             } else if (selectedItemID.startsWith("edge.")) { // disconnect edges                
                 const selectedEdges = loadedObject?.childNetwork?.edges.filter((edge) => edge.id == selectedItemID);
                 if (selectedEdges)

@@ -24,6 +24,8 @@ class _ImageObject extends StoryObject {
     public userDefinedProperties: any;
     public childNetwork?: StoryGraph;
     public content: IContent;
+    public mobileResource: string;
+    public isMobile: boolean;
     public icon: string;
 
     public static defaultIcon = "icon-picture"
@@ -43,6 +45,9 @@ class _ImageObject extends StoryObject {
             altText: "Image description"
         }
 
+        this.isMobile = false;
+        this.mobileResource = "https://source.unsplash.com/random/1920x1080";
+
         this.userDefinedProperties = {
             caption: "This is the caption",
             mediaSource: "Who made this?"
@@ -53,14 +58,17 @@ class _ImageObject extends StoryObject {
         makeObservable(this, {
             name: observable,
             userDefinedProperties: observable,
+            isMobile: observable,
             connectors: computed,
             menuTemplate: computed,
             content: observable,
             updateName: action,
             updateImageURL: action,
+            updateMobileImageURL: action,
             updateAltText: action,
             updateCaption: action,
-            updateMediaSource: action
+            updateMediaSource: action,
+            setMobile: action
         });
     }
 
@@ -68,6 +76,7 @@ class _ImageObject extends StoryObject {
         const ret: MenuTemplate[] = [
             ...nameField(this),
             new Text("URL", {defaultValue: ""}, () => this.content.resource, (arg: string) => this.updateImageURL(arg)),
+            new Text("Mobile version", {defaultValue: ""}, () => this.mobileResource, (arg: string) => this.updateMobileImageURL(arg)),
             new Text("Alt text", { placeHolder: "Image description" }, () => this.content.altText, (arg: string) => this.updateAltText(arg)),
             new Text("Caption", { placeHolder: "This is the caption" }, () => this.userDefinedProperties.caption, (arg: string) => this.updateCaption(arg)),
             new Text("Source", { placeHolder: "Who made this?" }, () => this.userDefinedProperties.mediaSource, (arg: string) => this.updateMediaSource(arg)),
@@ -80,6 +89,10 @@ class _ImageObject extends StoryObject {
 
     public updateImageURL(newURL: string) {
         this.content.resource = newURL;
+    }
+
+    public updateMobileImageURL(newURL: string) {
+        this.mobileResource = newURL;
     }
 
     public updateName(name: string): void {
@@ -98,6 +111,17 @@ class _ImageObject extends StoryObject {
         this.userDefinedProperties.mediaSource = mediaSource;
     }
 
+    //Check which classes exist on the storywrapper?
+
+    public setMobile(){
+        const Storywrapper = document.getElementById('storywrapper');
+    
+        if (!Storywrapper.classList.contains('MD') || !Storywrapper.classList.contains('LG')){
+            this.isMobile = true;
+        }
+            this.isMobile = false;
+}
+
     public getComponent(): FunctionComponent<INGWebSProps> {
         const Comp: FunctionComponent<INGWebSProps> = ({ content }) => {
 
@@ -109,7 +133,7 @@ class _ImageObject extends StoryObject {
 
             const imgContainer = <div id={this.id} class="imagewrapper image">
                     <figure>
-                        <img src={content?.resource} alt={this.content.altText} />
+                        <img src={this.isMobile ?  this.mobileResource : content?.resource} alt={this.content.altText} />
                         <figcaption>{this.userDefinedProperties.caption} <span class="media-source">// {this.userDefinedProperties.mediaSource}</span></figcaption>
                     </figure>
                 </div>;

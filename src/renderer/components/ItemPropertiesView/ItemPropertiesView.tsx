@@ -10,7 +10,7 @@ export const ItemPropertiesView: FunctionalComponent = () => {
     const { storyContentObjectRegistry, uistate } = useContext(Store);
     
     const res = storyContentObjectRegistry.
-    getValue(uistate.selectedItems.first);
+    get(uistate.selectedItems.first);
     const [state, setState] = useState({
         items: res?.menuTemplate
     });
@@ -25,7 +25,7 @@ export const ItemPropertiesView: FunctionalComponent = () => {
                 }
             ),
             ({ id }) => {
-                const items = storyContentObjectRegistry.getValue(id)?.menuTemplate;
+                const items = storyContentObjectRegistry.get(id)?.menuTemplate;
                 if (items !== undefined && items.length >= 0) {
                     setState({
                         items: items

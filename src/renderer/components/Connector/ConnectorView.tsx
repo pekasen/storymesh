@@ -36,7 +36,7 @@ export class ConnectorView extends Component<IConnectorViewProps> {
         // onDrag={this.onDrag(id)}
         const { storyContentObjectRegistry } = useContext(Store);
         const [fromId, fromPort] = StoryGraph.parseNodeId(id);
-        const obj = storyContentObjectRegistry.getValue(fromId);
+        const obj = storyContentObjectRegistry.get(fromId);
         const fromCon = obj?.connectors.get(fromPort);
 
         return <DraggableDropReceiver id={id} onDrop={(ev: DragEvent) => {
