@@ -13,6 +13,7 @@ function createWindow() {
         titleBarStyle: "hidden",
         webPreferences: {
             nodeIntegration: true,
+            contextIsolation: false,
             worldSafeExecuteJavaScript: true,
             enableRemoteModule: true
         }
@@ -31,7 +32,7 @@ function createWindow() {
     // .then((value) => Logger.info(`Loaded ${value}`))
     // .catch(() => console.warn("failed to load devtools extension"))
 
-    win.loadFile("./dist/index.html");
+    win.loadFile("../index.html");
     // win.webContents.openDevTools();
     return win
 }

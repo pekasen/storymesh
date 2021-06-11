@@ -36,7 +36,7 @@ export class BreadCrumb extends Component<IBreadCrumbPropeties>
             res.push(obj);
    
             if (obj && obj.parent) {
-                const rObj = storyContentObjectRegistry.getValue(obj.parent);
+                const rObj = storyContentObjectRegistry.get(obj.parent);
                 if (rObj) {
                     const r = recursePath(rObj);
                     if (r) res.push(...r)
@@ -69,7 +69,7 @@ export class BreadCrumb extends Component<IBreadCrumbPropeties>
                             }
                             case 1: {
                                 return <li class="item selected">{
-                                    storyContentObjectRegistry.getValue(uistate.selectedItems.first)?.name
+                                    storyContentObjectRegistry.get(uistate.selectedItems.first)?.name
                                     }</li>
                             }
                             default: {

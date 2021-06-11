@@ -12,9 +12,9 @@
 import Logger from 'js-logger';
 import { action, makeObservable, observable } from 'mobx';
 import { createModelSchema, custom, getDefaultModelSchema, map, ModelSchema, object, serialize, deserialize, mapAsArray } from 'serializr';
-import { IStoryObject } from 'storygraph';
+import { IStoryObject, StoryObject } from 'storygraph';
 import { rootStore } from '..';
-import { StoryObject } from '../../plugins/helpers/AbstractStoryObject';
+
 // import { deserializeObjectWithSchema } from '../../../node_modules/serializr/lib/core/deserialize';
 import { IItem } from '../components/IItem';
 
@@ -165,7 +165,7 @@ export function AutoValueRegistrySchema<T extends IValue<T>> () : ModelSchema<Va
             return serialize(_schema, v);
         },
         (jsonVal, context, callback) => {
-            const instance = rootStore.root.pluginStore.getNewInstance(jsonVal.role);
+            const instance = rootStore.root.pluginStore.get(jsonVal.role);
             if (!instance) throw("Big time failure !!11 while fetching schema for" + jsonVal.role);
             Logger.info("getting schema for", instance.constructor.name);
             const _schema = getDefaultModelSchema(instance.constructor);

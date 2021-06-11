@@ -1,11 +1,10 @@
 import { Component, createRef, FunctionComponent, h } from 'preact';
 import Logger from 'js-logger';
 import { INGWebSProps } from '../../utils/PlugInClassRegistry';
-import { VerticalPaneGroup, VerticalMiniPane, VerticalPane } from '../VerticalPane/VerticalPane';
+import { VerticalPaneGroup, VerticalPane } from '../VerticalPane/VerticalPane';
 import { deepObserve, IDisposer } from 'mobx-utils';
 import { useContext } from 'preact/hooks';
 import { Store } from '../..';
-import { StoryObject } from '../../../plugins/helpers/AbstractStoryObject';
 import { RootStore } from '../../store/rootStore';
 
 interface IPreviewWrapperProps extends INGWebSProps {
@@ -85,7 +84,7 @@ export class Preview2 extends Component<IPreviewProps, IPreviewState> {
     render({ }: IPreviewProps, { classes }: IPreviewState): h.JSX.Element {
         const store = useContext(Store);
         const topLevelObjectId = store.uistate.topLevelObjectID;
-        const topLevelObject = store.storyContentObjectRegistry.getValue(topLevelObjectId);
+        const topLevelObject = store.storyContentObjectRegistry.get(topLevelObjectId);
         if (!topLevelObject ) throw("BIGGY!");
         // if (!topLevelObject.getComponent) throw("BIGGY!2");
         const Elem = topLevelObject.getComponent();

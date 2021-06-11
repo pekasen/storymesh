@@ -3,7 +3,7 @@ import { App } from "./components/App";
 import { render, h, createContext } from "preact";
 import { registerHandlers } from './utils/registerHandlers';
 import { RootStore } from './store/rootStore';
-import { StoryObject } from '../plugins/helpers/AbstractStoryObject';
+import { StoryObject } from 'storygraph';
 import Logger from "js-logger";
 
 // setup logger

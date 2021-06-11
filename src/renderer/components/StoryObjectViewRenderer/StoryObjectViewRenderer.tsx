@@ -1,11 +1,12 @@
 import Logger from 'js-logger';
-import { IReactionDisposer, reaction } from 'mobx';
-import { Component, FunctionalComponent, h } from 'preact';
+import { reaction } from 'mobx';
+import { FunctionalComponent, h } from 'preact';
 import { useContext, useEffect, useState } from 'preact/hooks';
+import { PReg } from 'storygraph';
 import { IStoryObject } from 'storygraph/dist/StoryGraph/IStoryObject';
 import { Store } from '../..';
-import { Container } from '../../../plugins/content/Container';
-import { StoryObject } from '../../../plugins/helpers/AbstractStoryObject';
+import { Container } from 'storymesh-plugin-base';
+import { StoryObject } from 'storygraph';
 import { MoveableItem } from '../../store/MoveableItem';
 import { RootStore } from '../../store/rootStore';
 import { DragReceiver } from "../DragReceiver";
@@ -139,18 +140,25 @@ export const StoryObjectViewRenderer: FunctionalComponent = () => {
         const store = useContext(Store);
         const [,setState] = useState({});
         const loadedObjectId = store.uistate.loadedItem;
-        const loadedObject = store.storyContentObjectRegistry.getValue(loadedObjectId);
+        const loadedObject = store.storyContentObjectRegistry.get(loadedObjectId);
+        // see if all the subobjects have a MoveableItem attached
+        loadedObject?.childNetwork?.nodes.forEach(node => {
+            const uis = store.uistate.moveableItems;
+            if (!uis.registry.has(node)) {
+                uis.register(new MoveableItem(node, 50, 50));
+            }
+        });
 
         if (!loadedObject) throw("loadedObject is not defined");
         useEffect(() => {
             const disposeReaction = reaction(
                 () => {
                     const id = store.uistate.loadedItem;
-                    const network = store.storyContentObjectRegistry.getValue(id)?.childNetwork;
+                    const network = store.storyContentObjectRegistry.get(id)?.childNetwork;
                     if (!network) throw("network ist not defined!");
                 return {
                     id: id,
-                    names: network.nodes.map(id => store.storyContentObjectRegistry.getValue(id)?.name),
+                    names: network.nodes.map(id => store.storyContentObjectRegistry.get(id)?.name),
                     edges: network.edges.map(e => e.id)
                 }},
                 (i) => {
@@ -164,9 +172,10 @@ export const StoryObjectViewRenderer: FunctionalComponent = () => {
             };
         })
         const makeNewInstance = (store: RootStore, input: string, loadedObject: IStoryObject, coords: { x: number; y: number; }) => {
-            const instance = store.pluginStore.getNewInstance(input) as StoryObject;
-    
-            if (instance) {
+            // const instance = new store.pluginStore.get(input)?.constructor() as StoryObject;
+            const constructor = PReg.instance().get(input)?.constructor
+            if (constructor) {
+                const instance = new constructor(true)as StoryObject;
                 loadedObject.childNetwork?.addNode(store.storyContentObjectRegistry, instance);
                 if (instance.role === "internal.content.container") ((instance as Container).setup(store.storyContentObjectRegistry, store.uistate));           
                 store.uistate.selectedItems.setSelectedItems([instance.id]);
@@ -227,7 +236,7 @@ export const StoryObjectViewRenderer: FunctionalComponent = () => {
                 {
                     loadedObject.childNetwork?.nodes
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    .map(id => store.storyContentObjectRegistry.getValue(id))
+                    .map(id => store.storyContentObjectRegistry.get(id))
                     .map((object) => {
                         if (object) return <MoveReceiver registry={store.uistate.moveableItems} id={object.id} selectedItems={store.uistate.selectedItems}>
                             <StoryObjectView store={store} object={object as StoryObject}>

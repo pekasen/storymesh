@@ -3,29 +3,30 @@ import { makeAutoObservable } from 'mobx';
 import { deepObserve } from "mobx-utils";
 import { existsSync, readFileSync } from "original-fs";
 import { createModelSchema, deserialize, object } from "serializr";
-import { IStoryObject } from 'storygraph/dist/StoryGraph/IStoryObject';
+import { PReg, StoryObject, VReg, AbstractStoryModifier } from "storygraph";
 import { __prefPath } from "../../constants";
-import { Container } from "../../plugins/content/Container";
-import { StoryObject } from '../../plugins/helpers/AbstractStoryObject';
-import { AbstractStoryModifier } from "../../plugins/helpers/AbstractModifier";
+import { Container } from "storymesh-plugin-base";
 import { Preferences } from "../../preferences";
-import { AutoValueRegistrySchema, ClassRegistry, ValueRegistry } from '../utils/registry';
+import { IPlugInRegistryEntry } from "../utils/PlugInClassRegistry";
+import { AutoValueRegistrySchema } from '../utils/registry';
 import { NotificationStore } from './Notification';
 import { plugInLoader2, PlugInStore } from './PlugInStore';
 import { StateProcotol } from "./StateProcotol";
 import { UIStore } from './UIStore';
-import { IPlugInRegistryEntry } from "../utils/PlugInClassRegistry";
+import { start } from "storygraph";
+
+
 
 export interface IRootStoreProperties {
     uistate: UIStore
-    storyContentObjectRegistry: ValueRegistry<IStoryObject>
-    storyContentTemplatesRegistry: ClassRegistry<IStoryObject>
+    storyContentObjectRegistry: VReg
+    storyContentTemplatesRegistry: PReg
 }
 
 export class RootStore {
     uistate: UIStore
-    storyContentObjectRegistry: ValueRegistry<StoryObject>
-    pluginStore: PlugInStore<StoryObject | AbstractStoryModifier>;
+    storyContentObjectRegistry: VReg
+    pluginStore: PReg;
     notifications: NotificationStore;
     protocol: StateProcotol;
     userPreferences: Preferences;
@@ -39,35 +40,38 @@ export class RootStore {
         ipcRenderer.on('reload-preferences', () => {
             this.readPreferences();
         });
+        const { ppreg, preg, vreg } = start();
         /**
-         * initialize the template store
+         * initialize the UI store
          */
         this.uistate = uistate || new UIStore();
         /**
          * In this registry we store our instantiated StoryObjects
          */
-        this.storyContentObjectRegistry = new ValueRegistry<StoryObject>();
+        // this.storyContentObjectRegistry = new ValueRegistry<StoryObject>();
+        this.storyContentObjectRegistry = vreg;
         /**
          * In this registry we store our templates and plugin classes
          */
-        this.pluginStore = new PlugInStore();
+        this.pluginStore = preg;
         /**
          * Read the plugins and register them in the template store
          */
         const plugins = plugInLoader2("plugins/content");
         const modifiers = plugInLoader2("plugins/modifiers");
 
-        plugins.forEach((plug: IPlugInRegistryEntry<StoryObject>) => this.pluginStore.setPlugIn(plug.id, plug));
-        modifiers.forEach(plug => this.pluginStore.setPlugIn(plug.id, plug));
+        plugins.forEach((plug: IPlugInRegistryEntry<StoryObject>) => this.pluginStore.set(plug.id, plug));
+        modifiers.forEach(plug => this.pluginStore.set(plug.id, plug));
     
         /**
          * If we are in a empty and untitled document, make a root storyobject
          */
         if (this.uistate.untitledDocument) {
-            const emptyStory = this.pluginStore.getNewInstance("internal.content.container") as StoryObject;
+            const emptyStory = new Container();
+            // const emptyStory = this.pluginStore.get("internal.content.container") as StoryObject;
             if (emptyStory) {
-                this.storyContentObjectRegistry.register(
-                    emptyStory
+                this.storyContentObjectRegistry.set(
+                    emptyStory.id, emptyStory
                 );
                 (emptyStory as Container).setup(this.storyContentObjectRegistry, this.uistate);
                 emptyStory.name = "My Story";
