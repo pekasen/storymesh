@@ -32,7 +32,7 @@ function createWindow() {
     // .then((value) => Logger.info(`Loaded ${value}`))
     // .catch(() => console.warn("failed to load devtools extension"))
 
-    win.loadFile("../index.html");
+    win.loadFile("dist/index.html");
     // win.webContents.openDevTools();
     return win
 }
