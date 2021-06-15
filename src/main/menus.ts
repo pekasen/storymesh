@@ -27,10 +27,11 @@ export function patchMenu(): void {
                         show: false,
                         webPreferences: {
                             nodeIntegration: true,
+                            contextIsolation: false,
                             worldSafeExecuteJavaScript: true,
                             enableRemoteModule: true
                     }});
-                    child.loadFile("./dist/prefs.html");
+                    child.loadFile("dist/prefs.html");
                     
                     child.once('ready-to-show', () => {
                         child.show();

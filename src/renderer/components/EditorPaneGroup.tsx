@@ -10,20 +10,31 @@ import { StoryComponentGallery } from './StoryComponentGalleryView/StoryComponen
 import { Store } from '..';
 import { useContext, useEffect, useState } from 'preact/hooks';
 import { PReg } from 'storygraph';
-import { GalleryItemView } from './GalleryItemView';
 
 export const EditorPaneGroup: FunctionalComponent = () => {
     const [, setState] = useState({});
 
     const store = useContext(Store);
+    // setTimeout(() => {
+    //     () => setState({});
+    // }, 500);
 
     useEffect(() => {
+
         const disposer = reaction(
+<<<<<<< HEAD
             () => {store.pluginStore.size},
             () => {
                 setState({});
                 console.log("Look what I loaded:", store.pluginStore)
             }
+=======
+            () => [
+                store.storyContentObjectRegistry,
+                store.uistate.loadedItem
+            ],
+            () => setState({})
+>>>>>>> 420d351a122673050195c00bb0023bbe16d1b035
         );
 
         return () => {
@@ -47,6 +58,7 @@ export const EditorPaneGroup: FunctionalComponent = () => {
                         <BreadCrumb store={store} loadedObject={loadedItem}></BreadCrumb>
                     <StoryObjectViewRenderer />
                     <VerticalFlexPane>
+<<<<<<< HEAD
                         <StoryComponentGallery>
                             {store.pluginStore.toArray().
                                 // filter((val) => (val.public)).
@@ -56,6 +68,9 @@ export const EditorPaneGroup: FunctionalComponent = () => {
                                     </GalleryItemView>
                                 ))}
                         </StoryComponentGallery>
+=======
+                        <StoryComponentGallery />^
+>>>>>>> 420d351a122673050195c00bb0023bbe16d1b035
                     </VerticalFlexPane>
                 </VerticalPane>
             </VerticalPaneGroup>

@@ -1,5 +1,5 @@
 import { ipcRenderer } from "electron";
-import { makeAutoObservable } from 'mobx';
+import { computed, makeAutoObservable, makeObservable, observable } from 'mobx';
 import { deepObserve } from "mobx-utils";
 import { existsSync, readFileSync } from "original-fs";
 import { createModelSchema, deserialize, object } from "serializr";
@@ -55,7 +55,7 @@ export class RootStore {
         /**
          * In this registry we store our templates and plugin classes
          */
-        this.pluginStore = makeAutoObservable(preg);
+        this.pluginStore = preg
         this.pluginPackstore = ppreg;
         
         /**
@@ -70,6 +70,7 @@ export class RootStore {
                 const { PlugInExports } = value;
                 console.dir("Thing", PlugInExports);
                 ppreg.set(PlugInExports.name, PlugInExports);
+                // TODO: send message to App that loading is finished and we can build the UI
             });
         });
         
