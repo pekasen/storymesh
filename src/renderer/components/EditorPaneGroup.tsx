@@ -10,15 +10,23 @@ import { StoryComponentGallery } from './StoryComponentGalleryView/StoryComponen
 import { GalleryItemView } from './GalleryItemView';
 import { Store } from '..';
 import { useContext, useEffect, useState } from 'preact/hooks';
+import { PReg } from 'storygraph';
 
 export const EditorPaneGroup: FunctionalComponent = () => {
     const [, setState] = useState({});
 
     const store = useContext(Store);
+    // setTimeout(() => {
+    //     () => setState({});
+    // }, 500);
 
     useEffect(() => {
+
         const disposer = reaction(
-            () => [store.storyContentObjectRegistry, store.storyContentObjectRegistry.__registry.size, store.uistate.loadedItem],
+            () => [
+                store.storyContentObjectRegistry,
+                store.uistate.loadedItem
+            ],
             () => setState({})
         );
 
@@ -39,15 +47,7 @@ export const EditorPaneGroup: FunctionalComponent = () => {
                         <BreadCrumb store={store} loadedObject={loadedItem}></BreadCrumb>
                     <StoryObjectViewRenderer />
                     <VerticalFlexPane>
-                        <StoryComponentGallery>
-                            {store.pluginStore.toArray().
-                                filter((val) => (val.public)).
-                                map((item) => (
-                                    <GalleryItemView item={item}>
-                                        <span>{item.name}</span>
-                                    </GalleryItemView>
-                                ))}
-                        </StoryComponentGallery>
+                        <StoryComponentGallery />^
                     </VerticalFlexPane>
                 </VerticalPane>
             </VerticalPaneGroup>

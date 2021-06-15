@@ -1,6 +1,8 @@
 import { IReactionDisposer, reaction } from 'mobx';
 import { Component, FunctionalComponent, h } from 'preact';
-import { StoryObject } from 'storygraph';
+import { useContext } from 'preact/hooks';
+import { PReg, StoryObject } from 'storygraph';
+import { Store } from '..';
 import { IPlugInRegistryEntry } from '../utils/PlugInClassRegistry';
 import { Draggable } from './Draggable';
 import { IItem } from './IItem';
@@ -18,13 +20,8 @@ export class GalleryItemView extends Component<IGalleryItemViewProps<IPlugInRegi
 
     constructor(props: IGalleryItemViewProps<IPlugInRegistryEntry<StoryObject>>) {
         super(props);
+        const store = useContext(Store);
 
-        this.reactionDisposer = reaction(
-            () => ({ ...props.item }),
-            () => {
-                this.setState({});
-            }
-        );
     }
     
     render({ item, children, onClick }: IGalleryItemViewProps<IPlugInRegistryEntry<StoryObject>>): h.JSX.Element {
