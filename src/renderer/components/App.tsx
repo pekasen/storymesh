@@ -8,6 +8,7 @@ import { Store } from '..';
 import { useContext, useEffect, useRef, useState } from 'preact/hooks';
 import { EditorPaneGroup } from './EditorPaneGroup';
 import { NotificationView } from './NotificationView/NotificationView';
+import * as BABYLON from "babylonjs";
 
 export let rootEngine: BABYLON.Engine;
 
