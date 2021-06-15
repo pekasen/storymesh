@@ -3,7 +3,7 @@ import { makeAutoObservable } from 'mobx';
 import { deepObserve } from "mobx-utils";
 import { existsSync, readFileSync } from "original-fs";
 import { createModelSchema, deserialize, object } from "serializr";
-import { PReg, StoryObject, VReg, AbstractStoryModifier } from "storygraph";
+import { PReg, StoryObject, VReg, AbstractStoryModifier, PPReg, PlugInPack } from "storygraph";
 import { __prefPath } from "../../constants";
 import { Container } from "storymesh-plugin-base";
 import { Preferences } from "../../preferences";
@@ -15,8 +15,6 @@ import { StateProcotol } from "./StateProcotol";
 import { UIStore } from './UIStore';
 import { start } from "storygraph";
 
-
-
 export interface IRootStoreProperties {
     uistate: UIStore
     storyContentObjectRegistry: VReg
@@ -27,6 +25,7 @@ export class RootStore {
     uistate: UIStore
     storyContentObjectRegistry: VReg
     pluginStore: PReg;
+    pluginPackstore: PPReg;
     notifications: NotificationStore;
     protocol: StateProcotol;
     userPreferences: Preferences;
@@ -41,28 +40,39 @@ export class RootStore {
             this.readPreferences();
         });
         const { ppreg, preg, vreg } = start();
+        
         /**
          * initialize the UI store
          */
         this.uistate = uistate || new UIStore();
+        
         /**
          * In this registry we store our instantiated StoryObjects
          */
         // this.storyContentObjectRegistry = new ValueRegistry<StoryObject>();
-        this.storyContentObjectRegistry = vreg;
+        this.storyContentObjectRegistry = makeAutoObservable(vreg);
+        
         /**
          * In this registry we store our templates and plugin classes
          */
-        this.pluginStore = preg;
+        this.pluginStore = makeAutoObservable(preg);
+        this.pluginPackstore = ppreg;
+        
         /**
          * Read the plugins and register them in the template store
-         */
-        const plugins = plugInLoader2("plugins/content");
-        const modifiers = plugInLoader2("plugins/modifiers");
-
-        plugins.forEach((plug: IPlugInRegistryEntry<StoryObject>) => this.pluginStore.set(plug.id, plug));
-        modifiers.forEach(plug => this.pluginStore.set(plug.id, plug));
-    
+         */    
+        Promise.all(
+            this.userPreferences.installedPackages.map(pp_name => (
+                import(pp_name)
+            ))
+        ).then((values) => {
+            values.forEach((value) => {
+                const { PlugInExports } = value;
+                console.dir("Thing", PlugInExports);
+                ppreg.set(PlugInExports.name, PlugInExports);
+            });
+        });
+        
         /**
          * If we are in a empty and untitled document, make a root storyobject
          */
@@ -73,7 +83,7 @@ export class RootStore {
                 this.storyContentObjectRegistry.set(
                     emptyStory.id, emptyStory
                 );
-                (emptyStory as Container).setup(this.storyContentObjectRegistry, this.uistate);
+                (emptyStory as Container).setup(this.storyContentObjectRegistry);
                 emptyStory.name = "My Story";
                 // this.topLevelObject = emptyStory;
                 this.uistate.setLoadedItem(emptyStory.id);
@@ -134,42 +144,3 @@ export const RootStoreSchema = createModelSchema(
         storyContentObjectRegistry: object(AutoValueRegistrySchema()),
     }
 );
-
-// observe(this, (change) => Logger.info("changed state", change));
-        // spy((change) => {
-        //     // Logger.info("changed state", change)
-        //     if (change.type == "add" ||
-        //         change.type == "splice" ||
-        //         change.type == "update" ||
-        //         change.type == "remove") {
-        //             this.protocol.persist(change);
-        //         }
-        // });
-        // reaction(
-        //     () => {
-                
-
-        //         // eslint-disable-next-line @typescript-eslint/ban-types
-        //         const traverse = (o: object) => {
-        //             const _ret: unknown[] = [];
-        //             Object.entries(o).forEach(value => {
-        //                 const [key, val] = value;
-        //                 Logger.info(key);
-
-        //                 if (val && typeof val === "object") {
-        //                     _ret.push(...traverse(val));
-        //                 } else if (val) {
-        //                     _ret.push(val)
-        //                 }
-        //             })
-        //             return _ret;
-        //         }
-                
-        //         const _r = traverse(this.storyContentObjectRegistry);
-        //         Logger.info(_r);
-
-        //     },
-        //     (arg, prev, r) => {
-        //         Logger.info("state", r);
-        //     }
-        // )
