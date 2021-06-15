@@ -158,8 +158,8 @@ export const StoryObjectViewRenderer: FunctionalComponent = () => {
                     if (!network) throw("network ist not defined!");
                 return {
                     id: id,
-                    names: network.nodes.map(id => store.storyContentObjectRegistry.get(id)?.name),
-                    edges: network.edges.map(e => e.id)
+                    nodeSize: network.nodes.length,
+                    edges: network.edges
                 }},
                 (i) => {
                     Logger.info("I changed!", i);
@@ -173,7 +173,8 @@ export const StoryObjectViewRenderer: FunctionalComponent = () => {
         })
         const makeNewInstance = (store: RootStore, input: string, loadedObject: IStoryObject, coords: { x: number; y: number; }) => {
             // const instance = new store.pluginStore.get(input)?.constructor() as StoryObject;
-            const constructor = PReg.instance().get(input)?.constructor
+            const constructor = store.pluginStore.get(input)?.class;
+        
             if (constructor) {
                 const instance = new constructor(true)as StoryObject;
                 loadedObject.childNetwork?.addNode(store.storyContentObjectRegistry, instance);
@@ -232,7 +233,7 @@ export const StoryObjectViewRenderer: FunctionalComponent = () => {
                     }
                 }
             }>
-                <EdgeRenderer></EdgeRenderer>
+                
                 {
                     loadedObject.childNetwork?.nodes
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -247,6 +248,7 @@ export const StoryObjectViewRenderer: FunctionalComponent = () => {
                         </MoveReceiver>
                         })
                     }
+                    <EdgeRenderer />
             </div>
         </DragReceiver>
 }

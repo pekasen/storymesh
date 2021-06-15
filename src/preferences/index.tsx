@@ -14,7 +14,7 @@ export class Preferences {
     theme: Themes = "eggplant";
     author = "NGWebS Default User";
     installedPackages: string[] = [
-        "base"
+        "storymesh-plugin-base"
     ];
     static availableThemes = ["dark", "light", "eggplant"];
 }
