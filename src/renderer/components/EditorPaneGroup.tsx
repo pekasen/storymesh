@@ -22,19 +22,11 @@ export const EditorPaneGroup: FunctionalComponent = () => {
     useEffect(() => {
 
         const disposer = reaction(
-<<<<<<< HEAD
-            () => {store.pluginStore.size},
-            () => {
-                setState({});
-                console.log("Look what I loaded:", store.pluginStore)
-            }
-=======
             () => [
                 store.storyContentObjectRegistry,
                 store.uistate.loadedItem
             ],
             () => setState({})
->>>>>>> 420d351a122673050195c00bb0023bbe16d1b035
         );
 
         return () => {
@@ -58,19 +50,7 @@ export const EditorPaneGroup: FunctionalComponent = () => {
                         <BreadCrumb store={store} loadedObject={loadedItem}></BreadCrumb>
                     <StoryObjectViewRenderer />
                     <VerticalFlexPane>
-<<<<<<< HEAD
-                        <StoryComponentGallery>
-                            {store.pluginStore.toArray().
-                                // filter((val) => (val.public)).
-                                map((item) => (
-                                    <GalleryItemView item={item}>
-                                        <span>{item.name}</span>
-                                    </GalleryItemView>
-                                ))}
-                        </StoryComponentGallery>
-=======
                         <StoryComponentGallery />^
->>>>>>> 420d351a122673050195c00bb0023bbe16d1b035
                     </VerticalFlexPane>
                 </VerticalPane>
             </VerticalPaneGroup>
