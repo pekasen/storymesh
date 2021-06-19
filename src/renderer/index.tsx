@@ -1,4 +1,4 @@
-import "preact/debug";
+// import "preact/debug";
 import { App } from "./components/App";
 import { render, h, createContext } from "preact";
 import { registerHandlers } from './utils/registerHandlers';
