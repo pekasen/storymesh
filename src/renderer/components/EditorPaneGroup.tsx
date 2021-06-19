@@ -14,15 +14,12 @@ export const EditorPaneGroup: FunctionalComponent = () => {
     const [, setState] = useState({});
 
     const store = useContext(Store);
-    setTimeout(() => {
-        () => setState({});
-    }, 500);
 
     useEffect(() => {
 
         const disposer = reaction(
             () => [
-                store.storyContentObjectRegistry,
+                // store.storyContentObjectRegistry,
                 store.uistate.loadedItem
             ],
             () => setState({})
@@ -51,14 +48,11 @@ export const EditorPaneGroup: FunctionalComponent = () => {
             </VerticalPaneGroup>
         </Pane>
         <ResizablePane paneState={store.uistate.windowProperties.previewPane} resizable="left">
-            <Preview
-                topLevelObjectId={store.uistate.topLevelObjectID}
-                id={"g"}
-                graph={store.storyContentObjectRegistry.get(store.uistate.topLevelObjectID)?.childNetwork}
-                registry={store.storyContentObjectRegistry}
-                userDefinedProperties={{}}
-            >
-            </Preview>
+            <VerticalPaneGroup>
+                <VerticalPane>
+                    <Preview />
+                </VerticalPane>
+            </VerticalPaneGroup>
         </ResizablePane>
     </HorizontalPaneGroup>;
     else return <div>Loading</div>
