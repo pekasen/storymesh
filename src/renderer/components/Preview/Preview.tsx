@@ -1,4 +1,4 @@
-import preact, { Component, createRef, FunctionComponent, h } from 'preact';
+import { Component, createRef, FunctionComponent, h } from 'preact';
 import Logger from 'js-logger';
 import { INGWebSProps } from '../../utils/PlugInClassRegistry';
 import { VerticalPaneGroup, VerticalPane } from '../VerticalPane/VerticalPane';
@@ -6,7 +6,6 @@ import { deepObserve, IDisposer } from 'mobx-utils';
 import { useContext } from 'preact/hooks';
 import { Store } from '../..';
 import { RootStore } from '../../store/rootStore';
-import { VReg } from 'storygraph';
 
 interface IPreviewWrapperProps extends INGWebSProps {
     topLevelObjectId: string
@@ -16,7 +15,7 @@ interface IPreviewProps extends IPreviewWrapperProps {
     store: RootStore
 }
 
-type WidthClass = "XS" | "SM" | "MD" | "LG";
+type WidthClass = "XS" | "SM" | "MD" | "LG" | "XL";
 
 interface IPreviewState {
     classes: WidthClass[]
@@ -28,14 +27,22 @@ export const Preview: FunctionComponent<IPreviewWrapperProps> = (props) => {
 }
 export class Preview2 extends Component<IPreviewProps, IPreviewState> {
 
-    private reactionDisposer: IDisposer | undefined;
+    private reactionDisposer: IDisposer
     private ref = createRef<HTMLDivElement>();
     private sizeObserver: ResizeObserver;
     private logger = Logger.get("Preview");
 
     constructor(props: IPreviewProps) {
         super(props);
-        
+        const store = props.store;
+        // TODO: debounce user input
+        this.reactionDisposer = deepObserve(store.storyContentObjectRegistry, (e) => {
+            this.logger.info("Updated", e)
+            this.setState({
+                classes: this.state.classes
+            });
+        });
+
         this.state = {
             classes: ["XS"]
         };
@@ -50,12 +57,14 @@ export class Preview2 extends Component<IPreviewProps, IPreviewState> {
         });
     }
 
+    // TODO: refactor this to the StoryWrapper
     private getCurrentWidthClass(width: number) {
         const classes = [
             { class: "XS", condition: (x: number) => x >= 0 },
-            { class: "SM", condition: (x: number) => x >= 480 },
-            { class: "MD", condition: (x: number) => x >= 800 },
-            { class: "LG", condition: (x: number) => x >= 1024 },
+            { class: "SM", condition: (x: number) => x >= 576 },
+            { class: "MD", condition: (x: number) => x >= 768 },
+            { class: "LG", condition: (x: number) => x >= 960 },
+            { class: "XL", condition: (x: number) => x >= 1200 },
         ];
 
         return classes.filter(e => e.condition(width)).map(e => e.class as WidthClass);
@@ -70,20 +79,11 @@ export class Preview2 extends Component<IPreviewProps, IPreviewState> {
             this.setState({
                 classes: classString
             });
-            const store = VReg.instance();
-            // TODO: debounce user input
-            this.reactionDisposer = deepObserve(store, (e, p) => {
-                this.logger.info("Updated", p, e)
-                this.setState({
-                    classes: this.state.classes
-                });
-            });
         }
     }
 
-    render({ store }: IPreviewProps, { classes }: IPreviewState): h.JSX.Element {
-        // const store = useContext(Store);
-
+    render({ }: IPreviewProps, { classes }: IPreviewState): h.JSX.Element {
+        const store = useContext(Store);
         const topLevelObjectId = store.uistate.topLevelObjectID;
         const topLevelObject = store.storyContentObjectRegistry.get(topLevelObjectId);
         if (!topLevelObject ) throw("BIGGY!");
@@ -131,7 +131,7 @@ export class Preview2 extends Component<IPreviewProps, IPreviewState> {
     }
 
     componentWillUnmount(): void {
-        if (this.reactionDisposer) this.reactionDisposer();
+        this.reactionDisposer();
         this.sizeObserver.disconnect();
     }
 }

@@ -9,15 +9,14 @@ import { Preview } from './Preview/Preview';
 import { StoryComponentGallery } from './StoryComponentGalleryView/StoryComponentGallery';
 import { Store } from '..';
 import { useContext, useEffect, useState } from 'preact/hooks';
-import { PReg } from 'storygraph';
 
 export const EditorPaneGroup: FunctionalComponent = () => {
     const [, setState] = useState({});
 
     const store = useContext(Store);
-    // setTimeout(() => {
-    //     () => setState({});
-    // }, 500);
+    setTimeout(() => {
+        () => setState({});
+    }, 500);
 
     useEffect(() => {
 
@@ -47,10 +46,10 @@ export const EditorPaneGroup: FunctionalComponent = () => {
         <Pane>
             <VerticalPaneGroup>
                 <VerticalPane>
-                        <BreadCrumb store={store} loadedObject={loadedItem}></BreadCrumb>
+                    <BreadCrumb store={store} loadedObject={loadedItem}></BreadCrumb>
                     <StoryObjectViewRenderer />
                     <VerticalFlexPane>
-                        <StoryComponentGallery />^
+                        <StoryComponentGallery />
                     </VerticalFlexPane>
                 </VerticalPane>
             </VerticalPaneGroup>
