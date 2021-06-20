@@ -27,6 +27,7 @@
   "dependencies": {
     "mobx": "^6.0.1",
     "mobx-utils": "^6.0.3",
+    "npm": "^7.18.1",
     "preact": "^10.5.13",
     "preact-sidebar": "file:../preact-sidebar",
     "quill-delta": "^4.2.2",
