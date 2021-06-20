@@ -1,4 +1,4 @@
-import "preact/debug";
+// import "preact/debug";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import { Component, FunctionalComponent, h, JSX, render } from "preact";
 import { createModelSchema, deserialize, primitive, serialize } from "serializr";

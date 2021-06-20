@@ -5,7 +5,7 @@
   "main": "dist/main/index.js",
   "scripts": {
     "test": "echo 'Please do not. ",
-    "start": "electron --trace-warnings ."
+    "start": "electron --trace-warnings --allow-file-access-from-files ."
   },
   "repository": {
     "type": "git",
