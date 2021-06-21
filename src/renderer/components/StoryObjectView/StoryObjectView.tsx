@@ -2,10 +2,8 @@ import { IReactionDisposer, reaction } from 'mobx';
 import { Component, h } from 'preact';
 import { RootStore } from '../../store/rootStore';
 import { ConnectorView } from '../Connector/ConnectorView';
-import { Draggable } from '../Draggable';
 import { MoveSender } from '../Moveable';
 import { ConnectorPort, StoryObject, AbstractStoryModifier } from 'storygraph';
-import Logger from 'js-logger';
 
 
 export class StoryObjectView extends Component<StoryObjectViewProperties> {
@@ -33,8 +31,11 @@ export class StoryObjectView extends Component<StoryObjectViewProperties> {
             if (data) {
                 const path = data.split(".");
                 if (path[1] === "modifier") {
-                    const modifier = store.pluginStore.get(data) as AbstractStoryModifier;
-                    object.addModifier(modifier);
+                    const constructor = store.pluginStore.get(data)?.constructor;
+                    if (constructor !== undefined) {
+                        const modifier = new constructor(true) as AbstractStoryModifier;
+                        object.addModifier(modifier);
+                    }
                 }
             }
         }}>
