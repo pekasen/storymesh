@@ -91,6 +91,7 @@ export function registerHandlers(): void {
     });
 
     ipcRenderer.on("export", (e, { file }) => {
+        // @ts-expect-error
         const json = serialize(ValueRegistrySchema(StoryObjectSchema), rootStore.root.storyContentObjectRegistry);
         Logger.info(json)
         if (file !== undefined) {
