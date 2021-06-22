@@ -1,16 +1,14 @@
 import { ipcRenderer } from "electron";
-import { computed, makeAutoObservable, makeObservable, observable } from 'mobx';
+import { makeAutoObservable, observable } from 'mobx';
 import { deepObserve } from "mobx-utils";
 import { existsSync, readFileSync } from "original-fs";
 import { createModelSchema, deserialize, object } from "serializr";
-import { PReg, StoryObject, VReg, AbstractStoryModifier, PPReg, PlugInPack } from "storygraph";
+import { PReg, VReg, PPReg } from "storygraph";
 import { __prefPath } from "../../constants";
 import { Container } from "storymesh-plugin-base";
 import { Preferences } from "../../preferences";
-import { IPlugInRegistryEntry } from "../utils/PlugInClassRegistry";
 import { AutoValueRegistrySchema } from '../utils/registry';
 import { NotificationStore } from './Notification';
-import { plugInLoader2, PlugInStore } from './PlugInStore';
 import { StateProcotol } from "./StateProcotol";
 import { UIStore } from './UIStore';
 import { start } from "storygraph";
@@ -50,12 +48,14 @@ export class RootStore {
          * In this registry we store our instantiated StoryObjects
          */
         // this.storyContentObjectRegistry = new ValueRegistry<StoryObject>();
-        this.storyContentObjectRegistry = makeAutoObservable(vreg);
+        this.storyContentObjectRegistry = makeAutoObservable(vreg, {
+            __registry: observable.deep,
+        });
         
         /**
          * In this registry we store our templates and plugin classes
          */
-        this.pluginStore = preg
+        this.pluginStore = preg;
         this.pluginPackstore = ppreg;
         
         /**
@@ -82,6 +82,7 @@ export class RootStore {
             // const emptyStory = this.pluginStore.get("internal.content.container") as StoryObject;
             if (emptyStory) {
                 this.storyContentObjectRegistry.set(
+                    // @ts-ignore
                     emptyStory.id, emptyStory
                 );
                 (emptyStory as Container).setup(this.storyContentObjectRegistry);
@@ -106,6 +107,7 @@ export class RootStore {
 
         deepObserve(this, (change): void => {
             // Logger.info("changed state", path);
+            // @ts-ignore
             this.protocol.persist(change);
         });
     }

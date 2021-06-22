@@ -10,6 +10,7 @@ import { EditorPaneGroup } from './EditorPaneGroup';
 import { NotificationView } from './NotificationView/NotificationView';
 import * as BABYLON from "babylonjs";
 
+// TODO: remove BABYLON.js for now
 export let rootEngine: BABYLON.Engine;
 
 export const App = (): h.JSX.Element => {
@@ -23,22 +24,22 @@ export const App = (): h.JSX.Element => {
             // rootEngine.
         }
 
-        const disposer = reaction(
-            () => [
-                // doesn't ever trigger, remove:
-                // store,
-                // TODO: defer these both reactions to the appropriate component
-                store.uistate.windowProperties.title,
-                store.userPreferences.theme],
-            (root) => {
-                Logger.info("changed@root", root);
-                setState({})
-            }
-        )
+        // const disposer = reaction(
+        //     () => [
+        //         // doesn't ever trigger, remove:
+        //         // store,
+        //         // TODO: defer these both reactions to the appropriate component
+        //         store.uistate.windowProperties.title,
+        //         store.userPreferences.theme],
+        //     (root) => {
+        //         Logger.info("changed@root", root);
+        //         setState({})
+        //     }
+        // )
 
-        return () => {
-            disposer();
-        }
+        // return () => {
+        //     disposer();
+        // }
     });
 
     return <Window>

@@ -1,9 +1,7 @@
 import { FunctionalComponent } from 'preact';
 import { MenuTemplate } from 'preact-sidebar';
 import { IStoryObject, StoryGraph } from 'storygraph';
-import { IContent } from 'storygraph/dist/StoryGraph/IContent';
-import { IRenderingProperties } from 'storygraph/dist/StoryGraph/IRenderingProperties';
-import { IStoryModifier } from 'storygraph/dist/StoryGraph/IStoryModifier';
+import { IContent, IRenderingProperties, IStoryModifier } from 'storygraph';
 import { Class, ClassRegistry, IRegistryEntry, ValueRegistry } from './registry';
 
 /**
