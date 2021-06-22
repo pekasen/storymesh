@@ -1,54 +1,37 @@
 import { Component, createRef, h } from "preact";
 import { useEffect, useRef } from "preact/hooks";
-import Delta from "quill-delta";
 import { IMenuItemRenderer, IMenuTemplate } from "../SideBar";
 import { MenuTemplate } from "../../classes/MenuTemplate";
-import Quill from "quill";
+import  { Jodit } from "jodit";
 
-export const RichTextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<Delta, undefined>) => {
+export const RichTextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<string, undefined>) => {
     
     class RichText extends Component {
         ref = createRef<HTMLDivElement>();
-        quill: Quill | undefined;
 
         render() {
-
             return <div>
                 {
                     (item.label !== "") ? <label>{item.label}</label> : null
                 }
-                <div ref={this.ref}></div>
+                 <textarea class="text-editor" name="text-editor"></textarea>
             </div>
         }
 
         componentDidMount() {
-            if (this.ref != null && this.ref.current != null) {
-                this.quill = new Quill(this.ref.current, {
-                    theme: 'snow',
-                    modules: {
-                        toolbar: [
-                            [{
-                                header: [1, 2, 3, false
-                            ]}],
-                            ["bold", "italic", "underline", "align",  "direction"],
-                            ["code-block", "link", "list", "strike", "script"]
-                        ]
-                    }
-                });
+                const editor = new Jodit('.text-editor');
     
-               if (this.quill) {
-                if (item.getter !== undefined) {
-                    this.quill?.setContents(item.getter());
-                }
-    
-                this.quill?.on('text-change', () => {
-                    console.log(this.quill?.getContents());
-                    if (item.setter !== undefined && this.quill !== undefined) {
-                        item.setter(this.quill.getContents())
+                if (editor) {
+                    if (item.getter !== undefined) {
+                        editor.value = item.getter();
                     }
-                });
+        
+                    editor.events.on('change', () => {
+                        if (item.setter !== undefined && editor !== undefined) {
+                            item.setter(editor.value);
+                        }
+                    });
                }
-            }
         }
 
         componentWillUnmount() {
@@ -71,14 +54,14 @@ export const RichTextMenuItem: IMenuItemRenderer = (item: IMenuTemplate<Delta, u
     return <RichText />;
 }
 
-export class RichText extends MenuTemplate<Delta, undefined> {
+export class RichText extends MenuTemplate<string, undefined> {
     public type = RichTextMenuItem;
     public label: string;
     public options: undefined;
-    public getter: (() => Delta);
-    public setter: ((arg: Delta) => void);
+    public getter: (() => string);
+    public setter: ((arg: string) => void);
 
-    constructor(label: string, getter: () => Delta, setter: (arg: Delta) => void) {
+    constructor(label: string, getter: () => string, setter: (arg: string) => void) {
         super();
         this.label = label;
         this.getter = getter;
