@@ -1,5 +1,4 @@
 import { h } from "preact";
-import { reaction } from 'mobx';
 import Logger from "js-logger";
 
 import { Header } from './Header';
@@ -8,10 +7,10 @@ import { Store } from '..';
 import { useContext, useEffect, useRef, useState } from 'preact/hooks';
 import { EditorPaneGroup } from './EditorPaneGroup';
 import { NotificationView } from './NotificationView/NotificationView';
-import * as BABYLON from "babylonjs";
+//import * as BABYLON from "babylonjs";
 
 // TODO: remove BABYLON.js for now
-export let rootEngine: BABYLON.Engine;
+// export let rootEngine: BABYLON.Engine;
 
 export const App = (): h.JSX.Element => {
     const [, setState] = useState({});
@@ -20,7 +19,7 @@ export const App = (): h.JSX.Element => {
     
     useEffect(() => {
         if (canvasRef && canvasRef.current) {
-            rootEngine = new BABYLON.Engine(canvasRef.current, true);
+           // rootEngine = new BABYLON.Engine(canvasRef.current, true);
             // rootEngine.
         }
 
