@@ -22,7 +22,7 @@ export class InputConnectorView extends StoryObject {
     public deletable = false;
     
     public static defaultIcon = "icon-down";
-    public registry?: IRegistry;
+    // public registry?: IRegistry;
     
     protected _connectors: Map<string, IConnectorPort>;
     
@@ -42,7 +42,7 @@ export class InputConnectorView extends StoryObject {
         makeObservable(this,{
             name: observable,
             updateName: action,
-            addConnection: action
+            // addConnection: action
         });
     }
 
@@ -74,12 +74,13 @@ export class InputConnectorView extends StoryObject {
 
     setup(id: string, registry: IRegistry): void {
         this.parent = id;
-        this.registry = registry;
+        this.updateConnectors(registry);
+        // this.registry = registry;
     }
 
-    private updateConnectors(): void {
+    private updateConnectors(registry: IRegistry): void {
         if (!this.parent) return;
-        const parentNode = this.registry?.getValue(this.parent) as Container;
+        const parentNode = registry?.getValue(this.parent) as Container;
         if (!parentNode) return;
         parentNode.connectors.forEach((connector) => {
             const _conn = (connector as ConnectorPort);
