@@ -23,7 +23,7 @@ export class _CustomCode extends ObservableStoryObject {
     public isContentNode: boolean;
     public userDefinedProperties: any;
     public childNetwork?: StoryGraph;
-    // public content: IContent;
+    public content: any;
     public icon: string;
     public compiled: Element | null | undefined;
 
@@ -35,11 +35,10 @@ export class _CustomCode extends ObservableStoryObject {
         this.name = "Custom Code";
         this.role = "internal.content.customcode";
         this.isContentNode = true;
-        this.userDefinedProperties = {};
         this.makeDefaultConnectors();
 
-        this.userDefinedProperties = {
-            contents: "",
+        this.content = {
+            xmlString: "",
         }
 
         this.compiled = undefined;
@@ -73,9 +72,13 @@ export class _CustomCode extends ObservableStoryObject {
     }
 
     public updateContents(newContent: string) {
-        this.userDefinedProperties.contents = newContent;
+        this.content.xmlString = newContent;
+        this.recompileXML();
+    }
+
+    private recompileXML() {
         const parser = new DOMParser();
-        const compiledStuff = parser.parseFromString(newContent, 'text/html');
+        const compiledStuff = parser.parseFromString(this.content.xmlString, 'text/html');
         console.log(compiledStuff);
         this.compiled = compiledStuff.documentElement;
     }
@@ -85,6 +88,8 @@ export class _CustomCode extends ObservableStoryObject {
     }
 
     public getComponent(): FunctionComponent<INGWebSProps> {
+        this.recompileXML();
+        
         const Comp: FunctionComponent<INGWebSProps> = ({}) => {
 
             const ref = useRef<HTMLDivElement>();
