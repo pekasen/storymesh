@@ -50,9 +50,10 @@ export class Container extends StoryObject {
         this.userDefinedProperties = {
             padding: "0 0 0 0",
             maxWidth: "auto",
-            placeItems: "center",
+            placeItems: "start",
             backgroundColor: "",
-            textColor: ""
+            textColor: "",
+            height: "auto"
         };
         this.icon = Container.defaultIcon;
 

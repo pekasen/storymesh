@@ -10,35 +10,33 @@ import { createModelSchema, object, primitive } from 'serializr';
 import { useRef, useState, useEffect } from "preact/hooks";
 import { MenuTemplate, Text, CheckBox, HSliderMenuItem, HSlider } from "preact-sidebar";
 import { ContentSchema } from "../../renderer/store/schemas/ContentSchema";
+import { Container } from "./Container";
 
 /**
  */
 // @observable
-class VideoObject extends StoryObject {
+export class VideoObject extends StoryObject {
     public name: string;
     public role: string;
     public isContentNode: boolean;
     public userDefinedProperties: unknown;
-    public childNetwork?: StoryGraph;
     public content: IContent;
     public icon: string;
     // TODO: may be refactor these properties into a seperate object, e.g. userDefinedProperties?
     public playbackControls: boolean = false;
     public autoPlay: boolean = false;
     public loopable: boolean = false;
-    public scrollable: boolean = false;
-    public setAsContainerBackground: boolean = false;
+    public scrollableBackground: boolean = false;
     public muted: boolean = false;
     public scrollThroughSpeed: number = 100;
-    public static defaultIcon = "icon-video";  
+    public static defaultIcon = "icon-video";
 
     // TODO: are these all supposed to be private? I added the keyword…
-    private myReq: number;
-    private videoWrapperId = this.id.concat(".video-height");
+    private myRequestAnimationFrame: number;
     private idVideo = this.id.concat(".preview");
     private classList: string;
     private videoElement = createRef();
-    private videoWrapper = createRef();
+    private videoWrapper: HTMLElement | undefined | null;
 
     constructor() {
         super();
@@ -49,7 +47,7 @@ class VideoObject extends StoryObject {
         this.userDefinedProperties = {};
         this.makeDefaultConnectors();
         this.classList = "";
-        this.myReq = 0;
+        this.myRequestAnimationFrame = 0;
 
         this.content = {
             resource: "https://dl5.webmfiles.org/big-buck-bunny_trailer.webm",
@@ -58,68 +56,61 @@ class VideoObject extends StoryObject {
         }
         // this.menuTemplate = connectionField(this);
         this.icon = VideoObject.defaultIcon;
-     
-        makeObservable(this,{
-            name:                   observable,
-            userDefinedProperties:  observable,
-            content:                observable,
-            autoPlay:               observable,
-            playbackControls:       observable,
-            loopable:               observable,
-            scrollable:             observable,
-            setAsContainerBackground: observable,
-            muted:                  observable,
-            scrollThroughSpeed:     observable,
-            connectors:             computed,
-            menuTemplate:           computed,
-            updateName:             action,
-            updateVideoURL:         action,
-            updateScrollable:       action
-        });       
+
+        makeObservable(this, {
+            name: observable,
+            userDefinedProperties: observable,
+            content: observable,
+            autoPlay: observable,
+            playbackControls: observable,
+            loopable: observable,
+            scrollableBackground: observable,
+            muted: observable,
+            scrollThroughSpeed: observable,
+            connectors: computed,
+            menuTemplate: computed,
+            updateName: action,
+            updateVideoURL: action,
+            updateScrollableBackground: action
+        });
     }
 
     public get menuTemplate(): MenuTemplate[] {
         const ret: MenuTemplate[] = [
             ...nameField(this),
-            new Text("URL", {defaultValue: ""}, 
-                () => this.content.resource, 
+            new Text("URL", { defaultValue: "" },
+                () => this.content.resource,
                 (arg: string) => this.updateVideoURL(arg)),
             new CheckBox(
                 "Show Controls",
                 () => this.playbackControls,
                 (sel: boolean) => {
                     runInAction(() => this.playbackControls = sel)
-            }),           
+                }),
             new CheckBox(
                 "Enable AutoPlay",
                 () => this.autoPlay,
                 (sel: boolean) => {
                     runInAction(() => this.autoPlay = sel)
-            }),
+                }),
             new CheckBox(
                 "Enable Looping",
                 () => this.loopable,
                 (sel: boolean) => {
                     runInAction(() => this.loopable = sel)
-            }),
+                }),
             new CheckBox(
                 "Muted",
                 () => this.muted,
                 (sel: boolean) => {
                     runInAction(() => this.muted = sel)
-            }),
+                }),
             new CheckBox(
-                "Make Scrollable",
-                () => this.scrollable,
+                "Set as scrollable container background",
+                () => this.scrollableBackground,
                 (sel: boolean) => {
-                    runInAction(() => this.updateScrollable(sel))
-            }),
-            new CheckBox(
-                "Set as container background",
-                () => this.setAsContainerBackground,
-                (sel: boolean) => {
-                    runInAction(() => this.setAsContainerBackground = sel)
-            }),
+                    runInAction(() => this.updateScrollableBackground(sel))
+                }),
             new HSlider(
                 "Scroll-through speed",
                 {
@@ -129,12 +120,11 @@ class VideoObject extends StoryObject {
                 },
                 () => this.scrollThroughSpeed,
                 (sel: number) => {
-                    runInAction(() => 
-                    {
-                        this.scrollThroughSpeed = sel; 
-                        this.updateScrollable(this.scrollable);
+                    runInAction(() => {
+                        this.scrollThroughSpeed = sel;
+                        this.updateScrollableBackground(this.scrollableBackground);
                     })
-            }),
+                }),
             ...connectionField(this),
         ];
         if (super.menuTemplate && super.menuTemplate.length >= 1) ret.push(...super.menuTemplate);
@@ -149,72 +139,76 @@ class VideoObject extends StoryObject {
         this.name = name;
     }
 
-    public updateScrollable(newScrollable: boolean) {
-        this.scrollable = newScrollable;    
-        if (this.scrollable) {                                            
+    public updateScrollableBackground(newScrollableBackground: boolean) {
+        this.scrollableBackground = newScrollableBackground;
+        if (this.scrollableBackground) {
             if (this.videoElement && this.videoElement.current) {
                 if (!this.classList.includes("bound-to-scroll")) {
                     this.classList = this.classList.concat(" bound-to-scroll").trim();
                 }
-            }      
+            }
         } else {
             if (this.videoElement && this.videoElement.current) {
                 this.classList = this.classList.replace("bound-to-scroll", "").trim();
-            }      
-        }       
+            }
+        }
     }
 
     public getComponent(): FunctionComponent<INGWebSProps> {
-        const Comp: FunctionComponent<INGWebSProps> = ({content}) => {
-            const [, setState] = useState({});    
-            this._rerender = () => {
-                setState({});
-            };
-           
+        const Comp: FunctionComponent<INGWebSProps> = ({ registry, content }) => {
+            // const [, setState] = useState({});
+            // this._rerender = () => {
+            //     setState({});
+            // };
+
             this.videoElement = createRef(); // TODO why does this help? why is the reference otherwise null here?
-            this.videoWrapper = createRef();
-            var that = this;
-            const vid = <video          
+
+            const vid = <video class={this.classList}
                 id={this.idVideo}
-                ref={this.videoElement} 
+                ref={this.videoElement}
                 type="video/webm; codecs='vp8, vorbis'"
                 src={content?.resource}
                 autoPlay={this.autoPlay}
                 controls={this.playbackControls}
                 loop={this.loopable}
                 muted={this.muted}
-                autobuffer="autobuffer"
+                // autoBuffer={"true"}
                 preload="preload"
             ></video>;
 
             useEffect(() => {
-                var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-                            window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-                var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
-               
-                var that = this;
+                // @ts-ignore
+                const requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+                // @ts-ignore
+                window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+                // @ts-ignore
+                const cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+
+                const that = this;
                 function scrollPlay(): void {
-                    if (that.videoElement && that.videoElement.current && that.scrollable && !isNaN(that.videoElement.current.duration)) { //TODO: check why duration is sometimes NaN
-                        that.videoElement.current.currentTime =  that.videoElement.current.duration -
-                        (that.videoWrapper.current.getBoundingClientRect().bottom - that.videoElement.current.getBoundingClientRect().bottom) 
-                            / that.scrollThroughSpeed; 
-                        that.videoWrapper.current.style.height = Math.floor(that.videoElement.current.duration * that.scrollThroughSpeed + that.videoElement.current.getBoundingClientRect().height);
-                        that.myReq = requestAnimationFrame(scrollPlay);         
-                    } 
-                }  
-                if (this.scrollable) {
+                    if (that.parent) {
+                        that.videoWrapper = document.getElementById(that.parent);
+                        const parentNode = registry?.get(that.parent) as unknown as Container;
+                        if (that.videoElement && that.videoElement.current && that.scrollableBackground && that.videoWrapper && !isNaN(that.videoElement.current.duration)) { //TODO: check why duration is sometimes NaN
+                            that.videoElement.current.currentTime = that.videoElement.current.duration -
+                                (that.videoWrapper?.getBoundingClientRect().bottom - that.videoElement.current.getBoundingClientRect().bottom)
+                                / that.scrollThroughSpeed;
+                            parentNode.userDefinedProperties.height = (Math.floor(that.videoElement.current.duration * that.scrollThroughSpeed + that.videoElement.current.getBoundingClientRect().height)) + "px";
+                            that.videoWrapper.style.height = parentNode.userDefinedProperties.height;
+                            that.myRequestAnimationFrame = requestAnimationFrame(scrollPlay);
+                        }
+                    }
+                }
+                if (this.scrollableBackground) {
                     requestAnimationFrame(scrollPlay);
                 } else {
-                    cancelAnimationFrame(this.myReq);
-                }                 
-            }, [this.scrollable]);     
-
-            return <div id={this.videoWrapperId} ref={that.videoWrapper} class={this.classList}> {
-                    this.modifiers.reduce((p,v) => (
-                        v.modify(p)
-                    ), vid)
+                    cancelAnimationFrame(this.myRequestAnimationFrame);
                 }
-                </div>
+            }, [this.scrollableBackground]);
+
+            return this.modifiers.reduce((p, v) => (
+                v.modify(p)
+            ), vid)
         }
         return Comp
     }
@@ -224,9 +218,9 @@ class VideoObject extends StoryObject {
     }
 
     public updateValue(): void {
-
     }
 }
+
 
 createModelSchema(VideoObject, {
     content: object(ContentSchema),
