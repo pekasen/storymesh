@@ -31,7 +31,7 @@ export class Preview2 extends Component<IPreviewProps> {
         super(props);
         const store = props.store;
         // TODO: debounce user input
-        this.reactionDisposer = deepObserve(store, (e) => {
+        this.reactionDisposer = deepObserve(store.storyContentObjectRegistry, (e) => {
             this.logger.info("Updated", e)
             this.setState({});
         });       
