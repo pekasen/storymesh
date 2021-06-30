@@ -16,21 +16,15 @@ interface IPreviewProps extends IPreviewWrapperProps {
     store: RootStore
 }
 
-type WidthClass = "XS" | "SM" | "MD" | "LG" | "XL";
-
-interface IPreviewState {
-    classes: WidthClass[]
-}
-
 export const Preview: FunctionComponent<IPreviewWrapperProps> = (props) => {
     const store = useContext(Store);
     return <Preview2 store={store} {...props}/>
 }
-export class Preview2 extends Component<IPreviewProps, IPreviewState> {
+export class Preview2 extends Component<IPreviewProps> {
 
     private reactionDisposer: IDisposer
     private ref = createRef<HTMLDivElement>();
-    private sizeObserver: ResizeObserver;
+
     private logger = Logger.get("Preview");
 
     constructor(props: IPreviewProps) {
@@ -39,50 +33,15 @@ export class Preview2 extends Component<IPreviewProps, IPreviewState> {
         // TODO: debounce user input
         this.reactionDisposer = deepObserve(store, (e) => {
             this.logger.info("Updated", e)
-            this.setState({
-                classes: this.state.classes
-            });
-        });
-
-        this.state = {
-            classes: ["XS"]
-        };
-
-        this.sizeObserver = new ResizeObserver((entries: { contentRect: { width: any; }; }[]) => {
-            const storyDivWidth = entries[0].contentRect.width;
-            const classString: WidthClass[] = this.getCurrentWidthClass(storyDivWidth);
-
-            this.setState({
-                classes: classString
-            });
-        });
-    }
-
-    private getCurrentWidthClass(width: number) {
-        const classes = [
-            { class: "XS", condition: (x: number) => x >= 0 },
-            { class: "SM", condition: (x: number) => x >= 576 },
-            { class: "MD", condition: (x: number) => x >= 768 },
-            { class: "LG", condition: (x: number) => x >= 960 },
-            { class: "XL", condition: (x: number) => x >= 1200 },
-        ];
-
-        return classes.filter(e => e.condition(width)).map(e => e.class as WidthClass);
+            this.setState({});
+        });       
     }
 
     componentDidMount(): void {
-        if (this.ref.current) {
-            this.sizeObserver.observe(this.ref.current);
-            const width = this.ref.current.offsetWidth;
-            const classString: WidthClass[] = this.getCurrentWidthClass(width);
-
-            this.setState({
-                classes: classString
-            });
-        }
+        
     }
 
-    render({ }: IPreviewProps, { classes }: IPreviewState): h.JSX.Element {
+    render({ }: IPreviewProps): h.JSX.Element {
         const store = useContext(Store);
         const topLevelObjectId = store.uistate.topLevelObjectID;
         const topLevelObject = store.storyContentObjectRegistry.getValue(topLevelObjectId);
@@ -112,19 +71,15 @@ export class Preview2 extends Component<IPreviewProps, IPreviewState> {
                     </div>
                 </VerticalMiniPane> */}
                 <VerticalPane>
-                    <div class={`storywrapper ${classes.join(" ")}`} ref={this.ref}>
-                        <div class={"ngwebs-story "} id={topLevelObjectId}>
-                            <Elem 
-                                registry={store.storyContentObjectRegistry}
-                                id={topLevelObjectId}
-                                renderingProperties={topLevelObject.renderingProperties}
-                                content={topLevelObject.content}
-                                modifiers={topLevelObject.modifiers}
-                                graph={topLevelObject.childNetwork}
-                                userDefinedProperties={topLevelObject.userDefinedProperties}
-                            />
-                        </div>
-                    </div>
+                    <Elem 
+                        registry={store.storyContentObjectRegistry}
+                        id={topLevelObjectId}
+                        renderingProperties={topLevelObject.renderingProperties}
+                        content={topLevelObject.content}
+                        modifiers={topLevelObject.modifiers}
+                        graph={topLevelObject.childNetwork}
+                        userDefinedProperties={topLevelObject.userDefinedProperties}
+                    />
                 </VerticalPane>
             </VerticalPaneGroup>
         </div>
@@ -132,6 +87,5 @@ export class Preview2 extends Component<IPreviewProps, IPreviewState> {
 
     componentWillUnmount(): void {
         this.reactionDisposer();
-        this.sizeObserver.disconnect();
     }
 }

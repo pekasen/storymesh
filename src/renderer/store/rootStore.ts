@@ -15,6 +15,7 @@ import { plugInLoader2, PlugInStore } from './PlugInStore';
 import { StateProcotol } from "./StateProcotol";
 import { UIStore } from './UIStore';
 import { IPlugInRegistryEntry } from "../utils/PlugInClassRegistry";
+import { Story } from "../../plugins/content/Story";
 
 export interface IRootStoreProperties {
     uistate: UIStore
@@ -64,12 +65,12 @@ export class RootStore {
          * If we are in a empty and untitled document, make a root storyobject
          */
         if (this.uistate.untitledDocument) {
-            const emptyStory = this.pluginStore.getNewInstance("internal.content.container") as StoryObject;
+            const emptyStory = this.pluginStore.getNewInstance("internal.content.story") as Story;
             if (emptyStory) {
                 this.storyContentObjectRegistry.register(
                     emptyStory
                 );
-                (emptyStory as Container).setup(this.storyContentObjectRegistry, this.uistate);
+                emptyStory.setup(this.storyContentObjectRegistry, this.uistate);
                 emptyStory.name = "My Story";
                 // this.topLevelObject = emptyStory;
                 this.uistate.setLoadedItem(emptyStory.id);
