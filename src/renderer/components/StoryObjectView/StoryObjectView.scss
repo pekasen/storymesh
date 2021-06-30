@@ -1,9 +1,8 @@
-/* ================= STORY OBJECT ==================== */
-
 .story-object-view {
   position: relative;
   width: auto;
   min-width: 130px;
+  max-width: 150px;
   height: auto;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
   z-index: 1;
@@ -17,7 +16,7 @@
     @include customize(theme) {
       background: getValue(menu-background); //node-object-header?
     }
-    line-height: 15px;
+    line-height: 1.1em;
     font-size: 1.1em;
     vertical-align: middle;
     padding: 5px;
@@ -27,10 +26,22 @@
     position: relative;
     cursor: pointer;
     transition: background 0.2s ease-in-out;
+    overflow: auto;
+    line-break: auto;
+    white-space: nowrap;
+
+    .icon:before {
+      transform: translateY(-3px);
+    }
 
     p {
-      display: inline;
-      margin-left: 10px;
+      display: inline-block;
+      margin: 0 27px 0 10px;
+      max-width: 95px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      line-height: 1.15em;
     }
 
     .toggle-content {
@@ -81,15 +92,11 @@
     transition: all 0.3s ease-in-out;
     -webkit-transition: all 0.3s ease-in-out;
     position: relative;
-    width: auto;
     min-height: 30px;
-    max-height: 120px;
     padding: 5px 10px;
     font-size: 0.9em;
     line-break: auto;
     overflow: hidden;
-    min-width: 130px;
-    max-width: 150px;
     border-radius: 0 0 3px 3px;
     @include customize(theme) {
       background: getValue(node-object-background);
