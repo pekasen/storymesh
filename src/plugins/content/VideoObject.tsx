@@ -188,7 +188,7 @@ export class VideoObject extends StoryObject {
                 function scrollPlay(): void {
                     if (that.parent) {
                         that.videoWrapper = document.getElementById(that.parent);
-                        const parentNode = registry?.get(that.parent) as unknown as Container;
+                        const parentNode = registry?.getValue(that.parent) as unknown as Container;
                         if (that.videoElement && that.videoElement.current && that.scrollableBackground && that.videoWrapper && !isNaN(that.videoElement.current.duration)) { //TODO: check why duration is sometimes NaN
                             that.videoElement.current.currentTime = that.videoElement.current.duration -
                                 (that.videoWrapper?.getBoundingClientRect().bottom - that.videoElement.current.getBoundingClientRect().bottom)
