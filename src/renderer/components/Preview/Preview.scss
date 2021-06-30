@@ -5,6 +5,11 @@
   padding: 0;
   width: 100%;
   height: 100%;
+  background: #fff;
+
+  .vertical-pane {
+    background-color: inherit;
+  }
 
   .vertical-pane-mini {
     position: fixed;
@@ -13,6 +18,7 @@
   }
 
   .vertical-pane-group {
+    border: none;
     > .vertical-pane:nth-of-type(even) {
       background: #fff;
     }
