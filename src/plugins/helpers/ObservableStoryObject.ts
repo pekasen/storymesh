@@ -8,6 +8,7 @@ import { AbstractStoryModifier } from "./AbstractModifier";
 import { StoryObject } from "./AbstractStoryObject";
 import { StoryObject as AbstractStoryObject } from "./AbstractStoryObject";
 import { INGWebSProps } from "../../renderer/utils/PlugInClassRegistry";
+import { createModelSchema } from "serializr";
 
 export class ObservableStoryObject extends AbstractStoryObject {
     
@@ -183,6 +184,8 @@ export class ObservableStoryObject extends AbstractStoryObject {
         });
     }
 }
+
+createModelSchema(ObservableStoryObject, {});
 
 // export const StoryObjectSchema = createModelSchema(StoryObject, {
 //     id: identifier(
