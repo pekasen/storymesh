@@ -73,6 +73,7 @@ export class _CustomCode extends ObservableStoryObject {
     }
 
     public updateContents(newContent: string) {
+        this.userDefinedProperties.contents = newContent;
         const parser = new DOMParser();
         const compiledStuff = parser.parseFromString(newContent, 'text/html');
         console.log(compiledStuff);
