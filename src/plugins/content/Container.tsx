@@ -52,7 +52,8 @@ export class Container extends StoryObject {
             maxWidth: "auto",
             placeItems: "start",
             backgroundColor: "",
-            textColor: ""
+            textColor: "",
+            height: "auto"
         };
         this.icon = Container.defaultIcon;
 
