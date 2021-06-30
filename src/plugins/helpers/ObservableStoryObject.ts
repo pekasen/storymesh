@@ -1,22 +1,15 @@
+import { makeObservable } from "mobx";
 import { FunctionComponent } from "preact";
 import { v4 } from "uuid";
-import { action, makeObservable, observable } from 'mobx';
-import { StoryGraph, IConnectorPort, IEdge, IMetaData, IRenderingProperties, FlowConnectorInPort, FlowConnectorOutPort, DataConnectorInPort } from 'storygraph';
-import { IRegistry } from 'storygraph/dist/StoryGraph/IRegistry';
-import { IPlugIn, INGWebSProps } from "../../renderer/utils/PlugInClassRegistry";
-import { Card, MenuTemplate } from "preact-sidebar";
-import { createModelSchema, custom, deserialize, getDefaultModelSchema, identifier, list, map, object, optional, primitive, serialize } from 'serializr';
-import { UserDefinedPropertiesSchema } from '../../renderer/store/schemas/UserDefinedPropertiesSchema';
-import { MetaDataSchema } from '../../renderer/store/schemas/MetaDataSchema';
-import { rootStore } from '../../renderer';
-import { AbstractStoryModifier } from "./AbstractModifier";
-import { NotificationCenter } from "storygraph/dist/StoryGraph/NotificationCenter";
-import { EdgeSchema } from "../../renderer/store/schemas/EdgeSchema";
-import { ConnectorSchema } from "../../renderer/store/schemas/ConnectorSchema";
-import Logger, { ILogger } from "js-logger";
-import { StoryObject as StoryObject0 } from "storygraph"
+import { MenuTemplate, Card } from "preact-sidebar";
+import { IRegistry, NotificationCenter, IMetaData, IRenderingProperties, IEdge, StoryGraph, IConnectorPort, FlowConnectorInPort, FlowConnectorOutPort, DataConnectorInPort } from "storygraph";
 
-export class StoryObject extends StoryObject0 implements IPlugIn{
+import { AbstractStoryModifier } from "./AbstractModifier";
+import { StoryObject } from "./AbstractStoryObject";
+import { StoryObject as AbstractStoryObject } from "./AbstractStoryObject";
+import { INGWebSProps } from "../../renderer/utils/PlugInClassRegistry";
+
+export class ObservableStoryObject extends AbstractStoryObject {
     
     public id: string = v4();
     public metaData: IMetaData = {
@@ -40,7 +33,6 @@ export class StoryObject extends StoryObject0 implements IPlugIn{
     public connections: IEdge[] = [];
     public modifiers: AbstractStoryModifier[] = [];
     public deletable: boolean = true;
-    public logger: ILogger = Logger.get(this.id);
 
     public name!: string;
     public role!: string;
@@ -60,17 +52,16 @@ export class StoryObject extends StoryObject0 implements IPlugIn{
         
         makeObservable(this, {
             id: false,
-            metaData:               observable,
-            connections:            observable,
-            modifiers:              observable.deep,
+            // metaData:               observable,
+            // connections:            observable,
+            // modifiers:              observable.deep,
             // cannot make connectors as computed as it will fuck up everything and the world.
             // connectors:             computed,
             // addConnection:          action,
-            addModifier:            action,
-            removeModifier:         action
+            // addModifier:            action,
+            // removeModifier:         action
         });
     }
-
     
     public addConnections(edges: IEdge[]): void {
         // store locally
@@ -89,7 +80,7 @@ export class StoryObject extends StoryObject0 implements IPlugIn{
         if (this.parent) {
             const isIncoming = direction === "in";
 
-            const parentNetwork = registry.getValue(this.parent)?.childNetwork;
+            const parentNetwork = (registry.getValue(this.parent) as StoryObject)?.childNetwork;
             if (parentNetwork) {
                 const newEdge: IEdge = {
                     id: "edge." + v4(), // (isIncoming) ? `edge.${id}.${this.id}` : `edge.${this.id}.${id}`,
@@ -97,7 +88,7 @@ export class StoryObject extends StoryObject0 implements IPlugIn{
                     to: ((isIncoming) ? `${this.id}.${myport}` : `${id}.${theirport}`),
                     // parent: parentNetwork
                 };
-                Logger.info("new Edge", newEdge);
+
                 parentNetwork.connect(registry, [newEdge]);
             }
         }
@@ -107,7 +98,6 @@ export class StoryObject extends StoryObject0 implements IPlugIn{
             const _index = this.connections.findIndex((_edge) => (_edge.id === edge.id));
             if (_index !== -1) {
                 if (this.connections.splice(_index, 1)[0].id === edge.id) {
-                    Logger.info(`edge removed from node ${this.id}`);
                 } else console.warn(`edge not removed in node ${this.id}`);
             } else console.warn(`edge not found in node ${this.id}`);  
         });
@@ -159,7 +149,6 @@ export class StoryObject extends StoryObject0 implements IPlugIn{
 
     public isBound(): void {
         // throw new Error("Method not implemented.");
-        this.logger.log("READY TO ROLL");
     }
 
     public mountTo(): void {
@@ -195,36 +184,36 @@ export class StoryObject extends StoryObject0 implements IPlugIn{
     }
 }
 
-export const StoryObjectSchema = createModelSchema(StoryObject, {
-    id: identifier(
-        (id: string, obj) => {
-            const reg = rootStore._loadingCache;
-            Logger.info("registering @valuecache", obj,reg.set(id, obj))
-        }
-    ),
-    name: primitive(),
-    role: primitive(),
-    isContentNode: primitive(),
-    userDefinedProperties: object(UserDefinedPropertiesSchema),
-    metaData: object(MetaDataSchema),
-     // TODO: if this property is present in the ModelSchema, it cannot be overwritten by extending model schemas.
-    // content: optional(object(ContentSchema)),
-    parent: optional(primitive()),
-    connections: list(object(EdgeSchema)),
-    _connectors: map(object(ConnectorSchema)),
-    modifiers: list(custom(
-        (value: Record<string, unknown>) => {
-            const schema = getDefaultModelSchema(value.constructor);
-            if (!schema) throw("could not get schema for " + value.constructor.name);
-            return serialize(schema, value);
-        },
-        (jsonValue, context, callback) => {
-            const instance = rootStore.root.pluginStore.getNewInstance(jsonValue.role);
-            if (!instance) throw("Big time failure !!11 while fetching schema for" + jsonValue.role);
-            Logger.info("getting schema for", instance.constructor.name);
-            const _schema = getDefaultModelSchema(instance.constructor);
-            if (!_schema) throw("no schema present during deserialization for " + context.target.constructor.name);
-            return deserialize(_schema, jsonValue, callback);
-        }
-    ))
-});
+// export const StoryObjectSchema = createModelSchema(StoryObject, {
+//     id: identifier(
+//         (id: string, obj) => {
+//             VReg.instance().set(id, obj);
+//         }
+//     ),
+//     name: primitive(),
+//     role: primitive(),
+//     isContentNode: primitive(),
+//     userDefinedProperties: object(UserDefinedPropertiesSchema),
+//     metaData: object(MetaDataSchema),
+//     content: optional(object(ContentSchema)),
+//      // TODO: if this property is present in the ModelSchema, it cannot be overwritten by extending model schemas.
+//     // content: optional(object(ContentSchema)),
+//     parent: optional(primitive()),
+//     connections: list(object(EdgeSchema)),
+//     _connectors: map(object(ConnectorSchema)),
+//     modifiers: list(custom(
+//         (value: Record<string, unknown>) => {
+//             const schema = getDefaultModelSchema(value.constructor);
+//             if (!schema) throw("could not get schema for " + value.constructor.name);
+//             return serialize(schema, value);
+//         },
+//         (jsonValue, context, callback) => {
+//             const instance = PReg.instance().get(jsonValue.role);
+//             if (!instance) throw("Big time failure !!11 while fetching schema for" + jsonValue.role);
+//             console.log("getting schema for", instance.constructor.name);
+//             const _schema = getDefaultModelSchema(instance.constructor);
+//             if (!_schema) throw("no schema present during deserialization for " + context.target.constructor.name);
+//             return deserialize(_schema, jsonValue, callback);
+//         }
+//     ))
+// });
