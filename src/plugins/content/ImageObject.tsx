@@ -7,9 +7,10 @@ import { IContent } from 'storygraph/dist/StoryGraph/IContent';
 import { connectionField, nameField } from '../helpers/plugInHelpers';
 import { exportClass } from '../helpers/exportClass';
 import { createModelSchema, object } from 'serializr';
-import { useState } from "preact/hooks";
+import { useContext, useState } from "preact/hooks";
 import { MenuTemplate, Text } from "preact-sidebar";
 import { ContentSchema } from "../../renderer/store/schemas/ContentSchema";
+import { Width } from "./Story";
 
 /**
  * Our first little dummy PlugIn
@@ -23,7 +24,7 @@ class _ImageObject extends StoryObject {
     public isContentNode: boolean;
     public userDefinedProperties: any;
     public childNetwork?: StoryGraph;
-    public content: IContent;
+    public content: any;
     public icon: string;
 
     public static defaultIcon = "icon-picture"
@@ -39,6 +40,7 @@ class _ImageObject extends StoryObject {
 
         this.content = {
             resource: "https://source.unsplash.com/random/1920x1080",
+            altResource: "https://source.unsplash.com/random/640x480",
             contentType: "url",
             altText: "Image description"
         }
@@ -67,7 +69,8 @@ class _ImageObject extends StoryObject {
     public get menuTemplate(): MenuTemplate[] {
         const ret: MenuTemplate[] = [
             ...nameField(this),
-            new Text("URL", {defaultValue: ""}, () => this.content.resource, (arg: string) => this.updateImageURL(arg)),
+            new Text("Image URL", {defaultValue: ""}, () => this.content.resource, (arg: string) => this.updateImageURL(arg)),
+            new Text("Mobile URL", {defaultValue: ""}, () => this.content.altResource, (arg: string) => this.updateAltImageURL(arg)),
             new Text("Alt text", { placeHolder: "Image description" }, () => this.content.altText, (arg: string) => this.updateAltText(arg)),
             new Text("Caption", { placeHolder: "This is the caption" }, () => this.userDefinedProperties.caption, (arg: string) => this.updateCaption(arg)),
             new Text("Source", { placeHolder: "Who made this?" }, () => this.userDefinedProperties.mediaSource, (arg: string) => this.updateMediaSource(arg)),
@@ -82,6 +85,10 @@ class _ImageObject extends StoryObject {
         this.content.resource = newURL;
     }
 
+    public updateAltImageURL(newURL: string) {
+        this.content.altResource = newURL;
+    }
+    
     public updateName(name: string): void {
         this.name = name;
     }
@@ -99,7 +106,7 @@ class _ImageObject extends StoryObject {
     }
 
     public getComponent(): FunctionComponent<INGWebSProps> {
-        const Comp: FunctionComponent<INGWebSProps> = ({ content }) => {
+        const Comp: FunctionComponent<INGWebSProps> = ({ content, userDefinedProperties, modifiers }) => {
 
             const [, setState] = useState({});
 
@@ -107,15 +114,20 @@ class _ImageObject extends StoryObject {
                 setState({});
             }
 
+            const widthClasses = useContext(Width);
+            const resource = (widthClasses.indexOf("SM") !== -1) ? content?.resource : content.altResource;
+
             const imgContainer = <div id={this.id} class="imagewrapper image">
                     <figure>
-                        <img src={content?.resource} alt={this.content.altText} />
-                        <figcaption>{this.userDefinedProperties.caption} <span class="media-source">// {this.userDefinedProperties.mediaSource}</span></figcaption>
+                        <img src={resource} alt={content?.altText} />
+                        <figcaption>{userDefinedProperties.caption} <span class="media-source">// {userDefinedProperties.mediaSource}</span></figcaption>
                     </figure>
                 </div>;
-                return this.modifiers.reduce((p, v) => (
+                if (modifiers) return modifiers.reduce((p, v) => (
+                    // @ts-ignore
                         v.modify(p)
                     ), imgContainer)
+                else return imgContainer
         }
         return Comp
     }
