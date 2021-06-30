@@ -102,8 +102,8 @@ export class Container extends StoryObject {
                     div = <div style={`padding:${this.userDefinedProperties.padding};
                                        max-width:${this.userDefinedProperties.maxWidth};
                                        place-items:${this.userDefinedProperties.placeItems};
-                                       ${this.userDefinedProperties.backgroundColor.length ? "background-color:" + this.userDefinedProperties.backgroundColor : ""};
-                                       ${this.userDefinedProperties.textColor.length ? "color:" + this.userDefinedProperties.textColor : ""}`} id={id} class={"ngwebs-story-container"}>
+                                       ${this.userDefinedProperties.backgroundColor !== "" ? "background-color:" + this.userDefinedProperties.backgroundColor : ""};
+                                       ${this.userDefinedProperties.textColor ? "color:" + this.userDefinedProperties.textColor : ""}`} id={id} class={"ngwebs-story-container"}>
                         {
                             path.map(node => {
                                 // const node = (registry.getValue(e) as unknown as IPlugIn & StoryObject);
