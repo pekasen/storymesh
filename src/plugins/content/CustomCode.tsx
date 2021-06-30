@@ -25,8 +25,6 @@ export class _CustomCode extends ObservableStoryObject {
     public childNetwork?: StoryGraph;
     public content: any;
     public icon: string;
-    public compiled: Element | null | undefined;
-
     public static defaultIcon = "icon-picture"
 
     constructor() {
@@ -41,15 +39,14 @@ export class _CustomCode extends ObservableStoryObject {
             xmlString: "",
         }
 
-        this.compiled = undefined;
         this.icon = _CustomCode.defaultIcon;
 
         makeObservable(this, {
             name: observable,
             userDefinedProperties: observable,
-            compiled: observable,
             connectors: computed,
             menuTemplate: computed,
+            compiled: computed,
             updateContents: action,
             updateName: action
         });
@@ -58,7 +55,7 @@ export class _CustomCode extends ObservableStoryObject {
     public get menuTemplate(): MenuTemplate[] {
         const ret: MenuTemplate[] = [
             ...nameField(this),
-            new TextArea("Code", () => this.userDefinedProperties.contents, (arg: string) => this.updateContents(arg)),
+            new TextArea("Code", () => this.content.xmlString, (arg: string) => this.updateContents(arg)),
             // new Button("Update", () => this.testStuff()),
             ...connectionField(this),
         ];
@@ -79,7 +76,7 @@ export class _CustomCode extends ObservableStoryObject {
         const parser = new DOMParser();
         const compiledStuff = parser.parseFromString(this.content.xmlString, 'text/html');
         console.log(compiledStuff);
-        this.compiled = compiledStuff.documentElement;
+        this.__compiledXML = compiledStuff.documentElement;
     }
 
     public testStuff() {
@@ -87,7 +84,7 @@ export class _CustomCode extends ObservableStoryObject {
     }
 
     public getComponent(): FunctionComponent<INGWebSProps> {
-        this.recompileXML();
+        // this.recompileXML();
         
         const Comp: FunctionComponent<INGWebSProps> = ({}) => {
 
@@ -110,6 +107,15 @@ export class _CustomCode extends ObservableStoryObject {
 
     public getEditorComponent(): FunctionComponent<INGWebSProps> {
         return () => <div class="editor-component"></div>
+    }
+
+    private __compiledXML: Element | null | undefined;
+    public get compiled() {
+        if (this.__compiledXML === null || this.__compiledXML === undefined) {
+            // catch the first run after deserialization when __compiledXML is still undefined
+            this.recompileXML();
+        }
+        return this.__compiledXML;
     }
 }
 
