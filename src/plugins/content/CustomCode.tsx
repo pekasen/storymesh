@@ -36,13 +36,12 @@ export class _CustomCode extends ObservableStoryObject {
         this.role = "internal.content.customcode";
         this.isContentNode = true;
         this.makeDefaultConnectors();
-
+        this.userDefinedProperties = {};
         this.content = {
             xmlString: "",
         }
 
         this.compiled = undefined;
-        // this.menuTemplate = connectionField(this);
         this.icon = _CustomCode.defaultIcon;
 
         makeObservable(this, {
