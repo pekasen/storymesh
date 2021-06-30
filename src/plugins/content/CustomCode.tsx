@@ -74,9 +74,9 @@ export class _CustomCode extends ObservableStoryObject {
 
     public updateContents(newContent: string) {
         const parser = new DOMParser();
-        const compiledStuff = parser.parseFromString(newContent, 'text/html').body.firstElementChild;
+        const compiledStuff = parser.parseFromString(newContent, 'text/html');
         console.log(compiledStuff);
-        this.compiled = compiledStuff;
+        this.compiled = compiledStuff.documentElement;
     }
 
     public testStuff() {
