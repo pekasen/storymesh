@@ -65,17 +65,7 @@ export class RootStore {
          * If we are in a empty and untitled document, make a root storyobject
          */
         if (this.uistate.untitledDocument) {
-            const emptyStory = this.pluginStore.getNewInstance("internal.content.story") as Story;
-            if (emptyStory) {
-                this.storyContentObjectRegistry.register(
-                    emptyStory
-                );
-                emptyStory.setup(this.storyContentObjectRegistry, this.uistate);
-                emptyStory.name = "My Story";
-                // this.topLevelObject = emptyStory;
-                this.uistate.setLoadedItem(emptyStory.id);
-                this.uistate.topLevelObjectID = emptyStory.id;
-            }
+            this.createNewDocument();
         }
         /**
          * Initialize notification buffer
@@ -96,8 +86,24 @@ export class RootStore {
         });
     }
 
+    private createNewDocument() {
+        const emptyStory = this.pluginStore.getNewInstance("internal.content.story") as Story;
+        if (emptyStory) {
+            this.storyContentObjectRegistry.register(
+                emptyStory
+            );
+            emptyStory.setup(this.storyContentObjectRegistry, this.uistate);
+            emptyStory.name = "My Story";
+            // this.topLevelObject = emptyStory;
+            this.uistate.setLoadedItem(emptyStory.id);
+            this.uistate.topLevelObjectID = emptyStory.id;
+        }
+    }
+
     reset(): void {
         this.uistate = new UIStore();
+        this.storyContentObjectRegistry = new ValueRegistry();
+        this.createNewDocument();
     }
 
     replace(root: RootStore): void {
