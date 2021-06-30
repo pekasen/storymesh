@@ -190,8 +190,8 @@
     textarea {
       min-width: 250px;
       min-height: 100px;
-      @include customize(theme) {
-        color: getValue(text);
+            @include customize(theme) {
+        color: getValue(highlight-color-font);
       } 
     }
     input[type="range"] {
