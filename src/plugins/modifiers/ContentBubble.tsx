@@ -2,7 +2,7 @@ import { h } from "preact";
 import { computed } from "mobx";
 import { action, makeObservable, observable } from 'mobx';
 import { createModelSchema, object } from "serializr";
-import { HSlider, DropDown, MenuTemplate, ColorPicker, Divider } from "preact-sidebar";
+import { HSlider, DropDown, MenuTemplate, ColorPicker, Divider, Text } from "preact-sidebar";
 // @ts-expect-error
 import { createUseStyles } from 'preact-jss-hook';
 import { HMTLModifier } from "../../plugins/helpers/HTMLModifier";
@@ -18,30 +18,33 @@ export class _ContentBubble extends HMTLModifier {
         toggle: true
     }
     public static defaultIcon = "icon-eye";
-    public padding: number;
-    public textColor: string;
-    public backgroundColor: string;
-    public backgroundOpacity: number;
-    public borderRadius: number;
-    public placeItems: string;
+    public userDefinedProperties: {
+        maxWidth: string,
+        margin: number,
+        padding: number,
+        textColor: string,
+        backgroundColor: string,
+        backgroundOpacity: number,
+        borderRadius: number,
+        placeItems: string
+    };
 
     constructor() {
         super();
 
-        this.padding = 0;
-        this.textColor = "#ffffff"; // HEX STRING
-        this.backgroundColor = "#252525"; // HEX STRING
-        this.backgroundOpacity = 100;
-        this.borderRadius = 0;
-        this.placeItems = 'center';
+        this.userDefinedProperties = {
+            maxWidth: 'auto',
+            margin: 0,
+            padding: 0,
+            textColor: '#ffffff', // HEX STRING
+            backgroundColor: '#252525', // HEX STRING
+            backgroundOpacity: 100,
+            borderRadius: 0,
+            placeItems: 'center'
+        }
 
         makeObservable(this, {
-            padding:                    observable,
-            textColor:                  observable,
-            backgroundColor:            observable,
-            backgroundOpacity:          observable,
-            borderRadius:               observable,
-            placeItems:                 observable,
+            userDefinedProperties: observable,
             updatePadding:              action,
             updateTextColor:            action,
             updateBackgroundColor:      action,
@@ -56,6 +59,17 @@ export class _ContentBubble extends HMTLModifier {
         const ret: MenuTemplate[] = [
             ...super.menuTemplate,
             new Divider(""),
+            new Text("Max width (in px)", {defaultValue: ""}, () => this.userDefinedProperties.maxWidth, (arg: string) => this.updateMaxWidth(arg)),
+            new HSlider(
+                "Margin",
+                {
+                    min: 0,
+                    max: 100,
+                    formatter: (val: number) => `${val}px`
+                },
+                () => this.userDefinedProperties.margin,
+                (padding: number) => this.updateMargin(padding)
+            ),
             new HSlider(
                 "Padding",
                 {
@@ -63,7 +77,7 @@ export class _ContentBubble extends HMTLModifier {
                     max: 100,
                     formatter: (val: number) => `${val}px`
                 },
-                () => this.padding,
+                () => this.userDefinedProperties.padding,
                 (padding: number) => this.updatePadding(padding)
             ),
             new HSlider(
@@ -73,12 +87,12 @@ export class _ContentBubble extends HMTLModifier {
                     max: 100,
                     formatter: (val: number) => `${val}%`
                 },
-                () => this.borderRadius,
+                () => this.userDefinedProperties.borderRadius,
                 (radius: number) => this.updateBorderRadius(radius)
             ),
             new ColorPicker(
                 "Background color",
-                () => this.backgroundColor,
+                () => this.userDefinedProperties.backgroundColor,
                 (color: string) => this.updateBackgroundColor(color)
             ),
             new HSlider(
@@ -88,12 +102,12 @@ export class _ContentBubble extends HMTLModifier {
                     max: 100,
                     formatter: (val: number) => `${val}%`
                 },
-                () => this.backgroundOpacity,
+                () => this.userDefinedProperties.backgroundOpacity,
                 (opacity: number) => this.updateBackgroundOpacity(opacity)
             ),
             new ColorPicker(
                 "Text Color",
-                () => this.textColor,
+                () => this.userDefinedProperties.textColor,
                 (color: string) => this.updateTextColor(color)
             ),
             new DropDown(
@@ -101,7 +115,7 @@ export class _ContentBubble extends HMTLModifier {
                 {
                     options: ["start", "center", "end"]
                 },
-                () => this.placeItems,
+                () => this.userDefinedProperties.placeItems,
                 (item) => this.updatePlaceItems(item)
             ),
         ];
@@ -109,16 +123,24 @@ export class _ContentBubble extends HMTLModifier {
         return ret;
     }
 
+    public updateMaxWidth(newProperty: string) {
+        this.userDefinedProperties.maxWidth = newProperty;
+    }
+
+    public updateMargin(newProperty: number) {
+        this.userDefinedProperties.margin = newProperty;
+    }
+
     public updatePadding(newProperty: number) {
-        this.padding = newProperty;
+        this.userDefinedProperties.padding = newProperty;
     }
 
     public updateBorderRadius(newProperty: number) {
-        this.borderRadius = newProperty;
+        this.userDefinedProperties.borderRadius = newProperty;
     }
 
     public updateTextColor(newProperty: string) {
-        this.textColor = newProperty;
+        this.userDefinedProperties.textColor = newProperty;
     }
 
     public convertToRGB (c: string){
@@ -131,15 +153,15 @@ export class _ContentBubble extends HMTLModifier {
     //TODO: convert HEX to RGB to change alpha-value
     public updateBackgroundColor(newProperty: string) {
         console.log("Setting bgcol", newProperty);
-        this.backgroundColor = newProperty;
+        this.userDefinedProperties.backgroundColor = newProperty;
     }
 
     public updateBackgroundOpacity(newProperty: number) {
-        this.backgroundOpacity = newProperty ;
+        this.userDefinedProperties.backgroundOpacity = newProperty ;
     }
 
     public updatePlaceItems(placeItems: string): void {
-        this.placeItems = placeItems
+        this.userDefinedProperties.placeItems = placeItems
     }
 
     // private _trigger = () => {
@@ -154,19 +176,26 @@ export class _ContentBubble extends HMTLModifier {
         // this._connector.handleNotification = this._trigger;
         const useStyles = createUseStyles({
             contentBackground: {
-                padding: `${this.padding}px`,
-                "border-radius": `${this.borderRadius}px`,
+                "max-width": `${this.userDefinedProperties.maxWidth}px`,
+                margin: `${this.userDefinedProperties.margin}px`,
+                padding: `${this.userDefinedProperties.padding}px`,
+                "border-radius": `${this.userDefinedProperties.borderRadius}px`,
                 "background-color": `rgba(${this.backgroundRGBA})`,
-                color: this.textColor,
+                color: this.userDefinedProperties.textColor,        
+            },
+            contentPlacement: {
+                width: "100%",
                 display: "grid",
-                "place-items": `${this.placeItems}`          
+                "place-items": `${this.userDefinedProperties.placeItems}`,
             },
           });          
 
        const { classes } = useStyles();
 
-       return <div id={`_${this.id}`} class={`${classes.contentBackground}`}>
-                {element}
+       return <div class={`${classes.contentPlacement}`}>
+                <div id={`_${this.id}`} class={`${classes.contentBackground}`}>
+                    {element}
+                </div>
             </div>
     }
 
@@ -176,8 +205,8 @@ export class _ContentBubble extends HMTLModifier {
     }
 
     get backgroundRGBA() {
-        const tmp = this.convertToRGB(this.backgroundColor) + "," + this.backgroundOpacity/100;
-        console.log("Converting", this.backgroundColor, "to", tmp);
+        const tmp = this.convertToRGB(this.userDefinedProperties.backgroundColor) + "," + this.userDefinedProperties.backgroundOpacity/100;
+        console.log("Converting", this.userDefinedProperties.backgroundColor, "to", tmp);
         return tmp;
     }
 }
