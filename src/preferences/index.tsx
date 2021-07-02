@@ -1,6 +1,6 @@
 import "preact/debug";
 import { existsSync, readFileSync, writeFileSync } from "fs";
-import { Component, FunctionalComponent, h, JSX, render } from "preact";
+import { Component, createRef, FunctionalComponent, h, JSX, render } from "preact";
 import { createModelSchema, deserialize, primitive, serialize } from "serializr";
 import { __prefPath } from "../constants";
 import { remote } from "electron";
@@ -26,6 +26,8 @@ interface IThemePickerProps {
 }
 
 class PreferencesView extends Component<unknown, Preferences> {
+
+    private _divRef = createRef()
 
     constructor(_: never) {
         super();
@@ -105,23 +107,9 @@ class PreferencesView extends Component<unknown, Preferences> {
             </div>
         );
 
-        window.addEventListener("keydown", (e) => {
-            switch(e.key) {
-                case "Enter": {
-                    const elem = document.getElementById("pref-ok-btn");
-                    elem?.click();
-                    break;
-                }
-                case "Escape": {
-                    const elem = document.getElementById("pref-cancel-btn");
-                    elem?.click();
-                    break;
-                }
-                default: break;
-            }
-        });
         
-        return <div class="window-contents preferences">
+        
+        return <div class="window-contents preferences" ref={this._divRef}>
             <h3>Preferences</h3>
             <p>NGWebS Core Prototype</p>
             <p>Version: 0.0.1a</p>
@@ -132,6 +120,26 @@ class PreferencesView extends Component<unknown, Preferences> {
                 <button class="confirm" id="pref-ok-btn" onClick={() => this.saveAndExit()}>OK</button>
             </form>
         </div>
+    }
+
+    public componentDidMount() {
+        if (this._divRef.current !== null) {
+            this._divRef.current.addEventListener("keydown", (e: KeyboardEvent) => {
+                switch(e.key) {
+                    case "Enter": {
+                        const elem = document.getElementById("pref-ok-btn");
+                        elem?.click();
+                        break;
+                    }
+                    case "Escape": {
+                        const elem = document.getElementById("pref-cancel-btn");
+                        elem?.click();
+                        break;
+                    }
+                    default: break;
+                }
+            });
+        }
     }
 
     private saveAndExit() {
