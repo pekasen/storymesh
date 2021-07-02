@@ -7,7 +7,7 @@ import { StoryObject } from '../helpers/AbstractStoryObject';
 import { connectionField, nameField } from '../helpers/plugInHelpers';
 import { exportClass } from '../helpers/exportClass';
 import { createModelSchema } from 'serializr';
-import { HSliderMenuItem, MenuTemplate } from "preact-sidebar";
+import { HSlider, HSliderMenuItem, MenuTemplate } from "preact-sidebar";
 
 class _Spacer extends StoryObject {
 
@@ -59,17 +59,15 @@ class _Spacer extends StoryObject {
     public get menuTemplate(): MenuTemplate[] {
         const ret: MenuTemplate[] = [
             ...nameField(this),
-            {
-                label: "Vertical Space",
-                type: HSliderMenuItem,
-                options: {
-                    min: 0,
-                    max: 100,
-                    formatter: (val: number) => `${val}%`
-                },
-                getter: () => this.userDefinedProperties.vspace,
-                setter: (vspace: number) => this.updateVSpace(vspace)
+            new HSlider("Vertical Space", {
+                min: 0,
+                max: 200,
+                formatter: (val: number) => `${val}%`
             },
+            
+                () => this.userDefinedProperties.vspace,
+                (vspace: number) => this.updateVSpace(vspace)
+            ),
             ...connectionField(this)
         ];
         if (super.menuTemplate && super.menuTemplate.length >= 1) ret.push(...super.menuTemplate);
