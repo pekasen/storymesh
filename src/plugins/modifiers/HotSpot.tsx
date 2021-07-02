@@ -137,6 +137,7 @@ export class HTMLHotSpotModifier extends HMTLModifier {
     public name = "Hot-o-Spot-o"
     public role = "internal.modifier.hotspot";
     public data = new HotSpotModifierData();
+    private __debug = false;
 
     constructor() {
         super();
@@ -185,6 +186,7 @@ export class HTMLHotSpotModifier extends HMTLModifier {
     }
 
     public addHotSpot(hotspot: HotSpot): void {
+        hotspot.debug = this.__debug;
         this.data.hotspots.push(hotspot);
     }
 
@@ -313,7 +315,8 @@ export class HTMLHotSpotModifier extends HMTLModifier {
             new Button("Add HotSpot", () => this.addHotSpot(new CircleHotSpot())),
             new Button("Toggle Vis.", () => {
                 runInAction(() => {
-                    this.data.hotspots.forEach(e => e.debug = !e.debug);
+                    this.__debug = !this.__debug;
+                    this.data.hotspots.forEach(e => e.debug = this.__debug);
                 });
             })
         ];
