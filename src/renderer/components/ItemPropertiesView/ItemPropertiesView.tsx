@@ -21,7 +21,8 @@ export const ItemPropertiesView: FunctionalComponent = () => {
                 {
                     id: uistate.selectedItems.first,
                     connections: res?.connections.length,
-                    connectors: res?.connectors.size
+                    connectors: res?.connectors.size,
+                    values: storyContentObjectRegistry.getValue(uistate.selectedItems.first)?.menuTemplate.map(e => {if (e.getter )e.getter()})
                 }
             ),
             ({ id }) => {
