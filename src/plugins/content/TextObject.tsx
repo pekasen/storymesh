@@ -1,15 +1,16 @@
-import { FunctionComponent, h } from "preact";
-import { INGWebSProps } from "../../renderer/utils/PlugInClassRegistry";
 import { action, makeObservable, observable } from 'mobx';
+// @ts-expect-error
+import { convertDeltaToHtml } from 'node-quill-converter';
+import { FunctionComponent, h } from "preact";
+import { MenuTemplate, RichText } from "preact-sidebar";
+import Delta from "quill-delta";
+import Op from "quill-delta/dist/Op";
+import { createModelSchema, list, ModelSchema, object, optional, primitive } from 'serializr';
 import { StoryGraph } from 'storygraph';
-import { connectionField, nameField } from '../helpers/plugInHelpers';
+import { INGWebSProps } from "../../renderer/utils/PlugInClassRegistry";
 import { StoryObject } from '../helpers/AbstractStoryObject';
 import { exportClass } from '../helpers/exportClass';
-import { createModelSchema, list, map, ModelSchema, object, optional, primitive } from 'serializr';
-import Delta from "quill-delta";
-import { MenuTemplate, RichText } from "preact-sidebar";
-import { convertDeltaToHtml } from 'node-quill-converter';
-import Op from "quill-delta/dist/Op";
+import { connectionField, nameField } from '../helpers/plugInHelpers';
 
 interface ITextObjectContent {
     resource: Delta
