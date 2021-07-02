@@ -27,6 +27,7 @@ export function patchMenu(): void {
                         show: false,
                         webPreferences: {
                             nodeIntegration: true,
+                            contextIsolation: false,
                             worldSafeExecuteJavaScript: true,
                             enableRemoteModule: true
                     }});
