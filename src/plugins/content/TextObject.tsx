@@ -1,19 +1,17 @@
 import { action, makeObservable, observable } from 'mobx';
 // @ts-expect-error
-import { convertDeltaToHtml } from 'node-quill-converter';
 import { FunctionComponent, h } from "preact";
-import { MenuTemplate, RichText } from "preact-sidebar";
-import Delta from "quill-delta";
-import Op from "quill-delta/dist/Op";
+import { MenuTemplate, RichText, TextArea } from "preact-sidebar";
 import { createModelSchema, list, ModelSchema, object, optional, primitive } from 'serializr';
 import { StoryGraph } from 'storygraph';
 import { INGWebSProps } from "../../renderer/utils/PlugInClassRegistry";
 import { StoryObject } from '../helpers/AbstractStoryObject';
 import { exportClass } from '../helpers/exportClass';
 import { connectionField, nameField } from '../helpers/plugInHelpers';
+import Markup from "preact-markup";
 
 interface ITextObjectContent {
-    resource: Delta
+    resource: string
     altText: string
     contentType: "text"
 }
@@ -48,7 +46,7 @@ class _TextObject extends StoryObject {
         };
         this.makeDefaultConnectors();
         this.content = {
-            resource: new Delta(),
+            resource: "",
             altText: "empty",
             contentType: "text"
         };
@@ -70,7 +68,7 @@ class _TextObject extends StoryObject {
     public get menuTemplate(): MenuTemplate[] {
         const ret: MenuTemplate[] = [
             ...nameField(this),
-            new RichText("Content", () => this.content.resource, (arg: Delta) => this.updateText(arg)),
+            new TextArea("Content", () => this.content.resource, (arg: string) => this.updateText(arg)),
             // {
             //     label: "Content",
             //     type: "textarea",
@@ -103,16 +101,14 @@ class _TextObject extends StoryObject {
         this.name = newValue;
     }
 
-    public updateText(text: Delta) {
+    public updateText(text: string) {
         if (this.content) this.content.resource = text;
     }
 
     public getComponent() {    
         const Comp: FunctionComponent<INGWebSProps> = (args => {
-            let p: h.JSX.Element;
-            // TODO: is that supposed to be like that?
-            p = <span dangerouslySetInnerHTML={{ __html: convertDeltaToHtml(new Delta(args.content?.resource as unknown as Op[])) as string}} />
-            return this.modifiers.reduce((p,v) => {
+            const p = <Markup type="html" markup={args.content?.resource ? args.content?.resource : ""} />;
+            return this.modifiers.reduce((p, v) => {
                 return (v.modify(p));
             }, p);
         });
@@ -128,28 +124,14 @@ const AttributeSchema: ModelSchema<any> = {
     }
 }
 
-const OpSchema: ModelSchema<Op> = {
-    factory: () => ({}),
-    props: {
-        insert: optional(primitive()),
-        delete: optional(primitive()),
-        retain: optional(primitive()),
-        attributes: optional(object(AttributeSchema))
-    }
-};
-
-createModelSchema(Delta, {
-    ops: list(object(OpSchema))
-});
-
 const TextContentSchema: ModelSchema<ITextObjectContent> = {
     factory: () => ({
-        resource: new Delta(),
+        resource: "",
         altText: "",
         contentType: "text"
     }),
     props: {
-        resource: object(Delta),
+        resource: primitive(),
         altText: primitive(),
         contentType: primitive()
     }
