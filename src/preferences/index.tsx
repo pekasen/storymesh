@@ -108,12 +108,12 @@ class PreferencesView extends Component<unknown, Preferences> {
         window.addEventListener("keydown", (e) => {
             switch(e.key) {
                 case "Enter": {
-                    const elem = document.getElementById("pref-cancel-btn");
+                    const elem = document.getElementById("pref-ok-btn");
                     elem?.click();
                     break;
                 }
                 case "Escape": {
-                    const elem = document.getElementById("pref-ok-btn");
+                    const elem = document.getElementById("pref-cancel-btn");
                     elem?.click();
                     break;
                 }
