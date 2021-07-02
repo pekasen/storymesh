@@ -11,9 +11,16 @@ export const ItemPropertiesView: FunctionalComponent = () => {
     
     const res = storyContentObjectRegistry.
     getValue(uistate.selectedItems.first);
+    const shortcut = () => {
+        const r = storyContentObjectRegistry.getValue(uistate.selectedItems.first)?.menuTemplate.filter(e => e.conditional !== undefined && e.conditional).map(e => e.options.condition())
+        console.log("found", r);
+        return r
+    }
     const [state, setState] = useState({
-        items: res?.menuTemplate
+        items: res?.menuTemplate,
+        values: shortcut()
     });
+
 
     useEffect(() => {
         const disposer = reaction(
@@ -22,14 +29,15 @@ export const ItemPropertiesView: FunctionalComponent = () => {
                     id: uistate.selectedItems.first,
                     connections: res?.connections.length,
                     connectors: res?.connectors.size,
-                    values: storyContentObjectRegistry.getValue(uistate.selectedItems.first)?.menuTemplate.map(e => {if (e.getter )e.getter()})
+                    values: shortcut()
                 }
             ),
-            ({ id }) => {
+            ({ id, values }) => {
                 const items = storyContentObjectRegistry.getValue(id)?.menuTemplate;
                 if (items !== undefined && items.length >= 0) {
                     setState({
-                        items: items
+                        items: items,
+                        values: values
                     });
                 }
             }
