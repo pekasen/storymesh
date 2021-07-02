@@ -11,16 +11,25 @@ import { GalleryItemView } from './GalleryItemView';
 import { Store } from '..';
 import { useContext, useEffect, useState } from 'preact/hooks';
 import { StoryObject } from '../../plugins/helpers/AbstractStoryObject';
+import { ValueRegistry } from '../utils/registry';
 
 export const EditorPaneGroup: FunctionalComponent = () => {
-    const [, setState] = useState({});
-
+    
     const store = useContext(Store);
+    const [state, setState] = useState({
+        registry: store.storyContentObjectRegistry,
+        numNodes: store.storyContentObjectRegistry.registry.size,
+        loadedItemId: store.uistate.loadedItem
+    });
 
     useEffect(() => {
         const disposer = reaction(
             () => [store.storyContentObjectRegistry, store.storyContentObjectRegistry.registry.size, store.uistate.loadedItem],
-            () => setState({})
+            ([registry, numNodes, loadedItem]) => setState({
+                registry: registry as ValueRegistry<StoryObject>,
+                numNodes: numNodes as number,
+                loadedItemId: loadedItem as string
+            })
         );
 
         return () => {
@@ -28,7 +37,7 @@ export const EditorPaneGroup: FunctionalComponent = () => {
         };
     });
 
-    const loadedItem = store.storyContentObjectRegistry.getValue(store.uistate.loadedItem);
+    const loadedItem = store.storyContentObjectRegistry.getValue(state.loadedItemId);
 
     if (loadedItem) return <HorizontalPaneGroup>
         <ResizablePane paneState={store.uistate.windowProperties.sidebarPane} resizable="right" classes={["sidebar"]}>
@@ -44,6 +53,7 @@ export const EditorPaneGroup: FunctionalComponent = () => {
                             {store.pluginStore.registry.
                                 filter((val) => (val.public)).
                                 map((item) => (
+                                    // @ts-ignore
                                     <GalleryItemView item={item}>
                                         <span>{item.name}</span>
                                     </GalleryItemView>
@@ -54,14 +64,17 @@ export const EditorPaneGroup: FunctionalComponent = () => {
             </VerticalPaneGroup>
         </Pane>
         <ResizablePane paneState={store.uistate.windowProperties.previewPane} resizable="left">
-            <Preview
-                topLevelObjectId={store.uistate.topLevelObjectID}
-                id={"g"}
-                graph={store.storyContentObjectRegistry.getValue(store.uistate.topLevelObjectID)?.childNetwork}
-                registry={store.storyContentObjectRegistry}
-                userDefinedProperties={{}}
-            >
-            </Preview>
+            <VerticalPaneGroup>
+                <VerticalPane>
+                    <Preview
+                        // topLevelObjectId={store.uistate.topLevelObjectID}
+                        // id={"g"}
+                        // graph={store.storyContentObjectRegistry.getValue(store.uistate.topLevelObjectID)?.childNetwork}
+                        // registry={store.storyContentObjectRegistry}
+                        // userDefinedProperties={{}}
+                    />
+                </VerticalPane>
+            </VerticalPaneGroup>
         </ResizablePane>
     </HorizontalPaneGroup>;
     else return <div>Loading</div>
