@@ -9,6 +9,7 @@ import { ConnectorSchema } from "../../renderer/store/schemas/ConnectorSchema";
 import { exportClass } from "../helpers/exportClass";
 import { HMTLModifier } from "../helpers/HTMLModifier";
 import { HSlider, MenuTemplate, Text, CheckBox, ColorPicker, Divider, DropDown } from "preact-sidebar";
+// @ts-expect-error
 import { createUseStyles } from 'preact-jss-hook';
 
 export class AnimationModifier extends HMTLModifier {
