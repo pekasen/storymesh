@@ -402,10 +402,10 @@ export class EdgeRenderer2 extends Component<{store: RootStore}> {
         const d1_distance_from_top  = d1_offset.y + d1_height;
         const d1_distance_from_left = d1_offset.x + d1_width;
     
-        const d2_offset_x             = selectionRect.x();
-        const d2_offset_y             = selectionRect.y();
-        const d2_height             = selectionRect.height();
-        const d2_width              = selectionRect.width();
+        const d2_offset_x             = selectionRect.x() as number;
+        const d2_offset_y             = selectionRect.y() as number;
+        const d2_height             = selectionRect.height() as number;
+        const d2_width              = selectionRect.width() as number;
         const d2_distance_from_top  = d2_offset_y + d2_height;
         const d2_distance_from_left = d2_offset_x + d2_width;
         
