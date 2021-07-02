@@ -1,7 +1,6 @@
 import { IRegistry } from 'storygraph/dist/StoryGraph/IRegistry';
-import { StoryObject } from './AbstractStoryObject';
-import { ConnectorDirection, ConnectorPort, ConnectorType, IConnectorPort, StoryGraph } from 'storygraph';
-import { Button, CheckBox, DropDown, MenuTemplate, Table, Text } from 'preact-sidebar';
+import { ConnectorDirection, ConnectorPort, ConnectorType, IConnectorPort, IStoryModifier, IStoryObject, StoryGraph } from 'storygraph';
+import { Button, DropDown, MenuTemplate, Table, Text } from 'preact-sidebar';
 import { useContext } from 'preact/hooks';
 import { Store } from '../../renderer';
 
@@ -22,7 +21,9 @@ interface IConnectorMethods {
     removeConnector: (port: ConnectorPort) => void
 }
 
-export function connectionField(target: StoryObject & IDefaultFieldsMethods): MenuTemplate[] {
+type Target = IStoryObject | IStoryModifier
+
+export function connectionField(target: IStoryObject & IDefaultFieldsMethods): MenuTemplate[] {
     interface IConnectionTableEntry {
         thisPort: string
         otherPort?: string
@@ -107,7 +108,7 @@ export function connectionField(target: StoryObject & IDefaultFieldsMethods): Me
     ]
 }
 
-export function addConnectionPortField(target: StoryObject & IConnectorMethods): MenuTemplate[] {
+export function addConnectionPortField(target: Target & IConnectorMethods): MenuTemplate[] {
     return [
         new Button("Add Port", () => target.addConnector("flow", "in"))
         // {
@@ -123,7 +124,7 @@ export function addConnectionPortField(target: StoryObject & IConnectorMethods):
     ]
 }
 
-export function nameField(target: StoryObject & INameFieldMethods): MenuTemplate[] {
+export function nameField(target: Target & INameFieldMethods): MenuTemplate[] {
     return [
         new Text(
             "Name",
@@ -143,7 +144,7 @@ export function nameField(target: StoryObject & INameFieldMethods): MenuTemplate
 }
 
 export function dropDownField(
-    target: StoryObject,
+    target: Target,
     options: () => string[], //  = ["h1", "h2", "h3", "p", "b"]
     value: () => string,
     handler: (selection: string) => void
