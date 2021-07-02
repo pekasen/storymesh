@@ -1,20 +1,19 @@
-import { FunctionComponent } from "preact";
-import { v4 } from "uuid";
+import Logger, { ILogger } from "js-logger";
 import { action, makeObservable, observable } from 'mobx';
-import { StoryGraph, IConnectorPort, IEdge, IMetaData, IRenderingProperties, FlowConnectorInPort, FlowConnectorOutPort, DataConnectorInPort } from 'storygraph';
-import { IRegistry } from 'storygraph/dist/StoryGraph/IRegistry';
-import { IPlugIn, INGWebSProps } from "../../renderer/utils/PlugInClassRegistry";
+import { FunctionComponent } from "preact";
 import { Card, MenuTemplate } from "preact-sidebar";
 import { createModelSchema, custom, deserialize, getDefaultModelSchema, identifier, list, map, object, optional, primitive, serialize } from 'serializr';
-import { UserDefinedPropertiesSchema } from '../../renderer/store/schemas/UserDefinedPropertiesSchema';
-import { MetaDataSchema } from '../../renderer/store/schemas/MetaDataSchema';
-import { rootStore } from '../../renderer';
-import { AbstractStoryModifier } from "./AbstractModifier";
+import { DataConnectorInPort, FlowConnectorInPort, FlowConnectorOutPort, IConnectorPort, IEdge, IMetaData, IRenderingProperties, StoryGraph, StoryObject as StoryObject0 } from 'storygraph';
+import { IRegistry } from 'storygraph/dist/StoryGraph/IRegistry';
 import { NotificationCenter } from "storygraph/dist/StoryGraph/NotificationCenter";
-import { EdgeSchema } from "../../renderer/store/schemas/EdgeSchema";
+import { v4 } from "uuid";
+import { rootStore } from '../../renderer';
 import { ConnectorSchema } from "../../renderer/store/schemas/ConnectorSchema";
-import Logger, { ILogger } from "js-logger";
-import { StoryObject as StoryObject0 } from "storygraph"
+import { EdgeSchema } from "../../renderer/store/schemas/EdgeSchema";
+import { MetaDataSchema } from '../../renderer/store/schemas/MetaDataSchema';
+import { UserDefinedPropertiesSchema } from '../../renderer/store/schemas/UserDefinedPropertiesSchema';
+import { INGWebSProps, IPlugIn } from "../../renderer/utils/PlugInClassRegistry";
+import { AbstractStoryModifier } from "./AbstractModifier";
 
 export class StoryObject extends StoryObject0 implements IPlugIn{
     
