@@ -89,6 +89,7 @@ export class TransitionModifier extends HMTLModifier {
                 {
                     min: 0.5,
                     max: 10,
+                    step: 0.1,
                     formatter: (val: number) => `${val}s`
                 },
                 () => this.transitionDuration,
@@ -296,12 +297,12 @@ export const plugInExport = exportClass(
     true
 );
 
-export const TransitionModifierPlugIn: ModifierPlugIn = {
-    name: "Transition",
-    id: "internal.modifier.transition",
-    public: true,
-    icon: TransitionModifier.defaultIcon,
+// export const TransitionModifierPlugIn: ModifierPlugIn = {
+//     name: "Transition",
+//     id: "internal.modifier.transition",
+//     public: true,
+//     icon: TransitionModifier.defaultIcon,
 
-    // package: {},
-    constructor: TransitionModifier
-}
+//     // package: {},
+//     constructor: TransitionModifier
+// }
