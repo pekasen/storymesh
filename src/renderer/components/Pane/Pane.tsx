@@ -71,16 +71,23 @@ export interface IResizablePaneProps {
 }
 
 export const ResizablePane: FunctionalComponent<IResizablePaneProps> = ({children, resizable, paneState, classes}: IResizablePaneProps) => {
-    const [_, setState] = useState({});
-    const _classes = classes || [];
+    const [_, setState] = useState({
+        width: paneState.width,
+        hidden: false
+    });
 
+    const _classes = classes || [];
 
     if (resizable !== "none" && paneState) {
         useEffect(() => {
             const disposer = reaction(
                 () => ([paneState?.width, paneState.hidden]),
-                () => {
-                    setState({});
+                (a) => {
+                    const [width, hidden] = a;
+                    setState({
+                        width: width as number,
+                        hidden: hidden as boolean
+                    });
                 }
             )
     
@@ -89,11 +96,7 @@ export const ResizablePane: FunctionalComponent<IResizablePaneProps> = ({childre
             }
         });
 
-        const cache = {
-            x: 0
-        };    
-
-        return <div class={["pane", "pane-resizable", (paneState.hidden) ? " hidden" : "visible", ..._classes].join(" ")} style={`width: ${paneState?.width}`}>
+        return <div class={["pane", "pane-resizable", (paneState.hidden) ? " hidden" : "visible", ..._classes].join(" ")} style={`width: ${_.width}`}>
             {children}
             <div
             class={`drag-handle-horizontal-${(resizable === "left") ? "left" : "right"}`}
@@ -101,15 +104,8 @@ export const ResizablePane: FunctionalComponent<IResizablePaneProps> = ({childre
                 
                 const updater = (f: MouseEvent) => {
                     // mouse position
-                    const x =  - cache.x;
-                    // element position
-                    const rectX = (f.target as HTMLElement).getBoundingClientRect().x;
-                    cache.x
-                    Logger.info("Bounds", (f.target as HTMLElement).getBoundingClientRect());
-
-                    paneState.setWidth(-f.movementX + paneState.width);
-
-
+                    Logger.info("Bounds", f.movementX);
+                    paneState.setWidth(paneState.width - f.movementX);
                 };
                 const remover = () => {
                     document.removeEventListener("mousemove", updater);
