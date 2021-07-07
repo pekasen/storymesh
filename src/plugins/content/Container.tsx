@@ -101,6 +101,7 @@ export class Container extends StoryObject {
                 path = graph?.traverse(registry, this.startNode, Array.from(startNode.connectors)[0][1].id)
                 if (path !== undefined) {
                     div = <div style={`padding:${this.userDefinedProperties.padding};
+                                       height:${this.userDefinedProperties.height};
                                        max-width:${this.userDefinedProperties.maxWidth};
                                        place-items:${this.userDefinedProperties.placeItems};
                                        ${this.userDefinedProperties.backgroundColor !== "" ? "background-color:" + this.userDefinedProperties.backgroundColor : ""};

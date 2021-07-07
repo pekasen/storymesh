@@ -12,10 +12,11 @@ interface IMoveableProps extends ISelectableProps, INotifyable<MoveableItem>, II
     children: preact.JSX.Element
 }
 
+// To avoid duplicate IDs among the editor and preview elements, the MoveSender and MoveReceiver element IDs are suffixed by ".editor"
 export class MoveSender extends Component<IMoveableProps> {
-    render ({ registry, id, children, selectedItems}: IMoveableProps): h.JSX.Element {
+    render({ registry, id, children, selectedItems }: IMoveableProps): h.JSX.Element {
         const item = registry.getValue(id);
-        if (!item) throw("Nono1")
+        if (!item) throw ("Nono1")
 
 
         children.props["draggable"] = true;
@@ -27,7 +28,7 @@ export class MoveSender extends Component<IMoveableProps> {
             e = e || window.event;
 
             // TODO: prevent dragging beyond 0, since, it would move items out of view
-            function updater (this: Document, event: MouseEvent) {
+            function updater(this: Document, event: MouseEvent) {
                 selectedItems.ids.forEach(itemID => {
                     const _item = registry.getValue(itemID)
                     if (_item) {
@@ -40,10 +41,10 @@ export class MoveSender extends Component<IMoveableProps> {
                 });
             }
 
-            function remover () {
+            function remover() {
                 document.removeEventListener("mousemove", updater)
                 document.removeEventListener("mouseup", remover);
-            }       
+            }
             document.addEventListener("mousemove", updater);
             document.addEventListener("mouseup", remover);
         }
@@ -51,13 +52,13 @@ export class MoveSender extends Component<IMoveableProps> {
     }
 }
 
-export const MoveReceiver: FunctionalComponent<IMoveableProps> = ({id, children}: IMoveableProps) => {
+export const MoveReceiver: FunctionalComponent<IMoveableProps> = ({ id, children }: IMoveableProps) => {
 
     const store = useContext(Store);
     const [_, setState] = useState({});
     const registry = store.uistate.moveableItems;
     const item = registry.getValue(id);
-    if (!item) throw("MoveableItem not defined");
+    if (!item) throw ("MoveableItem not defined");
 
     useEffect(() => {
         const disposer = reaction(
@@ -76,15 +77,15 @@ export const MoveReceiver: FunctionalComponent<IMoveableProps> = ({id, children}
     })
 
     return <div
-        id={id}
+        id={id + ".editor"}
         style={
             "position: absolute;" +
             (item.x === 0 ? "" : `left: ${item.x};`) +
             (item.y === 0 ? "" : `top: ${item.y};`)
         }
-        >
-            {children}
-        </div>
+    >
+        {children}
+    </div>
 }
 
 export class MoveReceiver1 extends Component<IMoveableProps> {
@@ -94,7 +95,7 @@ export class MoveReceiver1 extends Component<IMoveableProps> {
         super(props);
 
         const item = props.registry.getValue(props.id)
-        if (!item) throw("Nono1")
+        if (!item) throw ("Nono1")
 
         this.reactionDisposer = reaction(
             () => ({
@@ -107,21 +108,21 @@ export class MoveReceiver1 extends Component<IMoveableProps> {
         )
     }
 
-    render ({ registry, id, children }: IMoveableProps): h.JSX.Element {
+    render({ registry, id, children }: IMoveableProps): h.JSX.Element {
         const item = registry.getValue(id);
 
-        if (!item) throw("Nono1")
-        
+        if (!item) throw ("Nono1")
+
         return <div
-            id={id}
+            id={id + ".editor"}
             style={
                 "position: absolute;" +
                 (item.x === 0 ? "" : `left: ${item.x};`) +
                 (item.y === 0 ? "" : `top: ${item.y};`)
             }
-            >
-                {children}
-            </div>
+        >
+            {children}
+        </div>
     }
 
     componentWillUnmount(): void {
@@ -142,7 +143,7 @@ export class Moveable extends Component<IMoveableProps> {
         super(props);
 
         const item = props.registry.getValue(props.id)
-        if (!item) throw("Nono1")
+        if (!item) throw ("Nono1")
 
         this.reactionDisposer = reaction(
             () => ({
@@ -155,11 +156,11 @@ export class Moveable extends Component<IMoveableProps> {
         )
     }
 
-    render ({ registry, id, children, selectedItems}: IMoveableProps): h.JSX.Element {
+    render({ registry, id, children, selectedItems }: IMoveableProps): h.JSX.Element {
         const item = registry.getValue(id);
 
-        if (!item) throw("Nono1")
-        
+        if (!item) throw ("Nono1")
+
         return <div
             id={id}
             draggable={true}
@@ -168,12 +169,12 @@ export class Moveable extends Component<IMoveableProps> {
                 (item.x === 0 ? "" : `left: ${item.x};`) +
                 (item.y === 0 ? "" : `top: ${item.y};`)
             }
-            onMouseDown={ 
+            onMouseDown={
                 (e: MouseEvent) => {
                     e = e || window.event;
 
                     // TODO: prevent dragging beyond 0, since, it would move items out of view
-                    function updater (this: Document, event: MouseEvent) {
+                    function updater(this: Document, event: MouseEvent) {
                         const _event = event as h.JSX.TargetedMouseEvent<HTMLDocument>
                         // _event.prevententDefault();
 
@@ -189,18 +190,18 @@ export class Moveable extends Component<IMoveableProps> {
                         });
                     }
 
-                    function remover (e: MouseEvent) {
+                    function remover(e: MouseEvent) {
                         e.preventDefault();
                         document.removeEventListener("mousemove", updater)
                         document.removeEventListener("mouseup", remover);
                     }
-                    
+
                     document.addEventListener("mousemove", updater);
                     document.addEventListener("mouseup", remover);
                 }
             }>
-                {children}
-            </div>
+            {children}
+        </div>
     }
 
     componentWillUnmount(): void {

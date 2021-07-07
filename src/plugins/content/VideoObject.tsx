@@ -131,7 +131,7 @@ export class VideoObject extends StoryObject {
         return ret;
     }
 
-    public updateVideoURL(newURL: string) {
+    public updateVideoURL(newURL: string): void {
         this.content.resource = newURL;
     }
 
@@ -139,7 +139,7 @@ export class VideoObject extends StoryObject {
         this.name = name;
     }
 
-    public updateScrollableBackground(newScrollableBackground: boolean) {
+    public updateScrollableBackground(newScrollableBackground: boolean): void {
         this.scrollableBackground = newScrollableBackground;
         if (this.scrollableBackground) {
             if (this.videoElement && this.videoElement.current) {
@@ -189,11 +189,14 @@ export class VideoObject extends StoryObject {
                     if (that.parent) {
                         that.videoWrapper = document.getElementById(that.parent);
                         const parentNode = registry?.getValue(that.parent) as unknown as Container;
-                        if (that.videoElement && that.videoElement.current && that.scrollableBackground && that.videoWrapper && !isNaN(that.videoElement.current.duration)) { //TODO: check why duration is sometimes NaN
+                        if (that.videoElement && that.videoElement.current && that.scrollableBackground && 
+                                that.videoWrapper && !isNaN(that.videoElement.current.duration)) 
+                        { //TODO: check why duration is sometimes NaN
                             that.videoElement.current.currentTime = that.videoElement.current.duration -
                                 (that.videoWrapper?.getBoundingClientRect().bottom - that.videoElement.current.getBoundingClientRect().bottom)
                                 / that.scrollThroughSpeed;
-                            parentNode.userDefinedProperties.height = (Math.floor(that.videoElement.current.duration * that.scrollThroughSpeed + that.videoElement.current.getBoundingClientRect().height)) + "px";
+                            parentNode.userDefinedProperties.height = (Math.floor(that.videoElement.current.duration * that.scrollThroughSpeed 
+                                + that.videoElement.current.getBoundingClientRect().height)) + "px";
                             that.videoWrapper.style.height = parentNode.userDefinedProperties.height;
                             that.myRequestAnimationFrame = requestAnimationFrame(scrollPlay);
                         }

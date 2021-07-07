@@ -90,6 +90,9 @@
       width: 100%;
       display: grid;
       place-items: start;
+      img, figure, span, div {
+        z-index: 2;
+      }
     }
 
     .hero {
