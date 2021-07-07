@@ -37,8 +37,8 @@ class TextMarkupObject extends StoryObject {
     constructor() {
         super();
         this.isContentNode = true;
-        this.role = "internal.content.text";
-        this.name = "Text";
+        this.role = "internal.content.textmarkup";
+        this.name = "TextMarkup";
         this.renderingProperties = {
             width: 100,
             order: 1,
@@ -68,7 +68,7 @@ class TextMarkupObject extends StoryObject {
     public get menuTemplate(): MenuTemplate[] {
         const ret: MenuTemplate[] = [
             ...nameField(this),
-            new TextArea("Content", () => this.content.resource, (arg: string) => this.updateText(arg.replace(/(?:\r\n|\r|\n)/g, '<br>'))),
+            new TextArea("Content", () => this.content.resource, (arg: string) => this.updateText(arg.replace(/(?:\r\n|\r|\n)/g, '<br>\n'))),
             // {
             //     label: "Content",
             //     type: "textarea",
@@ -143,8 +143,8 @@ createModelSchema(TextMarkupObject,{
 
 export const plugInExport = exportClass(
     TextMarkupObject,
-    "Text",
-    "internal.content.text",
+    "TextMarkup",
+    "internal.content.textmarkup",
     TextMarkupObject.defaultIcon,
     true
 );
