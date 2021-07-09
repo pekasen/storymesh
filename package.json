@@ -27,7 +27,6 @@
   "dependencies": {
     "mobx": "^6.0.1",
     "preact": "^10.0.5",
-    "preact-markup": "2.1.1",
     "preact-sidebar": "file:../preact-sidebar",
     "babylonjs": "^4.2.0",
     "babylonjs-loaders": "^4.2.0",
