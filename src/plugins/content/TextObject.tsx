@@ -3,6 +3,7 @@ import { action, makeObservable, observable } from 'mobx';
 import { convertDeltaToHtml } from 'node-quill-converter';
 import { FunctionComponent, h } from "preact";
 import { MenuTemplate, RichText } from "preact-sidebar";
+import { useEffect, useRef } from 'preact/hooks';
 import Delta from "quill-delta";
 import Op from "quill-delta/dist/Op";
 import { createModelSchema, list, ModelSchema, object, optional, primitive } from 'serializr';
@@ -67,25 +68,16 @@ class _TextObject extends StoryObject {
         });
     }
 
+    private compileXML(xmlString: string): HTMLElement {
+        const parser = new DOMParser();
+        const compiledStuff = parser.parseFromString(xmlString, 'text/html');
+        return compiledStuff.documentElement;
+    }
+    
     public get menuTemplate(): MenuTemplate[] {
         const ret: MenuTemplate[] = [
             ...nameField(this),
-            new RichText("Content", () => this.content.resource, (arg: Delta) => this.updateText(arg)),
-            // {
-            //     label: "Content",
-            //     type: "textarea",
-            //     value: () => this.content.resource,
-            //     valueReference: (text: string) => {this.updateText(text)}
-            // },
-            //...dropDownField(
-            //    this,
-            //    () => ["h1", "h2", "h3", "b", "p"],
-            //    () => this.userDefinedProperties.tag,
-            //    (selection: string) => {
-            //        Logger.info(selection);
-            //        runInAction(() => this.userDefinedProperties.tag = selection);
-            //    }
-            //),
+            new RichText("Content", () => this.content.resource, (arg: Delta) => this.updateText(arg)),            
             ...connectionField(this)
         ];
         if (super.menuTemplate) ret.push(...super.menuTemplate);
@@ -109,9 +101,15 @@ class _TextObject extends StoryObject {
 
     public getComponent() {    
         const Comp: FunctionComponent<INGWebSProps> = (args => {
-            let p: h.JSX.Element;
-            // TODO: is that supposed to be like that?
-            p = <span dangerouslySetInnerHTML={{ __html: convertDeltaToHtml(new Delta(args.content?.resource as unknown as Op[])) as string}} />
+            const ref = useRef<HTMLDivElement>();
+            useEffect(() => {
+                const textElement = this.compileXML(convertDeltaToHtml(new Delta(args.content?.resource as unknown as Op[])) as string);
+                if (ref.current !== null) {
+                    ref.current?.appendChild(textElement);
+                }
+            });
+            
+            const p = <span ref={ref}></span>;
             return this.modifiers.reduce((p,v) => {
                 return (v.modify(p));
             }, p);
