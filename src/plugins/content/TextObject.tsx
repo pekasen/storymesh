@@ -1,4 +1,5 @@
 import { action, makeObservable, observable } from 'mobx';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import { convertDeltaToHtml } from 'node-quill-converter';
 import { FunctionComponent, h } from "preact";
@@ -109,7 +110,7 @@ class _TextObject extends StoryObject {
                 }
             });
             
-            const p = <span ref={ref}></span>;
+            const p = <span class="text-object" ref={ref}></span>;
             return this.modifiers.reduce((p,v) => {
                 return (v.modify(p));
             }, p);

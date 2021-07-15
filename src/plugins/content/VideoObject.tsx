@@ -6,9 +6,9 @@ import { StoryObject } from '../helpers/AbstractStoryObject';
 import { IContent } from 'storygraph/dist/StoryGraph/IContent';
 import { connectionField, nameField } from '../helpers/plugInHelpers';
 import { exportClass } from '../helpers/exportClass';
-import { createModelSchema, object, primitive } from 'serializr';
+import { createModelSchema, object } from 'serializr';
 import { useRef, useState, useEffect } from "preact/hooks";
-import { MenuTemplate, Text, CheckBox, HSliderMenuItem, HSlider } from "preact-sidebar";
+import { MenuTemplate, Text, CheckBox, HSlider } from "preact-sidebar";
 import { ContentSchema } from "../../renderer/store/schemas/ContentSchema";
 import { Container } from "./Container";
 
@@ -23,12 +23,13 @@ export class VideoObject extends StoryObject {
     public content: IContent;
     public icon: string;
     // TODO: may be refactor these properties into a seperate object, e.g. userDefinedProperties?
-    public playbackControls: boolean = false;
-    public autoPlay: boolean = false;
-    public loopable: boolean = false;
-    public scrollableBackground: boolean = false;
-    public muted: boolean = false;
-    public scrollThroughSpeed: number = 100;
+    public playbackControls = false;
+    public autoPlay = false;
+    public loopable = false;
+    public scrollableBackground = false;
+    public muted = false;
+    public scrollThroughSpeed = 1;
+    public scrollThroughSpeedFactor = 100;
     public static defaultIcon = "icon-video";
 
     // TODO: are these all supposed to be private? I added the keyword…
@@ -114,8 +115,8 @@ export class VideoObject extends StoryObject {
             new HSlider(
                 "Scroll-through speed",
                 {
-                    min: 100,
-                    max: 1000,
+                    min: 1,
+                    max: 10,
                     formatter: (val: number) => `${val}`
                 },
                 () => this.scrollThroughSpeed,
@@ -194,8 +195,8 @@ export class VideoObject extends StoryObject {
                         { //TODO: check why duration is sometimes NaN
                             that.videoElement.current.currentTime = that.videoElement.current.duration -
                                 (that.videoWrapper?.getBoundingClientRect().bottom - that.videoElement.current.getBoundingClientRect().bottom)
-                                / that.scrollThroughSpeed;
-                            parentNode.userDefinedProperties.height = (Math.floor(that.videoElement.current.duration * that.scrollThroughSpeed 
+                                / (that.scrollThroughSpeed * that.scrollThroughSpeedFactor);
+                            parentNode.userDefinedProperties.height = (Math.floor(that.videoElement.current.duration * that.scrollThroughSpeed * that.scrollThroughSpeedFactor
                                 + that.videoElement.current.getBoundingClientRect().height)) + "px";
                             that.videoWrapper.style.height = parentNode.userDefinedProperties.height;
                             that.myRequestAnimationFrame = requestAnimationFrame(scrollPlay);
