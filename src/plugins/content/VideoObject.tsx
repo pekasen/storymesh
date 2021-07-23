@@ -184,15 +184,14 @@ export class VideoObject extends StoryObject {
                 window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
                 // @ts-ignore
                 const cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
-
+                
+                this.videoWrapper = this.parent ? document.getElementById(this.parent) : undefined;
+                const parentNode = this.parent ? registry?.getValue(this.parent) as unknown as Container : undefined;
                 const that = this;
                 function scrollPlay(): void {
-                    if (that.parent) {
-                        that.videoWrapper = document.getElementById(that.parent);
-                        const parentNode = registry?.getValue(that.parent) as unknown as Container;
-                        if (that.videoElement && that.videoElement.current && that.scrollableBackground && 
+                    if (parentNode && that.videoElement && that.videoElement.current && that.scrollableBackground && 
                                 that.videoWrapper && !isNaN(that.videoElement.current.duration)) 
-                        { //TODO: check why duration is sometimes NaN
+                        {
                             that.videoElement.current.currentTime = that.videoElement.current.duration -
                                 (that.videoWrapper?.getBoundingClientRect().bottom - that.videoElement.current.getBoundingClientRect().bottom)
                                 / (that.scrollThroughSpeed * that.scrollThroughSpeedFactor);
@@ -202,11 +201,15 @@ export class VideoObject extends StoryObject {
                             that.myRequestAnimationFrame = requestAnimationFrame(scrollPlay);
                         }
                     }
-                }
+                
+
                 if (this.scrollableBackground) {
                     requestAnimationFrame(scrollPlay);
                 } else {
                     cancelAnimationFrame(this.myRequestAnimationFrame);
+                    if (parentNode) {
+                        parentNode.userDefinedProperties.height = "auto";
+                    }
                 }
             }, [this.scrollableBackground]);
 
