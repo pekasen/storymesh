@@ -1,2 +1,5 @@
 dist/
 node_modules/
+teststory/
+
+package-lock.json
