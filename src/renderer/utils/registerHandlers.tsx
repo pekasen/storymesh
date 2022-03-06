@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron/renderer';
 import { readFile, writeFile } from "fs";
 import Logger from 'js-logger';
 import { deserialize, serialize } from 'serializr';
-import { StoryObjectSchema } from 'storygraph';
+import { StoryObjectSchema, VReg } from 'storygraph';
 import { rootStore } from '../index';
 import { RootStoreSchema } from "../store/rootStore";
 import { ValueRegistrySchema } from './registry';
@@ -91,8 +91,7 @@ export function registerHandlers(): void {
     });
 
     ipcRenderer.on("export", (e, { file }) => {
-        // @ts-expect-error
-        const json = serialize(ValueRegistrySchema(StoryObjectSchema), rootStore.root.storyContentObjectRegistry);
+        const json = serialize(VReg, rootStore.root.storyContentObjectRegistry);
         Logger.info(json)
         if (file !== undefined) {
             rootStore.root.uistate.setFile(file)
