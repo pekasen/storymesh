@@ -144,6 +144,6 @@ export const RootStoreSchema = createModelSchema(
     RootStore,
     {
         uistate: object(UIStore),
-        storyContentObjectRegistry: object(AutoValueRegistrySchema()),
+        storyContentObjectRegistry: object(VReg), // AutoValueRegistrySchema() 
     }
 );
