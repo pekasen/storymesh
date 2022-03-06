@@ -5,7 +5,7 @@ import { deserialize, serialize } from 'serializr';
 import { StoryObjectSchema } from 'storygraph';
 import { rootStore } from '../index';
 import { RootStoreSchema } from "../store/rootStore";
-import { IValue, ValueRegistrySchema } from './registry';
+import { ValueRegistrySchema } from './registry';
 
 /**
  * registers file-event handlers
@@ -13,7 +13,7 @@ import { IValue, ValueRegistrySchema } from './registry';
 export function registerHandlers(): void {
     ipcRenderer.on('save', (e, { file }) => {
         // rootStore.root.uistate.setFile(file);
-        const json = serialize(RootStoreSchema, rootStore.root);
+        const json = serialize(rootStore.root);
         Logger.info(json)
         if (file !== undefined) {
             rootStore.root.uistate.setFile(file)
