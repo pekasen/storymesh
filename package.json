@@ -1,0 +1,37 @@
+{
+  "name": "storymesh-player",
+  "version": "1.0.0",
+  "description": "Webplayer for StoryMesh",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pekasen/storymesh-player.git"
+  },
+  "keywords": [
+    "Storytelling",
+    "Interactive",
+    "Media"
+  ],
+  "author": "P. Kessling",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pekasen/storymesh-player/issues"
+  },
+  "homepage": "https://github.com/pekasen/storymesh-player#readme",
+  "dependencies": {
+    "preact": "^10.6.6",
+    "storygraph": "file:../storygraph",
+    "storymesh-plugin-base": "file:../storymesh-plugin-base"
+  },
+  "devDependencies": {
+    "express": "^4.17.3",
+    "ts-loader": "^9.2.7",
+    "typescript": "^4.6.2",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2"
+  }
+}

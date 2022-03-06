@@ -1,0 +1,159 @@
+{
+    "__registry": {
+        "57b538a7-af86-4bef-a436-df38e7960db4": {
+            "id": "57b538a7-af86-4bef-a436-df38e7960db4",
+            "name": "My Story",
+            "role": "internal.content.container",
+            "isContentNode": false,
+            "userDefinedProperties": {
+                "padding": "0 0 0 0",
+                "maxWidth": "auto",
+                "placeItems": "center",
+                "backgroundColor": "",
+                "textColor": ""
+            },
+            "metaData": {
+                "name": "NGWebS default user",
+                "createdAt": 1646586361776,
+                "tags": []
+            },
+            "connections": [],
+            "_connectors": {
+                "d0bfd898-9085-4983-a62b-70836795794f": {
+                    "id": "d0bfd898-9085-4983-a62b-70836795794f",
+                    "direction": "in",
+                    "type": "flow",
+                    "connections": [],
+                    "associated": "b31fa29d-636e-4954-b50e-bdc4c7b06322"
+                },
+                "b31fa29d-636e-4954-b50e-bdc4c7b06322": {
+                    "id": "b31fa29d-636e-4954-b50e-bdc4c7b06322",
+                    "direction": "out",
+                    "type": "flow",
+                    "connections": [],
+                    "associated": "d0bfd898-9085-4983-a62b-70836795794f"
+                },
+                "554319f6-d991-48dc-a7b3-7b2ac9eb008f": {
+                    "_name": "data-in",
+                    "id": "554319f6-d991-48dc-a7b3-7b2ac9eb008f",
+                    "direction": "in",
+                    "type": "data",
+                    "connections": []
+                }
+            },
+            "modifiers": []
+        },
+        "e7afc8ac-d46f-418f-8d91-1e087929bb76": {
+            "id": "e7afc8ac-d46f-418f-8d91-1e087929bb76",
+            "name": "Input",
+            "role": "internal.content.inputconnectorview",
+            "isContentNode": false,
+            "metaData": {
+                "name": "NGWebS default user",
+                "createdAt": 1646586361780,
+                "tags": []
+            },
+            "parent": "57b538a7-af86-4bef-a436-df38e7960db4",
+            "connections": [],
+            "_connectors": {
+                "d0bfd898-9085-4983-a62b-70836795794f": {
+                    "id": "d0bfd898-9085-4983-a62b-70836795794f",
+                    "direction": "out",
+                    "type": "flow",
+                    "connections": [
+                        {
+                            "from": "e7afc8ac-d46f-418f-8d91-1e087929bb76.d0bfd898-9085-4983-a62b-70836795794f",
+                            "to": "6baa6486-e3f8-4a90-99a6-08a038443637.652dba71-6815-43fb-aeb7-401e61b7ce37",
+                            "id": "edge.7d511e16-d69a-409d-9768-dfb7af299976"
+                        }
+                    ]
+                },
+                "554319f6-d991-48dc-a7b3-7b2ac9eb008f": {
+                    "id": "554319f6-d991-48dc-a7b3-7b2ac9eb008f",
+                    "direction": "out",
+                    "type": "data",
+                    "connections": []
+                }
+            },
+            "modifiers": []
+        },
+        "b36c6e7d-acd3-4748-b5ad-d1cdb7f8a59b": {
+            "id": "b36c6e7d-acd3-4748-b5ad-d1cdb7f8a59b",
+            "name": "Output",
+            "role": "internal.content.outputconnectorview",
+            "isContentNode": false,
+            "metaData": {
+                "name": "NGWebS default user",
+                "createdAt": 1646586361780,
+                "tags": []
+            },
+            "parent": "57b538a7-af86-4bef-a436-df38e7960db4",
+            "connections": [],
+            "_connectors": {
+                "b31fa29d-636e-4954-b50e-bdc4c7b06322": {
+                    "id": "b31fa29d-636e-4954-b50e-bdc4c7b06322",
+                    "direction": "in",
+                    "type": "flow",
+                    "connections": []
+                }
+            },
+            "modifiers": []
+        },
+        "6baa6486-e3f8-4a90-99a6-08a038443637": {
+            "id": "6baa6486-e3f8-4a90-99a6-08a038443637",
+            "name": "Hero",
+            "role": "internal.content.hero",
+            "isContentNode": true,
+            "userDefinedProperties": {
+                "text": "fsfdfddddfgss",
+                "filterAmount": 0,
+                "headlineWidth": "",
+                "filterType": "grayscale",
+                "filterValue": "%"
+            },
+            "metaData": {
+                "name": "NGWebS default user",
+                "createdAt": 1646586365905,
+                "tags": []
+            },
+            "content": {
+                "resource": "https://source.unsplash.com/random/1920x1080",
+                "contentType": "url",
+                "altText": ""
+            },
+            "parent": "57b538a7-af86-4bef-a436-df38e7960db4",
+            "connections": [],
+            "_connectors": {
+                "652dba71-6815-43fb-aeb7-401e61b7ce37": {
+                    "id": "652dba71-6815-43fb-aeb7-401e61b7ce37",
+                    "direction": "in",
+                    "type": "flow",
+                    "connections": [
+                        {
+                            "from": "e7afc8ac-d46f-418f-8d91-1e087929bb76.d0bfd898-9085-4983-a62b-70836795794f",
+                            "to": "6baa6486-e3f8-4a90-99a6-08a038443637.652dba71-6815-43fb-aeb7-401e61b7ce37",
+                            "id": "edge.7d511e16-d69a-409d-9768-dfb7af299976"
+                        }
+                    ],
+                    "associated": "8f34997f-f9b6-44c1-af91-5c7e01e5096a"
+                },
+                "8f34997f-f9b6-44c1-af91-5c7e01e5096a": {
+                    "id": "8f34997f-f9b6-44c1-af91-5c7e01e5096a",
+                    "direction": "out",
+                    "type": "flow",
+                    "connections": [],
+                    "associated": "652dba71-6815-43fb-aeb7-401e61b7ce37"
+                },
+                "3f8e6c73-0d2c-40af-8ffa-0c0fd7204924": {
+                    "_name": "data-in",
+                    "id": "3f8e6c73-0d2c-40af-8ffa-0c0fd7204924",
+                    "direction": "in",
+                    "type": "data",
+                    "connections": []
+                }
+            },
+            "modifiers": []
+        }
+    },
+    "entrypoint": "57b538a7-af86-4bef-a436-df38e7960db4"
+}
