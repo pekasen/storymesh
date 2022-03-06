@@ -33,5 +33,3 @@ export function display(file: string, mount_id: string) : any {
 
     return ret
 }
-
-// display('story.json')
