@@ -161,7 +161,7 @@ export function AutoValueRegistrySchema<T extends IValue<T>> () : ModelSchema<Va
         (v, k, obj) => {
             Logger.info("getting schema for", v.constructor.name);
             const _schema = getDefaultModelSchema(v.constructor);
-            if (!_schema) throw("no schema available for "+ v.contructor.name);
+            if (!_schema) throw("no schema available for " + v.contructor.name);
             return serialize(_schema, v);
         },
         (jsonVal, context, callback) => {
