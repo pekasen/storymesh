@@ -6,6 +6,7 @@ import { deepObserve, IDisposer } from 'mobx-utils';
 import { useContext, useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { Store } from '../..';
 import { RootStore } from '../../store/rootStore';
+import { VReg } from 'storygraph';
 
 interface IPreviewWrapperProps extends INGWebSProps {
     topLevelObjectId: string
@@ -15,7 +16,7 @@ interface IPreviewProps extends IPreviewWrapperProps {
     store: RootStore
 }
 
-type WidthClass = "XS" | "SM" | "MD" | "LG" | "XL";
+    type WidthClass = "XS" | "SM" | "MD" | "LG" | "XL";
 
 interface IPreviewState {
     classes: WidthClass[]
@@ -83,7 +84,8 @@ export const Preview: FunctionComponent = () => {
     });
 
     const topLevelObject = useMemo(() => {
-        const topLevelObjectId = store.uistate.topLevelObjectID;
+        const topLevelObjectId = VReg.instance().entrypoint;
+        if (!topLevelObjectId) throw('preview entrypoint not set')
         const topLevelObject = store.storyContentObjectRegistry.get(topLevelObjectId);
         if (!topLevelObject ) throw("BIGGY!");
         

@@ -89,7 +89,7 @@ export class RootStore {
                 emptyStory.name = "My Story";
                 // this.topLevelObject = emptyStory;
                 this.uistate.setLoadedItem(emptyStory.id);
-                this.uistate.topLevelObjectID = emptyStory.id;
+                VReg.instance().entrypoint = emptyStory.id;
             }
         }
         /**
