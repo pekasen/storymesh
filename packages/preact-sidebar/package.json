@@ -1,0 +1,49 @@
+{
+  "name": "preact-sidebar",
+  "version": "1.0.0",
+  "description": "Declaritive reactive sidebar menus",
+  "main": "dist/bundle.js",
+  "types": "./types",
+  "dependencies": {
+    "jodit": "^3.7.1",
+    "preact": "^10.5.13"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^11.2.0",
+    "@rollup/plugin-typescript": "^8.2.0",
+    "@testing-library/preact": "^2.0.1",
+    "@types/chai": "^4.2.15",
+    "@types/jsdom": "^16.2.6",
+    "@types/mocha": "^8.2.0",
+    "@types/quill": "^2.0.5",
+    "chai": "^4.3.0",
+    "jsdom": "^16.4.0",
+    "mocha": "^8.3.0",
+    "node-sass": "^5.0.0",
+    "rollup": "^2.39.1",
+    "rollup-plugin-scss": "^2.6.1",
+    "ts-node": "^9.1.1",
+    "tslib": "^2.1.0",
+    "typescript": "^4.1.5"
+  },
+  "scripts": {
+    "test": "mocha --require ts-node/register --watch-extensions ts,tsx 'test/**/*.{ts,tsx}'",
+    "build": "rollup -c",
+    "declarations": "tsc -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pekasen/preact-sidebar.git"
+  },
+  "keywords": [
+    "reactive",
+    "sidebar",
+    "menu"
+  ],
+  "author": "Philipp Kessling",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pekasen/preact-sidebar/issues"
+  },
+  "homepage": "https://github.com/pekasen/preact-sidebar#readme"
+}
