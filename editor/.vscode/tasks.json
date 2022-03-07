@@ -1,0 +1,18 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "gulp",
+			"task": "sass-story",
+			"problemMatcher": [],
+			"label": "gulp: sass-story"
+		},
+		{
+			"type": "gulp",
+			"task": "sass:watch",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "gulp: sass:watch"
+		}
+	]
+}

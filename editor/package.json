@@ -1,0 +1,71 @@
+{
+  "name": "ngwebs-editor",
+  "version": "1.0.0",
+  "description": "A next-generation web storytelling editor.",
+  "main": "dist/main/index.js",
+  "scripts": {
+    "test": "echo 'Please do not. ",
+    "start": "electron --trace-warnings --allow-file-access-from-files ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pekasen/ngwebs-editor.git"
+  },
+  "keywords": [
+    "web",
+    "storytelling",
+    "AR",
+    "VR",
+    "scrollytelling"
+  ],
+  "author": "P. Kessling",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pekasen/ngwebs-editor/issues"
+  },
+  "homepage": "https://github.com/pekasen/ngwebs-editor#readme",
+  "dependencies": {
+    "mobx": "^6.0.1",
+    "mobx-utils": "^6.0.3",
+    "preact": "^10.5.13",
+    "preact-sidebar": "file:../preact-sidebar",
+    "serializr": "^2.0.3",
+    "storygraph": "file:../storygraph",
+    "storymesh-plugin-base": "file:../storymesh-plugin-base",
+    "tslib": "^2.0.1",
+    "uuid": "^8.3.1"
+  },
+  "devDependencies": {
+    "@svgdotjs/svg.js": "^3.0.16",
+    "@types/chai": "^4.2.14",
+    "@types/electron": "^1.6.10",
+    "@types/electron-devtools-installer": "^2.2.0",
+    "@types/mocha": "^8.0.3",
+    "@types/node-sass": "^4.11.1",
+    "@types/resize-observer-browser": "^0.1.5",
+    "@types/uuid": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.6.0",
+    "@typescript-eslint/parser": "^4.6.0",
+    "acorn": "^8.0.4",
+    "chai": "^4.2.0",
+    "cssnano": "^5.1.0",
+    "electron": "^13.1.0",
+    "eslint": "^7.12.1",
+    "eslint-plugin-jsdoc": "^30.7.3",
+    "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-sass": "^5.1.0",
+    "js-logger": "^1.6.1",
+    "jss": "^10.6.0",
+    "merge-stream": "^2.0.0",
+    "mobx-utils": "^6.0.1",
+    "mocha": "^9.2.1",
+    "node-sass": "^7.0.1",
+    "preact-jss-hook": "^2.1.2",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
+  },
+  "directories": {
+    "test": "test"
+  }
+}
