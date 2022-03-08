@@ -30,6 +30,10 @@ export const EditorPaneGroup: FunctionalComponent = () => {
         };
     });
 
+    // const timeout = setTimeout(() => {
+    //     setState({});
+    // }, 500);
+
     const loadedItem = store.storyContentObjectRegistry.get(store.uistate.loadedItem);
 
     if (loadedItem) return <HorizontalPaneGroup>
