@@ -1,5 +1,5 @@
 import { h } from "preact";
-import { connectionField, nameField, exportClass, StoryObject, IRegistry, ConnectorPort, IConnectorPort, IEdge } from 'storygraph';
+import { connectionField, nameField, exportClass, StoryObject, IRegistry, ConnectorPort, IConnectorPort, IEdge, VReg } from 'storygraph';
 import { MenuTemplate } from "preact-sidebar";
 import { action, makeObservable, observable } from 'mobx';
 import { createModelSchema } from 'serializr';
@@ -16,7 +16,6 @@ export class InputConnectorView extends StoryObject {
     public deletable = false;
     
     public static defaultIcon = "icon-down";
-    public registry?: IRegistry;
     
     protected _connectors: Map<string, IConnectorPort>;
     
@@ -68,12 +67,11 @@ export class InputConnectorView extends StoryObject {
 
     setup(id: string, registry: IRegistry): void {
         this.parent = id;
-        this.registry = registry;
     }
 
     private updateConnectors(): void {
         if (!this.parent) return;
-        const parentNode = this.registry?.get(this.parent) as Container;
+        const parentNode = VReg.instance().get(this.parent) as Container;
         if (!parentNode) return;
         parentNode.connectors.forEach((connector) => {
             const _conn = (connector as ConnectorPort);
