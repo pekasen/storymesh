@@ -1,0 +1,32 @@
+{
+  "name": "storymesh",
+  "version": "1.0.0",
+  "description": "a interactive storytelling platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pekasen/storymesh.git"
+  },
+  "keywords": [
+    "interactive",
+    "storytelling",
+    "scrollytelling"
+  ],
+  "author": "P. Kessling, J. Golek, A. Tutescu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pekasen/storymesh/issues"
+  },
+  "homepage": "https://github.com/pekasen/storymesh#readme",
+  "workspaces": [
+    "packages/*",
+    "editor"
+  ],
+  "dependencies": {
+    "eslint": "^7.12.1",
+    "eslint-plugin-jsdoc": "^30.7.3"
+  }
+}
