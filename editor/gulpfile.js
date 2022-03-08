@@ -1,9 +1,9 @@
 'use strict';
 var gulp = require('gulp');
-var sass = require('gulp-sass');
+// var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var merge = require('merge-stream');
-sass.compiler = require('node-sass');
+var sass = require('gulp-sass')(require('node-sass'));
 
 gulp.task('sass-story', function () {
   const uiThemes = gulp.src('./src/**/ui-themes.scss')

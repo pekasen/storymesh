@@ -22,8 +22,8 @@
   },
   "homepage": "https://github.com/pekasen/storymesh#readme",
   "workspaces": [
-    "packages/*",
-    "editor"
+    "./packages/*",
+    "./editor/"
   ],
   "dependencies": {
     "eslint": "^7.12.1",

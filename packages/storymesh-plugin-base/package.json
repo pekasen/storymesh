@@ -13,15 +13,16 @@
     "mobx": "^6.3.2",
     "preact": "^10.5.13",
     "preact-jss-hook": "^2.1.2",
-    "preact-sidebar": "file:../preact-sidebar",
-    "storygraph": "file:../storygraph",
+    "preact-sidebar": "^1.0.0",
+    "storygraph": "^2.2.6",
     "uuid": "^8.3.2"
   },
   "description": "StoryMesh's Base PlugIns",
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

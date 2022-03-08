@@ -4,7 +4,8 @@
   "description": "StoryGraph is a TypeScript/ECMAScript",
   "main": "dist/index.js",
   "scripts": {
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'spec/**/*.spec.ts'"
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'spec/**/*.spec.ts'",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -32,7 +33,7 @@
   },
   "dependencies": {
     "preact": "^10.0.5",
-    "preact-sidebar": "file:../preact-sidebar",
+    "preact-sidebar": "^1.0.0",
     "serializr": "^2.0.5",
     "uuid": "^8.3.2"
   }

@@ -5,7 +5,9 @@
   "main": "dist/main/index.js",
   "scripts": {
     "test": "echo 'Please do not. ",
-    "start": "electron --trace-warnings --allow-file-access-from-files ."
+    "prestart": "gulp sass & tsc",
+    "start": "electron --trace-warnings --allow-file-access-from-files .",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -28,10 +30,10 @@
     "mobx": "^6.0.1",
     "mobx-utils": "^6.0.3",
     "preact": "^10.5.13",
-    "preact-sidebar": "file:../preact-sidebar",
+    "preact-sidebar": "^1.0.0",
     "serializr": "^2.0.3",
-    "storygraph": "file:../storygraph",
-    "storymesh-plugin-base": "file:../storymesh-plugin-base",
+    "storygraph": "^2.2.6",
+    "storymesh-plugin-base": "^1.0.0",
     "tslib": "^2.0.1",
     "uuid": "^8.3.1"
   },

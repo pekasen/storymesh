@@ -28,7 +28,7 @@ export const Preview: FunctionComponent = () => {
         classes: ["XS"]
     });
     const store = useContext(Store);
-    const ref = useRef<HTMLDivElement>();
+    const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
 
