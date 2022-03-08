@@ -11,6 +11,9 @@
   }
   /* for testing */
   max-width: 300px;
+  .ql-toolbar.ql-snow {
+    background: rgba(255, 255, 255, .53);
+  }
   form {
     display: flex;
     flex-direction: column;
@@ -240,6 +243,21 @@
         background: getValue(node-object-background); //sidebar-card?
       }
       border: 0;
+      table {
+        .btn.btn-default {
+          border: 2px solid;
+          @include customize(theme) {
+            color: getValue(text);
+            border-color: getValue(text);
+          }
+          &:hover {
+            @include customize(theme) {
+              color: getValue(highlight-color);
+              border-color: getValue(highlight-color);
+            } 
+          } 
+        }
+      }
       table,
       thead,
       tbody {

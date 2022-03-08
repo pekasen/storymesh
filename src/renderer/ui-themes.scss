@@ -2,16 +2,16 @@
 
 $themes: (
   light: (
-    menu-background: #b5b5b5,
-    text-background: #949494,
-    text: #262626,
-    node-area-background: #949494,
-    node-object-background: #d3d3d3,
-    highlight-color: #8f273a,
+    menu-background: #b6b6b6,
+    text-background: #ababab,
+    text: #121212,
+    node-area-background: rgb(225, 225, 225),
+    node-object-background: #949292,
+    highlight-color: rgb(0, 113, 101),
     highlight-color-font: #efefef,
-    border-color: #949494,
+    border-color: #121212,
     //TODO: Replace and also add colors for "warning", "success", ...
-    flow: #009485,
+    flow: rgb(0, 113, 101),
     data: #409bff,
     reaction: rgb(255, 166, 0),
   ),
