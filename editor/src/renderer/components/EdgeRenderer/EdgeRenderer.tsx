@@ -405,7 +405,9 @@ export class EdgeRenderer2 extends Component<{store: RootStore}> {
         const d2_offset_y             = selectionRect.y();
         const d2_height             = selectionRect.height();
         const d2_width              = selectionRect.width();
+        // @ts-ignore
         const d2_distance_from_top  = d2_offset_y + d2_height;
+        // @ts-ignore
         const d2_distance_from_left = d2_offset_x + d2_width;
         
         const not_colliding = ( d1_distance_from_top < d2_offset_y 

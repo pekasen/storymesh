@@ -16,7 +16,7 @@ interface IGalleryItemViewProps<T extends IItem> {
 
 export class GalleryItemView extends Component<IGalleryItemViewProps<IPlugInRegistryEntry<StoryObject>>> {
 
-    reactionDisposer: IReactionDisposer;
+    // reactionDisposer: IReactionDisposer;
 
     constructor(props: IGalleryItemViewProps<IPlugInRegistryEntry<StoryObject>>) {
         super(props);
@@ -34,7 +34,7 @@ export class GalleryItemView extends Component<IGalleryItemViewProps<IPlugInRegi
     }
 
     componentWillUnmount(): void {
-        this.reactionDisposer();
+        // this.reactionDisposer();
     }
 }
 
