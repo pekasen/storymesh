@@ -1,0 +1,12 @@
+{
+  "name": "preact-mdparse",
+  "version": "1.0.0",
+  "description": "a light-weight markdown parser for preact",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "mocha --require ts-node/register --watch-extensions ts,tsx 'spec/**/*.spec.{ts,tsx}'",
+    "build": "tsc"
+  },
+  "author": "P. Kessling",
+  "license": "MIT"
+}
