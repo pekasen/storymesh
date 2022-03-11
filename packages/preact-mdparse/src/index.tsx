@@ -7,7 +7,6 @@ export class MDAST {
 
     private paragraphTerminator = /\n\s*\n/gm
     private lineterminator = /\n/gm
-
     private lineStartRules = [
         {tag: 'h1', regex: /^\s{0,3}#{1}\s/g, remove: true},
         {tag: 'h2', regex: /^\s{0,3}#{2}\s/g, remove: true},
@@ -19,8 +18,12 @@ export class MDAST {
         {tag: 'ol', regex: /^\s{0,3}\d+\s/g, remove: true, block: true},
         {tag: 'quote', regex: /^\s{0,3}\>\s/g, remove: true, block: true},
         {tag: 'code', regex: /^\s{4,}/g, remove: true},
-        {tag: 'hline', regex: /^\s{0,3}[-|\*»\+]{3,}\s{0,}/g, remove: true},
+        {tag: 'hline', regex: /^\s{0,3}[-|\*»\+|\s*]{3,}\s{0,}/g, remove: true},
         {tag: 'p', regex: /^\w+/g, remove: false}
+    ]
+    private lineRules = [
+        {tag: 'bold', regex: /\*{2}.*\*{2}/},
+        {tag: 'ital', regex: /\_{2}.*\_{2}/},
     ]
 
     public constructor(text: string | MDAST | (string | MDAST)[], tag?: string) {
@@ -110,63 +113,27 @@ export class MDAST {
         return {
             tag: this.tag,
             text: (typeof this.text === 'string') ? 
-                this.text : 
-                    (Array.isArray(this.text)) ? 
+                this.text : (Array.isArray(this.text)) ? 
                     this.text.map(e => e.repr()) : this.text.repr()
         }
     }
+
+    public map(callback: (text: string, tag?: string) => any) : any {
+        if (Array.isArray(this.text)) {
+            return this.text.map(e => e.map(callback))
+        } else if (typeof this.text === 'string') {
+            return callback(this.text, this.tag)
+        } else return this.text.map(callback)
+    }
 }
 
-export class Parser {
-    
-    public constructor() {
+export interface Mapper {
+    tag: string,
+    newtag: string
+}
 
-    }
+export function translate(ast: MDAST, mapper: Mapper[]) {
 
-    public parse(markdown: string) {
-
-        return new MDAST(markdown)
-        // // 1. construct a AST from md string
-        // //      1.1. split by double new lines, trim whitespace
-        // let ret = markdown.split(/\n\s{0,}\n/gm)
-        // //      1.2. split by newlines (if necessary)
-        // const ret2 = ret.map(e => e.split(/\n/gm))
-        // //      1.3. if line starts with special char, apply tag
-        // //      1.4. extract tags line by line
-        // // 2. bind preact html tags to AST
-        // // 3. ...
-        // // 4. profit
-
-
-        // return ret2.map(paragraph => {
-        //         return paragraph.map(line => {
-        //             // @ts-ignore
-        //             return this.ruleset.reduce((agg, rule) =>{
-        //                 // do the line start stuff
-        //                 if (line.match(rule.regex) && agg === undefined) return new MDAST(
-        //                     (rule.remove) ? line.replace(rule.regex, '') : line,
-        //                     rule.tag
-        //                 )
-        //                 else return agg
-        //             }, undefined)
-        //             // @ts-ignore
-        //         }).reduce((agg: MDAST, now: MDAST) => {
-        //             return agg.union(now)
-        //         })
-        // })
-    }
-
-    private splitParagraphs() {
-
-    }
-
-    private splitLines() {
-
-    }
-
-    private extractFrom(string: string, regex: RegExp) {
-
-    }
 }
 
 export interface MarkdownProps {
@@ -176,7 +143,8 @@ export interface MarkdownProps {
 export class Markdown extends Component<MarkdownProps> {
 
     public render({ markdown }: MarkdownProps) {
+        const ast = new MDAST(markdown)
 
-        return <p></p>
+        return ast.map((text, tag) => h(tag!, {children: text}))
     }
 }
