@@ -1,11 +1,12 @@
 import { FunctionComponent, h } from "preact";
 import { action, makeObservable, observable } from 'mobx';
-import { INGWebSProps, StoryGraph, connectionField, nameField, exportClass } from 'storygraph';
-import { createModelSchema, list, ModelSchema, object, optional, primitive } from 'serializr';
-import { MenuTemplate, RichText } from "preact-sidebar";
+import { INGWebSProps, connectionField, nameField, exportClass } from 'storygraph';
+import { createModelSchema, ModelSchema, object, primitive } from 'serializr';
+import { MenuTemplate, TextArea } from "preact-sidebar";
 import { StoryPlugIn } from "../../../storygraph/dist/StoryGraph/registry/PlugIn";
 import { ObservableStoryObject } from "../helpers/ObservableStoryObject";
 import he from 'he';
+import { Markdown } from 'preact-mdparse'
 
 interface ITextObjectContent {
     resource: string
@@ -64,7 +65,7 @@ export class _TextObject extends ObservableStoryObject {
     public get menuTemplate(): MenuTemplate[] {
         const ret: MenuTemplate[] = [
             ...nameField(this),
-            new RichText("Content", () => this.content.resource, (arg: string) => this.updateText(arg)),
+            new TextArea("Content", () => this.content.resource, (arg: string) => this.updateText(arg)),
             // {
             //     label: "Content",
             //     type: "textarea",
@@ -97,38 +98,22 @@ export class _TextObject extends ObservableStoryObject {
         this.name = name;
     }
 
-    public updateText(htmlText: string) {    
+    public updateText(htmlText: string) : void {    
         if (this.content) {
-            this.content.resource = he.decode(htmlText.replace(/<[^>]+>/g, ''), );
+            this.content.resource = htmlText;
         }
     }
 
-    public getComponent() {    
-        const Comp: FunctionComponent<INGWebSProps> = (args => {
-            let p: h.JSX.Element;
+    public getComponent() : FunctionComponent<INGWebSProps> {    
+        const Comp: FunctionComponent<INGWebSProps> = (() => {
             // TODO: is that supposed to be like that?
-            p = <span dangerouslySetInnerHTML={{ __html: args.content?.resource}} />
+            const p = <Markdown markdown={this.content.resource} />
             return this.modifiers.reduce((p,v) => {
                 return (v.modify(p));
             }, p);
         });
 
         return Comp
-    }
-}
-
-const AttributeSchema: ModelSchema<any> = {
-    factory: () => ({}),
-    props: {
-        "*": true
-    }
-}
-
-const OpsSchema: ModelSchema<any> = {
-    factory: () => ({}),
-    props: {
-        attributes: object(AttributeSchema),
-        '*': true
     }
 }
 
@@ -139,7 +124,7 @@ const TextContentSchema: ModelSchema<ITextObjectContent> = {
         contentType: "text"
     }),
     props: {
-        resource: object(OpsSchema),
+        resource: primitive(),
         altText: primitive(),
         contentType: primitive()
     }
